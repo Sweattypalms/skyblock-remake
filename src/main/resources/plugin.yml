@@ -1,0 +1,7 @@
+name: Skyblock
+version: '${project.version}'
+main: com.sweattypalms.skyblock.Skyblock
+api-version: '1.17'
+authors: [sweattypalms, devil_gamer_xd]
+description: A Hypixel Skyblock remake plugin
+website: sweattypalms.me
