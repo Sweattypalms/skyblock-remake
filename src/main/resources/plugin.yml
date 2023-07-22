@@ -5,3 +5,7 @@ api-version: '1.17'
 authors: [sweattypalms, devil_gamer_xd]
 description: A Hypixel Skyblock remake plugin
 website: sweattypalms.me
+commands:
+  test:
+    description: Test command
+    usage: /<command>
