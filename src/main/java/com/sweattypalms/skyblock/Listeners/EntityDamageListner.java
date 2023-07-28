@@ -2,6 +2,7 @@ package com.sweattypalms.skyblock.Listeners;
 
 
 import com.sweattypalms.skyblock.SkyBlock;
+import com.sweattypalms.skyblock.utils.ItemUtil;
 import com.sweattypalms.skyblock.utils.SkyUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -12,6 +13,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import javax.annotation.Nullable;
@@ -30,6 +32,7 @@ public class EntityDamageListner implements Listener {
         if (event.getDamager() instanceof Player) {
             if (event.getEntity() instanceof Player) return;
             Player player = (Player) event.getDamager();
+            ItemStack itemStack = player.getItemInHand();
             try {
                 double d = 0;
                 d += (5 + 100) + (200 / 5) * (1 + 200 / 100);

@@ -10,7 +10,6 @@ public class GuiListener implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-        event.setCancelled(true);
         if (event.getClickedInventory() == null) return;
         Player player = (Player) event.getWhoClicked();
         GUI gui = GUI.GUI_MAP.get(player.getUniqueId());
