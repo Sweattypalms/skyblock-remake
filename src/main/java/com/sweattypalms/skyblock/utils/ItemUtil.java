@@ -10,8 +10,11 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.persistence.PersistentDataType;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class ItemUtil {
@@ -178,5 +181,36 @@ public class ItemUtil {
         item.setItemMeta(meta);
         return item;
     }
+
+
+    public static ItemStack getStack(String name, Material material, short data, int amount, List<String> lore) {
+        ItemStack stack = new ItemStack(material, data);
+        stack.setDurability(data);
+        ItemMeta meta = stack.getItemMeta();
+        if (name != null) {
+            assert meta != null;
+            meta.setDisplayName(name);
+        }
+        stack.setAmount(amount);
+        meta.setLore(lore);
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_POTION_EFFECTS, ItemFlag.HIDE_UNBREAKABLE, ItemFlag.HIDE_ATTRIBUTES);
+        stack.setItemMeta(meta);
+        return stack;
+    }
+
+    public static ItemStack getStack(String name, Material material, short data, int amount, String... lore) {
+        return getStack(name, material, data, amount, Arrays.asList(lore));
+    }
+
+    public static ItemStack getSkullStack(String name, String skullName, int amount, String... lore) {
+        ItemStack stack = getStack(name, Material.PLAYER_HEAD, (short) 3, amount, lore);
+        SkullMeta meta = (SkullMeta) stack.getItemMeta();
+        assert meta != null;
+        meta.setOwner(skullName);
+        stack.setItemMeta(meta);
+        return stack;
+    }
+
+
 
 }

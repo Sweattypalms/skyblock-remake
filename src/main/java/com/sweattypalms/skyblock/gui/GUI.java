@@ -1,5 +1,6 @@
 package com.sweattypalms.skyblock.gui;
 
+import com.sweattypalms.skyblock.SkyBlock;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -21,7 +22,7 @@ public abstract class GUI implements Listener{
 
 
     protected String title;
-    protected static int size;
+    protected int size;
     protected List<GUIItem> items;
 
     public GUI(String title, int size) {
@@ -80,6 +81,7 @@ public abstract class GUI implements Listener{
     public String getTitle(){
         return title;
     }
+
 
     public void fill(ItemStack stack, int cornerSlot, int cornerSlot2, boolean overwrite, boolean pickup) {
         int topLeft = Math.min(cornerSlot, cornerSlot2);
@@ -161,11 +163,16 @@ public abstract class GUI implements Listener{
 
     public void open(Player player) {
         Inventory inventory = Bukkit.createInventory(player, size, ChatColor.translateAlternateColorCodes('&', title));
+        GUIOpenEvent openEvent = new GUIOpenEvent(player, this, inventory);
+        SkyBlock.getInstance().getServer().getPluginManager().callEvent(openEvent);
         for (GUIItem item : items) {
             inventory.setItem(item.getSlot(), item.getItem());
         }
         player.openInventory(inventory);
+        GUI_MAP.remove(player.getUniqueId());
         GUI_MAP.put(player.getUniqueId(), this);
+    }
+    public void onOpen(GUIOpenEvent e) {
     }
 
     public void close(Player player) {

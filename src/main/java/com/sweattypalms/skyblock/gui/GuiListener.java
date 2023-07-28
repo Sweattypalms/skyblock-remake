@@ -26,4 +26,10 @@ public class GuiListener implements Listener {
     public void onInventoryClose(InventoryCloseEvent event) {
         GUI.GUI_MAP.remove(event.getPlayer().getUniqueId());
     }
+
+    @EventHandler
+    public void onGUIOpen(GUIOpenEvent e) {
+        GUI gui = e.getOpened();
+        e.getOpened().onOpen(e);
+    }
 }

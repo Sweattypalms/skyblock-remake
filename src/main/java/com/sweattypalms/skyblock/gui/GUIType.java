@@ -3,7 +3,8 @@ package com.sweattypalms.skyblock.gui;
 import com.sweattypalms.skyblock.utils.SkyUtils;
 
 public enum GUIType {
-    Example_Gui(ExampleGui.class),
+   SkyBlock_Menu(SkyblockMenu.class),
+
 
 ;
 
