@@ -1,9 +1,5 @@
 package com.sweattypalms.skyblock.commands;
 
-import com.sweattypalms.skyblock.Items.SkyblockItem;
-import com.sweattypalms.skyblock.enums.Rarity;
-import com.sweattypalms.skyblock.gui.GUIType;
-import com.sweattypalms.skyblock.utils.ItemUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -26,7 +22,6 @@ public class MainCommandHandler implements CommandExecutor {
             commandSender.sendMessage(ChatColor.RED + "Only players can use this command!");
             return true;
         }
-        GUIType.SkyBlock_Menu.getGUI().open(player);
         player.sendMessage(ChatColor.GREEN + "Hello, " + player.getName() + "!");
         return true;
     }

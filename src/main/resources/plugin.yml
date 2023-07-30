@@ -9,3 +9,12 @@ commands:
   test:
     description: Test command
     usage: /<command>
+  gms:
+    description: Sets gamemode to survival
+    usage: /<command>
+  gmc:
+    description: Sets gamemode to creative
+    usage: /<command>
+  gmss:
+    description: Sets gamemode to spectator
+    usage: /<command>
