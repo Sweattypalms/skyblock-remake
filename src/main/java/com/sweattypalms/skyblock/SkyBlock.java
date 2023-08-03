@@ -2,6 +2,8 @@ package com.sweattypalms.skyblock;
 
 import com.sweattypalms.skyblock.commands.MainCommandHandler;
 import com.sweattypalms.skyblock.commands.UtilCommandHandler;
+import com.sweattypalms.skyblock.core.items.ItemManager;
+import com.sweattypalms.skyblock.core.listeners.EntityDamageEntityListener;
 import com.sweattypalms.skyblock.core.listeners.PlayerJoinListener;
 import com.sweattypalms.skyblock.core.stats.SkyblockPlayer;
 import org.bukkit.Bukkit;
@@ -24,6 +26,7 @@ public final class SkyBlock extends JavaPlugin {
         long start = System.currentTimeMillis();
          registerListeners();
          registerCommands();
+         registerItems();
          long end = System.currentTimeMillis() - start;
          if (debug) {
              getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "Skyblock has been enabled! This took " + ChatColor.YELLOW + end + "ms");
@@ -39,7 +42,8 @@ public final class SkyBlock extends JavaPlugin {
 
     public void registerListeners(){
         List<Listener> listeners = List.of(
-                new PlayerJoinListener()
+                new PlayerJoinListener(),
+                new EntityDamageEntityListener()
         );
         listeners.forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
     }
@@ -53,6 +57,9 @@ public final class SkyBlock extends JavaPlugin {
         getCommand("gms").setExecutor(utilCommandHandler);
         getCommand("gmc").setExecutor(utilCommandHandler);
         getCommand("gmss").setExecutor(utilCommandHandler);
+    }
+    public void registerItems(){
+        ItemManager.initSimpleItems();
     }
 
     public static SkyBlock getInstance() {

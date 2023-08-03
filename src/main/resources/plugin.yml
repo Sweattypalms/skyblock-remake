@@ -9,6 +9,7 @@ commands:
   test:
     description: Test command
     usage: /<command>
+
   gms:
     description: Sets gamemode to survival
     usage: /<command>

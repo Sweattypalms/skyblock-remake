@@ -13,8 +13,10 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.*;
 
 public class SkyblockPlayer {
-    static List<SkyblockPlayer> players = new ArrayList<>();
-
+    static HashMap<UUID, SkyblockPlayer> players = new HashMap<>();
+    public static SkyblockPlayer getSkyblockPlayer(Player player){
+        return players.get(player.getUniqueId());
+    }
 
     @Getter
     private final Player player;
@@ -27,7 +29,7 @@ public class SkyblockPlayer {
 
     public SkyblockPlayer(Player player) {
         this.player = player;
-        players.add(this);
+        players.put(player.getUniqueId(), this);
         Arrays.stream(Stats.values()).toList().forEach(stat -> {
             this.baseStats.put(stat, stat.getBaseValue());
         });
@@ -49,6 +51,8 @@ public class SkyblockPlayer {
     }
 
     private void initHealth(){
+
+        player.setHealthScale(20);
         AttributeInstance attribute = this.player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
         assert attribute != null;
         attribute.setBaseValue(this.maxStats.get(Stats.HEALTH));
