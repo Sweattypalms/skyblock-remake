@@ -10,14 +10,13 @@ import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public class SkyblockPlayer {
     static HashMap<UUID, SkyblockPlayer> players = new HashMap<>();
-    public static SkyblockPlayer getSkyblockPlayer(Player player){
-        return players.get(player.getUniqueId());
-    }
-
     @Getter
     private final Player player;
     @Getter
@@ -26,15 +25,14 @@ public class SkyblockPlayer {
     Map<Stats, Double> maxStats = new HashMap<>();
     @Getter
     Map<Stats, Double> liveStats = new HashMap<>();
-
     public SkyblockPlayer(Player player) {
         this.player = player;
         players.put(player.getUniqueId(), this);
         Arrays.stream(Stats.values()).toList().forEach(stat -> {
             this.baseStats.put(stat, stat.getBaseValue());
         });
-        this.maxStats = this.baseStats;
-        this.liveStats = this.baseStats;
+        this.maxStats = new HashMap<>(this.baseStats);
+        this.liveStats = new HashMap<>(this.baseStats);
         init();
 
         new BukkitRunnable() {
@@ -46,12 +44,19 @@ public class SkyblockPlayer {
 
     }
 
+    public static SkyblockPlayer getSkyblockPlayer(Player player) {
+        return players.get(player.getUniqueId());
+    }
+
+    public static SkyblockPlayer newPlayer(Player player) {
+        return new SkyblockPlayer(player);
+    }
+
     private void init() {
         initHealth();
     }
 
-    private void initHealth(){
-
+    private void initHealth() {
         player.setHealthScale(20);
         AttributeInstance attribute = this.player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
         assert attribute != null;
@@ -60,20 +65,28 @@ public class SkyblockPlayer {
     }
 
     private void tick() {
-        this.actionBar();
         this.manageStats();
+        this.actionBar();
     }
 
     private void manageStats() {
         setLiveStat(Stats.HEALTH, this.player.getHealth());
+        player.setFoodLevel(20);
+        player.setSaturation(20);
     }
-    public void setMaxStat(Stats stat, double value){
+
+    public void setMaxStat(Stats stat, double value) {
+        double maxStats = this.maxStats.get(stat);
+        double liveStats = this.liveStats.get(stat);
+        if (maxStats >= liveStats) {
+            this.player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(value);
+            this.player.setHealth(value);
+        }
         this.maxStats.put(stat, value);
-        this.initHealth();
     }
-    public void setLiveStat(Stats stat, double value){
-        this.baseStats.put(stat, value);
-        this.initHealth();
+
+    public void setLiveStat(Stats stat, double value) {
+        this.liveStats.put(stat, value);
     }
 
     private void actionBar() {
@@ -93,11 +106,13 @@ public class SkyblockPlayer {
         String currentHealthString = formatDouble(currentHealth);
         return ChatColor.RED + Stats.HEALTH.getSymbol() + " " + currentHealthString + " / " + healthString;
     }
+
     private String getDefenceComponent() {
         double maxDefence = this.maxStats.get(Stats.DEFENCE);
         String defenceString = formatDouble(maxDefence);
         return ChatColor.GREEN + Stats.DEFENCE.getSymbol() + " " + defenceString;
     }
+
     private String getIntelligenceComponent() {
         double maxIntelligence = this.maxStats.get(Stats.INTELLIGENCE);
         String intelligenceString = formatDouble(maxIntelligence);
@@ -107,10 +122,8 @@ public class SkyblockPlayer {
 
         return ChatColor.AQUA + Stats.INTELLIGENCE.getSymbol() + " " + currentIntelligenceString + " / " + intelligenceString;
     }
-    public static SkyblockPlayer newPlayer(Player player){
-        return new SkyblockPlayer(player);
-    }
-    private String formatDouble(double v1){
+
+    private String formatDouble(double v1) {
         return String.format("%.1f", v1).replace(".0", "");
     }
 

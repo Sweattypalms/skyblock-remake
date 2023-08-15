@@ -1,6 +1,7 @@
 package com.sweattypalms.skyblock.core.items.builder;
 
 import com.sweattypalms.skyblock.core.PDCHelper;
+import com.sweattypalms.skyblock.core.helpers.PlaceholderFormatter;
 import com.sweattypalms.skyblock.core.items.builder.abilities.Ability;
 import com.sweattypalms.skyblock.core.stats.Stats;
 import org.bukkit.Material;
@@ -113,7 +114,7 @@ public abstract class SkyblockItem {
 
         if(this.staticLore != null) {
             this.staticLore.forEach(line -> {
-                lore.add(line.replace("$", "§"));
+                lore.add(PlaceholderFormatter.format(line));
             });
             lore.add("§7");
         }

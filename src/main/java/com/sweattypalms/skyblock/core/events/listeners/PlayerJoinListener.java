@@ -1,4 +1,4 @@
-package com.sweattypalms.skyblock.core.listeners;
+package com.sweattypalms.skyblock.core.events.listeners;
 
 import com.sweattypalms.skyblock.core.stats.SkyblockPlayer;
 import org.bukkit.event.EventHandler;
@@ -9,6 +9,7 @@ public class PlayerJoinListener implements Listener {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event){
+        if(SkyblockPlayer.getSkyblockPlayer(event.getPlayer()) != null) return;
         SkyblockPlayer skyblockPlayer = new SkyblockPlayer(event.getPlayer());
     }
 }

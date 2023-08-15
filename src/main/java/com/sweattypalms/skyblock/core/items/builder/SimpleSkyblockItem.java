@@ -7,6 +7,8 @@ import org.bukkit.Material;
 import java.util.List;
 import java.util.Map;
 
+import static com.sweattypalms.skyblock.core.items.ItemManager.ITEMS_LIST;
+
 public class SimpleSkyblockItem extends SkyblockItem {
     public SimpleSkyblockItem(Builder<?> builder) {
         super(
@@ -19,6 +21,7 @@ public class SimpleSkyblockItem extends SkyblockItem {
                 builder.itemType,
                 builder.abilities
         );
+        ITEMS_LIST.put(this.getId(), this);
     }
 
     public static Builder<?> builder() {

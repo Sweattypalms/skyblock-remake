@@ -2,9 +2,10 @@ package com.sweattypalms.skyblock;
 
 import com.sweattypalms.skyblock.commands.MainCommandHandler;
 import com.sweattypalms.skyblock.commands.UtilCommandHandler;
+import com.sweattypalms.skyblock.core.events.listeners.SkyblockDamageListener;
 import com.sweattypalms.skyblock.core.items.ItemManager;
-import com.sweattypalms.skyblock.core.listeners.EntityDamageEntityListener;
-import com.sweattypalms.skyblock.core.listeners.PlayerJoinListener;
+import com.sweattypalms.skyblock.core.events.listeners.EntityDamageEntityListener;
+import com.sweattypalms.skyblock.core.events.listeners.PlayerJoinListener;
 import com.sweattypalms.skyblock.core.stats.SkyblockPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -12,7 +13,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.List;
-import java.util.Objects;
 
 public final class SkyBlock extends JavaPlugin {
 
@@ -43,7 +43,8 @@ public final class SkyBlock extends JavaPlugin {
     public void registerListeners(){
         List<Listener> listeners = List.of(
                 new PlayerJoinListener(),
-                new EntityDamageEntityListener()
+                new EntityDamageEntityListener(),
+                new SkyblockDamageListener()
         );
         listeners.forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
     }
@@ -52,6 +53,8 @@ public final class SkyBlock extends JavaPlugin {
     public void registerCommands(){
         MainCommandHandler mainCommandHandler = new MainCommandHandler();
         getCommand("test").setExecutor(mainCommandHandler);
+        getCommand("item").setExecutor(mainCommandHandler);
+        getCommand("mob").setExecutor(mainCommandHandler);
 
         UtilCommandHandler utilCommandHandler = new UtilCommandHandler();
         getCommand("gms").setExecutor(utilCommandHandler);
