@@ -3,7 +3,9 @@ package com.sweattypalms.skyblock.core.mobs;
 import java.util.Arrays;
 
 public enum Regions {
-    GRAVEYARD;
+    GRAVEYARD,
+    END
+    ;
 
     public static Regions getRegion(String region) {
         final Regions[] _region = {null};

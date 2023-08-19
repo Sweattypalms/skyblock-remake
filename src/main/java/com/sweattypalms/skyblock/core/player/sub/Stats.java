@@ -1,5 +1,6 @@
-package com.sweattypalms.skyblock.core.player;
+package com.sweattypalms.skyblock.core.player.sub;
 
+import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 
@@ -13,9 +14,14 @@ public enum Stats {
     /* ---------------------------- */
 
     HEALTH(ChatColor.RED + "❤", "Health", 100, false, ChatColor.GREEN),
-    DEFENCE(ChatColor.GREEN + "❈", "Defence", 0, false, ChatColor.GREEN),
+    DEFENSE(ChatColor.GREEN + "❈", "Defence", 0, false, ChatColor.GREEN),
     INTELLIGENCE(ChatColor.AQUA + "✎", "Intelligence", 100, false, ChatColor.GREEN),
     SPEED(ChatColor.WHITE + "✦", "Speed", 100, false, ChatColor.GREEN),
+
+    /* ---------------------------- */
+
+    HEALTH_REGEN(ChatColor.RED + "❣", "Health Regen", 100, false, ChatColor.RED, true),
+    MANA_REGEN(ChatColor.AQUA + "❉", "Mana Regen", 100, false, ChatColor.AQUA, true),
 
     ;
     @Getter
@@ -28,6 +34,8 @@ public enum Stats {
     private final boolean isPercentage;
     @Getter
     private final String itemBuilderColor;
+    @Getter
+    private boolean privateField = false;
 
     <T> Stats(String symbol, String name, double baseValue, boolean isPercentage, T itemBuilderColor) {
         this.symbol = symbol;
@@ -39,8 +47,12 @@ public enum Stats {
         else
             this.itemBuilderColor = (String) itemBuilderColor;
     }
+    <T> Stats(String symbol, String name, double baseValue, boolean isPercentage, T itemBuilderColor, boolean privateField){
+        this(symbol, name, baseValue, isPercentage, itemBuilderColor);
+        this.privateField = privateField;
+    }
 
     static double get(SkyblockPlayer skyblockPlayer, Stats stat) {
-        return skyblockPlayer.getMaxStats().get(stat);
+        return skyblockPlayer.getStatsManager().getMaxStats().get(stat);
     }
 }

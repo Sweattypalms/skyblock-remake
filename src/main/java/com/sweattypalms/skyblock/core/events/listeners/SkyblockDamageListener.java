@@ -1,6 +1,7 @@
 package com.sweattypalms.skyblock.core.events.listeners;
 
 import com.sweattypalms.skyblock.SkyBlock;
+import com.sweattypalms.skyblock.core.events.SkyblockMobDamagePlayerEvent;
 import com.sweattypalms.skyblock.core.events.SkyblockPlayerDamageEntityEvent;
 import com.sweattypalms.skyblock.core.helpers.DamageCalculator;
 import com.sweattypalms.skyblock.core.items.builder.SkyblockItem;
@@ -9,9 +10,11 @@ import com.sweattypalms.skyblock.core.items.builder.abilities.types.DamageAbilit
 import com.sweattypalms.skyblock.core.items.builder.abilities.types.FullSetBonus;
 import com.sweattypalms.skyblock.core.items.builder.abilities.types.ITriggerable;
 import com.sweattypalms.skyblock.core.mobs.SkyblockMob;
-import com.sweattypalms.skyblock.core.player.Stats;
+import com.sweattypalms.skyblock.core.player.sub.Stats;
+import com.sweattypalms.skyblock.core.player.sub.StatsManager;
 import org.bukkit.Location;
 import org.bukkit.Sound;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -26,10 +29,12 @@ public class SkyblockDamageListener implements Listener {
      */
     @EventHandler(priority = EventPriority.LOWEST)
     public void onSkyblockPlayerDamageEntityDamageCalculation(SkyblockPlayerDamageEntityEvent event) {
+        if(event.isCancelled()) return;
+        if(event.getSkyblockMob() == null) return;
         // TODO: check for damage type : event.getDamageType()
 
         // Item Abilities (Item in hand)
-        SkyblockItem item = event.getSkyblockPlayer().getSkyblockItemInHand();
+        SkyblockItem item = event.getSkyblockPlayer().getInventoryManager().getSkyblockItemInHand();
         if (item instanceof IHasAbility iHasAbility) {
             iHasAbility.getAbilities().forEach(ability -> {
                 if (!(ability instanceof ITriggerable triggerable)) return;
@@ -43,7 +48,7 @@ public class SkyblockDamageListener implements Listener {
             });
         }
         // Full Set Bonus
-        FullSetBonus fullSetBonus = event.getSkyblockPlayer().getEquippedFullSetBonus();
+        FullSetBonus fullSetBonus = event.getSkyblockPlayer().getInventoryManager().getEquippedFullSetBonus();
         if (fullSetBonus != null) {
             // Not checking for trigger because it is already checked in getEquippedFullSetBonus() through isFullSetEquipped()
             fullSetBonus.apply(event);
@@ -63,7 +68,7 @@ public class SkyblockDamageListener implements Listener {
     @EventHandler
     public void onSkyblockPlayerDamageEntity(SkyblockPlayerDamageEntityEvent event) {
         if (event.isCancelled()) return;
-
+        if(event.getSkyblockMob() == null) return;
 
         SkyblockMob skyblockMob = event.getSkyblockMob();
         double damage = event.getDamage();
@@ -75,7 +80,7 @@ public class SkyblockDamageListener implements Listener {
 //        );
 
         // Item Abilities
-        SkyblockItem item = event.getSkyblockPlayer().getSkyblockItemInHand();
+        SkyblockItem item = event.getSkyblockPlayer().getInventoryManager().getSkyblockItemInHand();
         if (item instanceof IHasAbility iHasAbility) {
             iHasAbility.getAbilities().forEach(ability -> {
                 if (!(ability instanceof ITriggerable triggerable)) return;
@@ -93,7 +98,7 @@ public class SkyblockDamageListener implements Listener {
         /* ------- FEROCITY ------- */
 
         // Implement extra logic ;; check for various damage types and apply ferocity / not.
-        int ferocity = event.getSkyblockPlayer().getMaxStats().get(Stats.FEROCITY).intValue();
+        int ferocity = event.getSkyblockPlayer().getStatsManager().getMaxStats().get(Stats.FEROCITY).intValue();
 
         int guaranteedHits = ferocity / 100;
         boolean extraHit = event.getSkyblockPlayer().getRandom().nextInt(100) < (ferocity % 100);
@@ -125,5 +130,25 @@ public class SkyblockDamageListener implements Listener {
 
     }
 
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onSkyblockMobDamageEntity(SkyblockMobDamagePlayerEvent event) {
+        if (event.getSkyblockMob() == null) return;
+        /* Cancel event if needed */
+
+        SkyblockMob skyblockMob = event.getSkyblockMob();
+        double damage = skyblockMob.getDamage();
+        event.setDamage(damage);
+    }
+
+    @EventHandler
+    public void onSkyblockMobDamageEntityDamageCalculation(SkyblockMobDamagePlayerEvent event) {
+        double damage = event.getDamage();
+        double defense = event.getSkyblockPlayer().getStatsManager().getMaxStats().get(Stats.DEFENSE);
+
+        damage = DamageCalculator.calculateDamageReduction(defense, damage);
+
+        event.getSkyblockPlayer().damage(damage);
+    }
 
 }

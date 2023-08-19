@@ -2,7 +2,7 @@ package com.sweattypalms.skyblock.core.items.builder;
 
 import com.sweattypalms.skyblock.core.items.builder.abilities.Ability;
 import com.sweattypalms.skyblock.core.items.builder.abilities.IHasAbility;
-import com.sweattypalms.skyblock.core.player.Stats;
+import com.sweattypalms.skyblock.core.player.sub.Stats;
 import org.bukkit.Material;
 
 import java.util.List;

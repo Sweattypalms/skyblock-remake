@@ -14,7 +14,7 @@ import java.util.List;
 public class SkyblockInteractListener implements Listener {
     @EventHandler
     public void onSkyblockInteract(SkyblockInteractEvent event) {
-        List<SkyblockItem> items = event.getSkyblockPlayer().getInventorySkyblockItems().values().stream().toList();
+        List<SkyblockItem> items = event.getSkyblockPlayer().getInventoryManager().getInventorySkyblockItems().values().stream().toList();
         items = items.stream().filter(item -> item instanceof IHasAbility).toList();
         List<ITriggerable> abilities =
                 items.stream()

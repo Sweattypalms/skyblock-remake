@@ -5,7 +5,7 @@ import com.sweattypalms.skyblock.core.items.builder.SkyblockItem;
 import com.sweattypalms.skyblock.core.mobs.MobManager;
 import com.sweattypalms.skyblock.core.mobs.SkyblockMob;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
-import com.sweattypalms.skyblock.core.player.Stats;
+import com.sweattypalms.skyblock.core.player.sub.Stats;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -61,13 +61,11 @@ public class MainCommandHandler implements CommandExecutor {
 
         SkyblockMob skyblockMob;
         try {
-            skyblockMob = MobManager.getMob(id);
+            skyblockMob = MobManager.getInstance(id);
         } catch (IllegalArgumentException e) {
             player.sendMessage(ChatColor.RED + e.getMessage());
             return;
         }
-
-        assert skyblockMob != null;
 
         skyblockMob.spawn(player.getLocation());
         player.sendMessage(ChatColor.RED + "Successfully spawned: " + skyblockMob.getId());
@@ -116,6 +114,6 @@ public class MainCommandHandler implements CommandExecutor {
         player.sendMessage(ChatColor.GREEN + "Setting " + stat + " to " + value);
 
         SkyblockPlayer skyblockPlayer = SkyblockPlayer.getSkyblockPlayer(player);
-        skyblockPlayer.setBaseStat(stat, value);
+        skyblockPlayer.getStatsManager().setBaseStat(stat, value);
     }
 }

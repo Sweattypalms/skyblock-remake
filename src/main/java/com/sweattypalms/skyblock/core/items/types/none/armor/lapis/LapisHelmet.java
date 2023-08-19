@@ -7,7 +7,7 @@ import com.sweattypalms.skyblock.core.items.builder.abilities.Ability;
 import com.sweattypalms.skyblock.core.items.builder.abilities.AbilityManager;
 import com.sweattypalms.skyblock.core.items.builder.abilities.IHasAbility;
 import com.sweattypalms.skyblock.core.items.builder.armor.interfaces.IHeadHelmet;
-import com.sweattypalms.skyblock.core.player.Stats;
+import com.sweattypalms.skyblock.core.player.sub.Stats;
 import org.bukkit.Material;
 
 import java.util.HashMap;
@@ -17,7 +17,7 @@ import java.util.Map;
 public class LapisHelmet extends SkyblockItem implements IHasAbility, IHeadHelmet {
     public static final String ID = "lapis_helmet";
     private static Map<Stats, Double> stats = new HashMap<>(Map.of(
-            Stats.DEFENCE, 25d
+            Stats.DEFENSE, 25d
     ));
     public LapisHelmet() {
         super(

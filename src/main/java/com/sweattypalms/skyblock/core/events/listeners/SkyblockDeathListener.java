@@ -36,6 +36,6 @@ public class SkyblockDeathListener implements Listener {
 //        }else{
 //            System.out.println("random mob died");
 //        }
-        System.out.println("Cause: " + event.getCause());
+//        System.out.println("Cause: " + event.getCause());
     }
 }

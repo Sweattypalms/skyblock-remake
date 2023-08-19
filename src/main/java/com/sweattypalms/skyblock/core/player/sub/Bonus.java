@@ -1,4 +1,4 @@
-package com.sweattypalms.skyblock.core.player;
+package com.sweattypalms.skyblock.core.player.sub;
 
 public class Bonus {
     private final Stats stat;

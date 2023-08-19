@@ -3,9 +3,9 @@ package com.sweattypalms.skyblock.core.items.builder.abilities;
 import com.sweattypalms.skyblock.core.events.SkyblockInteractEvent;
 import com.sweattypalms.skyblock.core.events.SkyblockPlayerDamageEntityEvent;
 import com.sweattypalms.skyblock.core.items.builder.abilities.types.*;
-import com.sweattypalms.skyblock.core.player.Bonus;
+import com.sweattypalms.skyblock.core.player.sub.Bonus;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
-import com.sweattypalms.skyblock.core.player.Stats;
+import com.sweattypalms.skyblock.core.player.sub.Stats;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -109,7 +109,7 @@ public class AbilityManager {
             super.apply(event);
             SkyblockPlayer skyblockPlayer = ((SkyblockInteractEvent) event).getSkyblockPlayer();
             Bonus speedBonus = new Bonus(Stats.SPEED, 50, 3000);
-            skyblockPlayer.setBonus("aote.speed", speedBonus);
+            skyblockPlayer.getBonusManager().setBonus("aote.speed", speedBonus);
         }
     };
     public static class LAPIS_ARMOR_ABILITY implements FullSetBonus, PassiveAbility{
@@ -129,8 +129,8 @@ public class AbilityManager {
 
         @Override
         public void onTick(SkyblockPlayer player) {
-            double currentMaxHealth = player.getMaxStats().get(Stats.HEALTH);
-            player.setMaxStat(Stats.HEALTH, currentMaxHealth + 60);
+            double currentMaxHealth = player.getStatsManager().getMaxStats().get(Stats.HEALTH);
+            player.getStatsManager().setMaxStat(Stats.HEALTH, currentMaxHealth + 60);
         }
     }
     public static abstract class TELEPORT_ABILITY implements ITriggerable, IUsageCost {

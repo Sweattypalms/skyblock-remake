@@ -32,6 +32,7 @@ public class GraveyardZombie extends EntityZombie implements ISkyblockMob, IRegi
         return Regions.GRAVEYARD;
     }
 
+
     @Override
     public SkyblockMob getSkyblockMob() {
         return skyblockMob;

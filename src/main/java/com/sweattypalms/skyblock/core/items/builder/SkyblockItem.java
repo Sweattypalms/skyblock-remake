@@ -10,7 +10,7 @@ import com.sweattypalms.skyblock.core.items.builder.abilities.types.ITriggerable
 import com.sweattypalms.skyblock.core.items.builder.abilities.types.IUsageCost;
 import com.sweattypalms.skyblock.core.items.builder.armor.interfaces.IDyedArmor;
 import com.sweattypalms.skyblock.core.items.builder.armor.interfaces.IHeadHelmet;
-import com.sweattypalms.skyblock.core.player.Stats;
+import com.sweattypalms.skyblock.core.player.sub.Stats;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;

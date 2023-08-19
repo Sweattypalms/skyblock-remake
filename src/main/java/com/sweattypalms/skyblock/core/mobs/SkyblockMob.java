@@ -35,6 +35,7 @@ public class SkyblockMob {
         }
         return null;
     }
+
     @Getter
     public final String id;
     @Getter

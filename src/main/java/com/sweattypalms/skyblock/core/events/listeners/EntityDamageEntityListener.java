@@ -1,5 +1,6 @@
 package com.sweattypalms.skyblock.core.events.listeners;
 
+import com.sweattypalms.skyblock.core.events.SkyblockMobDamagePlayerEvent;
 import com.sweattypalms.skyblock.core.events.SkyblockPlayerDamageEntityEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
@@ -50,7 +51,11 @@ public class EntityDamageEntityListener implements Listener {
             );
             Bukkit.getPluginManager().callEvent(skyblockPlayerDamageEntityEvent);
         }else{
-            /* TODO: add SkyblockEntityDamagePlayerEvent */
+            SkyblockMobDamagePlayerEvent skyblockMobDamagePlayerEvent = new SkyblockMobDamagePlayerEvent(
+                    (Player) event.getEntity(),
+                    (LivingEntity) event.getDamager()
+            );
+            Bukkit.getPluginManager().callEvent(skyblockMobDamagePlayerEvent);
         }
     }
 }

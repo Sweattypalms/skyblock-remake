@@ -1,7 +1,6 @@
 package com.sweattypalms.skyblock.core.mobs.regions.graveyard;
 
 import com.sweattypalms.skyblock.core.helpers.EntityHelper;
-import com.sweattypalms.skyblock.core.items.builder.SkyblockItemType;
 import com.sweattypalms.skyblock.core.mobs.IRegionEntity;
 import com.sweattypalms.skyblock.core.mobs.ISkyblockMob;
 import com.sweattypalms.skyblock.core.mobs.Regions;
@@ -9,7 +8,6 @@ import com.sweattypalms.skyblock.core.mobs.SkyblockMob;
 import net.minecraft.world.entity.EntityLiving;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.monster.EntityZombieVillager;
-import net.minecraft.world.level.World;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
@@ -37,6 +35,7 @@ public class ZombieVillager extends EntityZombieVillager implements ISkyblockMob
     public Regions getRegion() {
         return Regions.GRAVEYARD;
     }
+
 
     @Override
     public SkyblockMob getSkyblockMob() {

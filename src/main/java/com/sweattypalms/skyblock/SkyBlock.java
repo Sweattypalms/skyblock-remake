@@ -3,6 +3,7 @@ package com.sweattypalms.skyblock;
 import com.sweattypalms.skyblock.commands.MainCommandHandler;
 import com.sweattypalms.skyblock.commands.UtilCommandHandler;
 import com.sweattypalms.skyblock.core.items.ItemManager;
+import com.sweattypalms.skyblock.core.mobs.MobManager;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -28,6 +29,7 @@ public final class SkyBlock extends JavaPlugin {
          registerListeners();
          registerCommands();
          registerItems();
+            registerMobs();
          long end = System.currentTimeMillis() - start;
          if (debug) {
              getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "Skyblock has been enabled! This took " + ChatColor.YELLOW + end + "ms");
@@ -77,6 +79,9 @@ public final class SkyBlock extends JavaPlugin {
     }
     public void registerItems(){
         ItemManager.initSimpleItems();
+    }
+    public void registerMobs(){
+        MobManager.init();
     }
 
     private void configs(){

@@ -3,7 +3,7 @@ package com.sweattypalms.skyblock.core.helpers;
 import com.sweattypalms.skyblock.core.events.SkyblockPlayerDamageEntityEvent;
 import com.sweattypalms.skyblock.core.mobs.SkyblockMob;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
-import com.sweattypalms.skyblock.core.player.Stats;
+import com.sweattypalms.skyblock.core.player.sub.Stats;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -20,8 +20,8 @@ public class DamageCalculator {
         double entityDefense = skyblockMob.getDefense();
 
         double baseDamage = PDCHelper.getOrDefault(item, Stats.DAMAGE.name().toLowerCase(), 0d);
-        double strength = skyblockPlayer.getMaxStats().get(Stats.STRENGTH);
-        double critDamage = skyblockPlayer.getMaxStats().get(Stats.CRIT_DAMAGE);
+        double strength = skyblockPlayer.getStatsManager().getMaxStats().get(Stats.STRENGTH);
+        double critDamage = skyblockPlayer.getStatsManager().getMaxStats().get(Stats.CRIT_DAMAGE);
 
         double additiveMultiplier = event.getAdditiveMultiplier();
         double multiplicitiveMultiplier = event.getMultiplicativeMultiplier();
@@ -41,6 +41,10 @@ public class DamageCalculator {
     }
 
     public static double calculateDamageReduction(double defense) {
-        return defense / (defense + 100);
+        return defense / (float) (defense + 100);
+    }
+
+    public static double calculateDamageReduction(double defense, double damage) {
+        return damage * (1 - calculateDamageReduction(defense));
     }
 }

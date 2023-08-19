@@ -5,7 +5,7 @@ import com.sweattypalms.skyblock.core.items.builder.SimpleSkyblockItem;
 import com.sweattypalms.skyblock.core.items.builder.SkyblockItem;
 import com.sweattypalms.skyblock.core.items.builder.SkyblockItemType;
 import com.sweattypalms.skyblock.core.items.builder.abilities.AbilityManager;
-import com.sweattypalms.skyblock.core.player.Stats;
+import com.sweattypalms.skyblock.core.player.sub.Stats;
 import org.bukkit.Material;
 import org.reflections.Reflections;
 

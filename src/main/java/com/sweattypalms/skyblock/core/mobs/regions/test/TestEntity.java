@@ -12,10 +12,11 @@ import net.minecraft.world.entity.player.EntityHuman;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
 
-public class TestEntity extends EntityZombie implements ISkyblockMob{
+
+public class TestEntity extends EntityZombie implements ISkyblockMob {
     public static final String ID = "test_entity";
 
-    private SkyblockMob skyblockMob;
+    private final SkyblockMob skyblockMob;
 
     public TestEntity(Location location, SkyblockMob skyblockMob) {
         super(EntityTypes.be, ((CraftWorld) location.getWorld()).getHandle());
@@ -25,7 +26,6 @@ public class TestEntity extends EntityZombie implements ISkyblockMob{
                 .setCustomName("$cFlorida man")
                 .setLevel(999)
                 .setAi(true);
-        ;
         skyblockMob.setAi(false);
     }
 
@@ -46,8 +46,8 @@ public class TestEntity extends EntityZombie implements ISkyblockMob{
 
     @Override
     protected void initPathfinder() {
-            //look at player
-            this.bQ.a(0, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 8.0F));    // Follow player
+        //look at player
+        this.bQ.a(0, new PathfinderGoalLookAtPlayer(this, EntityHuman.class, 8.0F));    // Follow player
     }
 
     @Override
@@ -63,7 +63,7 @@ public class TestEntity extends EntityZombie implements ISkyblockMob{
         return b;
     }
 
-    private void damageEntityDebug(){
+    private void damageEntityDebug() {
         System.out.println("damageEntity called");
         if (this.getHealth() <= 0.0F) {
             killEntityDebug();
