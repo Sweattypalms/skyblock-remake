@@ -1,4 +1,4 @@
-package com.sweattypalms.skyblock.core;
+package com.sweattypalms.skyblock.core.helpers;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
@@ -9,13 +9,13 @@ import static com.sweattypalms.skyblock.SkyBlock.getInstance;
 
 public class PDCHelper {
     public static boolean hasInt(ItemStack item, String key){
-        return item.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(getInstance(), key), PersistentDataType.INTEGER);
+        return item != null && item.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(getInstance(), key), PersistentDataType.INTEGER);
     }
     public static boolean hasString(ItemStack item, String key){
-        return item.hasItemMeta() && item.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(getInstance(), key), PersistentDataType.STRING);
+        return item != null && item.hasItemMeta() && item.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(getInstance(), key), PersistentDataType.STRING);
     }
     public static boolean hasDouble(ItemStack item, String key){
-        return item.hasItemMeta() && item.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(getInstance(), key), PersistentDataType.DOUBLE);
+        return item != null && item.hasItemMeta() && item.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(getInstance(), key), PersistentDataType.DOUBLE);
     }
     public static Integer getInt(ItemStack item, String key) {
         return hasInt(item, key) ? item.getItemMeta().getPersistentDataContainer().get(new NamespacedKey(getInstance(), key), PersistentDataType.INTEGER)

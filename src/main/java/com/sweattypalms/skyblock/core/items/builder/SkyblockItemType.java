@@ -1,16 +1,30 @@
 package com.sweattypalms.skyblock.core.items.builder;
 
+import lombok.Getter;
+import org.bukkit.inventory.EquipmentSlot;
+
+import javax.annotation.Nullable;
+
 public enum SkyblockItemType {
     SWORD,
     BOW,
-    HELMET,
-    CHESTPLATE,
-    LEGGINGS,
-    BOOTS,
-    ACCESSORY,
+    HELMET (EquipmentSlot.HEAD),
+    CHESTPLATE (EquipmentSlot.CHEST),
+    LEGGINGS (EquipmentSlot.LEGS),
+    BOOTS (EquipmentSlot.FEET),
+    ACCESSORY (null),
     WAND,
     PICKAXE,
     DRILL,
     AXE,
-    NONE
+    NONE (null);
+
+    @Nullable @Getter
+    private final EquipmentSlot slot;
+    SkyblockItemType(@Nullable EquipmentSlot slot) {
+        this.slot = slot;
+    }
+    SkyblockItemType() {
+        this.slot = EquipmentSlot.HAND;
+    }
 }

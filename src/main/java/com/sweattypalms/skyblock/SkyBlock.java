@@ -2,17 +2,18 @@ package com.sweattypalms.skyblock;
 
 import com.sweattypalms.skyblock.commands.MainCommandHandler;
 import com.sweattypalms.skyblock.commands.UtilCommandHandler;
-import com.sweattypalms.skyblock.core.events.listeners.SkyblockDamageListener;
 import com.sweattypalms.skyblock.core.items.ItemManager;
-import com.sweattypalms.skyblock.core.events.listeners.EntityDamageEntityListener;
-import com.sweattypalms.skyblock.core.events.listeners.PlayerJoinListener;
-import com.sweattypalms.skyblock.core.stats.SkyblockPlayer;
+import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.reflections.Reflections;
 
-import java.util.List;
+import java.io.File;
+import java.util.Set;
 
 public final class SkyBlock extends JavaPlugin {
 
@@ -33,6 +34,7 @@ public final class SkyBlock extends JavaPlugin {
          }
 
         Bukkit.getOnlinePlayers().forEach(SkyblockPlayer::newPlayer);
+        configs();
     }
 
     @Override
@@ -41,12 +43,23 @@ public final class SkyBlock extends JavaPlugin {
     }
 
     public void registerListeners(){
-        List<Listener> listeners = List.of(
-                new PlayerJoinListener(),
-                new EntityDamageEntityListener(),
-                new SkyblockDamageListener()
-        );
-        listeners.forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
+        Reflections reflections = new Reflections("com.sweattypalms.skyblock.core.events.listeners");
+        Set<Class<? extends Listener>> listenerClasses = reflections.getSubTypesOf(org.bukkit.event.Listener.class);
+
+        for (Class<? extends org.bukkit.event.Listener> clazz : listenerClasses) {
+            try {
+                org.bukkit.event.Listener listenerInstance = clazz.getDeclaredConstructor().newInstance();
+                Bukkit.getPluginManager().registerEvents(listenerInstance, this);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+//        List<Listener> listeners = List.of(
+//                new UtilityListener(),
+//                new EntityDamageEntityListener(),
+//                new SkyblockDamageListener()
+//        );
+//        listeners.forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -55,6 +68,7 @@ public final class SkyBlock extends JavaPlugin {
         getCommand("test").setExecutor(mainCommandHandler);
         getCommand("item").setExecutor(mainCommandHandler);
         getCommand("mob").setExecutor(mainCommandHandler);
+        getCommand("stat").setExecutor(mainCommandHandler);
 
         UtilCommandHandler utilCommandHandler = new UtilCommandHandler();
         getCommand("gms").setExecutor(utilCommandHandler);
@@ -63,6 +77,19 @@ public final class SkyBlock extends JavaPlugin {
     }
     public void registerItems(){
         ItemManager.initSimpleItems();
+    }
+
+    private void configs(){
+        File configuration = new File(this.getDataFolder(), "skyblock_config.yml");
+        FileConfiguration config = YamlConfiguration.loadConfiguration(configuration);
+        if(!configuration.exists()){
+            config.set("ratio", true);
+            try {
+                config.save(configuration);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public static SkyBlock getInstance() {

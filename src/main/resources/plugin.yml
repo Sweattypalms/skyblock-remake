@@ -24,3 +24,6 @@ commands:
   mob:
     description: Spawns a mob
     usage: /<command>
+  stat:
+    description: Set or show stats.
+    usage: /<command>

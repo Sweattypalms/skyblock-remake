@@ -34,6 +34,7 @@ public class EntityDamageEntityListener implements Listener {
 //    }
     @EventHandler
     public void onEntityDamageEntity(EntityDamageByEntityEvent  event){
+        event.setDamage(0);
         if(!(event.getEntity() instanceof LivingEntity livingEntity))
             return;
 

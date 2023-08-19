@@ -1,13 +1,18 @@
 package com.sweattypalms.skyblock.core.items.builder.abilities;
 
 
-import com.sweattypalms.skyblock.core.stats.SkyblockPlayer;
 import org.bukkit.event.Event;
 
+import java.util.List;
+
 public interface Ability {
-    TriggerType getTriggerType();
 
-    boolean trigger(Event event);
 
-    void apply(SkyblockPlayer player, Event event);
+    String getName();
+    default boolean nameVisible(){
+        return true;
+    }
+    List<String> getDescription();
+
+    void apply(Event event);
 }

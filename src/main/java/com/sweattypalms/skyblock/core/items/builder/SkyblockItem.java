@@ -1,12 +1,21 @@
 package com.sweattypalms.skyblock.core.items.builder;
 
-import com.sweattypalms.skyblock.core.PDCHelper;
+import com.sweattypalms.skyblock.core.helpers.PDCHelper;
 import com.sweattypalms.skyblock.core.helpers.PlaceholderFormatter;
-import com.sweattypalms.skyblock.core.items.builder.abilities.Ability;
-import com.sweattypalms.skyblock.core.stats.Stats;
+import com.sweattypalms.skyblock.core.items.ItemManager;
+import com.sweattypalms.skyblock.core.items.builder.abilities.IHasAbility;
+import com.sweattypalms.skyblock.core.items.builder.abilities.TriggerType;
+import com.sweattypalms.skyblock.core.items.builder.abilities.types.FullSetBonus;
+import com.sweattypalms.skyblock.core.items.builder.abilities.types.ITriggerable;
+import com.sweattypalms.skyblock.core.items.builder.abilities.types.IUsageCost;
+import com.sweattypalms.skyblock.core.items.builder.armor.interfaces.IDyedArmor;
+import com.sweattypalms.skyblock.core.items.builder.armor.interfaces.IHeadHelmet;
+import com.sweattypalms.skyblock.core.player.Stats;
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -20,22 +29,18 @@ public abstract class SkyblockItem {
     private final Rarity rarity;
     private final SkyblockItemType itemType;
 
-    private final List<Ability> abilities;
-
 
     /**
-     *
-     * @param id "diamond_sword"
+     * @param id          "diamond_sword"
      * @param displayName "Diamond Sword"
-     * @param material Material.DIAMOND_SWORD
-     * @param staticLore List.of(" $7This is a diamond sword"), Use $ as a placeholder
-     * @param stats Map.of(Stats.DAMAGE, 35d)
-     * @param baseRarity Rarity.RARE
-     * @param itemType SkyblockItemType.SWORD
+     * @param material    Material.DIAMOND_SWORD
+     * @param staticLore  List.of(" $7This is a diamond sword"), Use $ as a placeholder
+     * @param stats       Map.of(Stats.DAMAGE, 35d)
+     * @param baseRarity  Rarity.RARE
+     * @param itemType    SkyblockItemType.SWORD
      */
-    public SkyblockItem(String id, String displayName, Material material, @Nullable List<String> staticLore, Map<Stats, Double> stats, Rarity baseRarity, SkyblockItemType itemType, @Nullable List<Ability> abilities) {
+    public SkyblockItem(String id, String displayName, Material material, @Nullable List<String> staticLore, Map<Stats, Double> stats, Rarity baseRarity, SkyblockItemType itemType) {
         this.id = id;
-        System.out.println("id: " + id);
         this.displayName = displayName;
         this.material = material;
         this.staticLore = staticLore;
@@ -47,29 +52,47 @@ public abstract class SkyblockItem {
         });
         this.rarity = baseRarity;
         this.itemType = itemType;
-        this.abilities = abilities;
     }
 
+    public static SkyblockItem fromItemStack(ItemStack item) {
+        String id = PDCHelper.getString(item, "id");
+        return ItemManager.ITEMS_LIST.getOrDefault(id, null);
+    }
 
     public ItemStack toItemStack() {
-        ItemStack item = new ItemStack(this.material);
+        ItemStack item;
+        if (this instanceof IHeadHelmet headHelmet) {
+            if (headHelmet.getTexture() != null) {
+//            TODO: Add head helmet texture
+                item = new ItemStack(Material.PLAYER_HEAD);
+            } else {
+                item = new ItemStack(this.material);
+            }
+        } else {
+            item = new ItemStack(this.material);
+        }
+
         ItemMeta meta = item.getItemMeta();
 
+        assert meta != null;
+
+        if(this instanceof IDyedArmor dyedArmor){
+            ((LeatherArmorMeta) meta).setColor(dyedArmor.getColor());
+        }
 
         // ------- DISPLAY NAME -------
-        meta.setDisplayName(rarity.getColor() + this.displayName);
+        meta.setDisplayName(__getDisplayName());
         // ------- DISPLAY NAME -------
 
         // ------- LORE -------
-        StringBuilder singleLineLore = new StringBuilder();
-        this.staticLore.forEach(line -> {
-            singleLineLore.append(line.replace("$", "§"));
-            singleLineLore.append("\n");
-        });
 
         List<String> lore = buildLore();
         meta.setLore(lore);
+
         // ------- LORE -------
+
+        Arrays.stream(ItemFlag.values()).toList().forEach(meta::addItemFlags);
+        meta.setUnbreakable(true);
 
         item.setItemMeta(meta);
 
@@ -78,12 +101,23 @@ public abstract class SkyblockItem {
         // ------- STATS -------
 
         // ------- PERSISTENT DATA CONTAINER -------
-        PDCHelper.setString(item, "id", this.id);
-        PDCHelper.setString(item, "lore", singleLineLore.toString());
-        PDCHelper.setString(item, "rarity", this.rarity.name());
+        PDCHelper.set(item, "id", this.id);
+//        PDCHelper.set(item, "lore", singleLineLore.toString()); // Implement later when making Dctr Space Helmet
+        PDCHelper.set(item, "rarity", this.rarity.name());
         // ------- PERSISTENT DATA CONTAINER -------
 
+
         return item;
+    }
+
+    /**
+     * This is made to be overridden;
+     * In dungeon item, you can display stars and things with the name by overriding.
+     *
+     * @return "§l§6Diamond Sword"
+     */
+    private String __getDisplayName() {
+        return this.rarity.getColor() + this.displayName;
     }
 
     private List<String> buildLore() {
@@ -112,20 +146,50 @@ public abstract class SkyblockItem {
 
         lore.add("§7");
 
-        if(this.staticLore != null) {
+        if (this.staticLore != null) {
             this.staticLore.forEach(line -> {
                 lore.add(PlaceholderFormatter.format(line));
             });
             lore.add("§7");
         }
 
+        if (this instanceof IHasAbility iHasAbility) {
+            iHasAbility.getAbilities().forEach(ability -> {
+                if (!ability.nameVisible()) return;
+                if(!(ability instanceof ITriggerable triggerable)) return;
+                String abilityName = ability.getName();
+                final String[] triggerType = {""};
+                if (triggerable.getTriggerType() == TriggerType.NONE) {
+                    triggerType[0] = "";
+                } else {
+                    triggerType[0] = triggerable.getTriggerType().name().replace("_", " ");
+                }
+                String abilityType = ability instanceof FullSetBonus ? "Full Set Bonus" : "Ability";
+                String abilityLine = "$6" + abilityType + ": $6" + abilityName + " $e$l" + triggerType[0];
+                abilityLine = PlaceholderFormatter.format(abilityLine);
+                lore.add(abilityLine);
+                lore.addAll(PlaceholderFormatter.format(ability.getDescription()));
+                if(ability instanceof IUsageCost cost){
+                    cost.getCost().forEach((_stat, _value) -> {
+                        String costLine = "$8";
+                        costLine += PlaceholderFormatter.capitalize(_stat.name());
+                        costLine += " Cost:";
+                        costLine += " $3";
+                        costLine += _value;
+                        costLine = PlaceholderFormatter.format(costLine);
+                        lore.add(costLine);
+                    });
+                }
+                lore.add("§7");
+            });
+        }
 
-        // TODO: Add abilities
+
 
         String canBeReforged = "§8This item can be reforged!";
         lore.add(canBeReforged);
         String type = this.itemType == SkyblockItemType.NONE ? "" : String.valueOf(this.itemType);
-        String rarityLine=  rarity.getColor() + "§l"  + rarity + " " + type;
+        String rarityLine = rarity.getColor() + "§l" + rarity + " " + type;
         lore.add(rarityLine);
 
         return lore;
@@ -157,14 +221,11 @@ public abstract class SkyblockItem {
         return this.stats;
     }
 
-    public List<Ability> getAbilities(){
-        return this.abilities;
+    public Rarity getRarity() {
+        return this.rarity;
     }
 
-    public SkyblockItem addAbility(Ability ability){
-        this.abilities.add(ability);
-        System.out.println("Added ability  to " + this.id);
-        return this;
+    public SkyblockItemType getItemType() {
+        return this.itemType;
     }
-
 }

@@ -4,6 +4,8 @@ import com.sweattypalms.skyblock.core.items.ItemManager;
 import com.sweattypalms.skyblock.core.items.builder.SkyblockItem;
 import com.sweattypalms.skyblock.core.mobs.MobManager;
 import com.sweattypalms.skyblock.core.mobs.SkyblockMob;
+import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
+import com.sweattypalms.skyblock.core.player.Stats;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -38,6 +40,9 @@ public class MainCommandHandler implements CommandExecutor {
                 break;
             case "mob":
                 mobCommand(player, command, s, args);
+                break;
+            case "stat":
+                statCommand(player, command, s, args);
                 break;
             default:
                 player.sendMessage(ChatColor.RED + "Unknown command!");
@@ -85,6 +90,7 @@ public class MainCommandHandler implements CommandExecutor {
         String id = args[0].toLowerCase();
         if (!ItemManager.ITEMS_LIST.containsKey(id)) {
             player.sendMessage(ChatColor.RED + "Invalid item ID!");
+            return;
         }
 
         SkyblockItem skyblockItem = ItemManager.ITEMS_LIST.get(id);
@@ -93,4 +99,23 @@ public class MainCommandHandler implements CommandExecutor {
         player.getInventory().addItem(itemStack);
     }
 
+    private void statCommand(Player player, Command command, String s, String[] args) {
+        if (args.length == 0) {
+            player.sendMessage(ChatColor.RED + "Usage: /stat stat value");
+        }
+        Stats stat;
+        double value = 0;
+        try {
+            stat = Stats.valueOf(args[0].toUpperCase());
+            value = Double.parseDouble(args[1]);
+        } catch (Exception e) {
+            player.sendMessage(ChatColor.RED + "Invalid stat or value!");
+            return;
+        }
+
+        player.sendMessage(ChatColor.GREEN + "Setting " + stat + " to " + value);
+
+        SkyblockPlayer skyblockPlayer = SkyblockPlayer.getSkyblockPlayer(player);
+        skyblockPlayer.setBaseStat(stat, value);
+    }
 }

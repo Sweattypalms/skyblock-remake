@@ -1,7 +1,8 @@
 package com.sweattypalms.skyblock.core.items.builder;
 
 import com.sweattypalms.skyblock.core.items.builder.abilities.Ability;
-import com.sweattypalms.skyblock.core.stats.Stats;
+import com.sweattypalms.skyblock.core.items.builder.abilities.IHasAbility;
+import com.sweattypalms.skyblock.core.player.Stats;
 import org.bukkit.Material;
 
 import java.util.List;
@@ -9,7 +10,8 @@ import java.util.Map;
 
 import static com.sweattypalms.skyblock.core.items.ItemManager.ITEMS_LIST;
 
-public class SimpleSkyblockItem extends SkyblockItem {
+public class SimpleSkyblockItem extends SkyblockItem implements IHasAbility {
+    private final List<Ability> abilities;
     public SimpleSkyblockItem(Builder<?> builder) {
         super(
                 builder.id,
@@ -18,19 +20,22 @@ public class SimpleSkyblockItem extends SkyblockItem {
                 builder.staticLore,
                 builder.stats,
                 builder.baseRarity,
-                builder.itemType,
-                builder.abilities
+                builder.itemType
         );
+        this.abilities = builder.abilities == null ? List.of() : builder.abilities;
         ITEMS_LIST.put(this.getId(), this);
+    }
+    public List<Ability> getAbilities() {
+        return this.abilities;
+    }
+
+    public SkyblockItem addAbility(Ability ability) {
+        this.abilities.add(ability);
+        return this;
     }
 
     public static Builder<?> builder() {
         return new Builder<>();
-    }
-
-    @Override
-    public List<Ability> getAbilities() {
-        return null;
     }
 
     public static class Builder<T extends Builder<T>>{
