@@ -6,7 +6,7 @@ import com.sweattypalms.skyblock.core.items.builder.SkyblockItemType;
 import com.sweattypalms.skyblock.core.items.builder.abilities.Ability;
 import com.sweattypalms.skyblock.core.items.builder.abilities.AbilityManager;
 import com.sweattypalms.skyblock.core.items.builder.abilities.IHasAbility;
-import com.sweattypalms.skyblock.core.items.builder.armor.interfaces.IHeadHelmet;
+import com.sweattypalms.skyblock.core.items.builder.armor.IHeadHelmet;
 import com.sweattypalms.skyblock.core.player.sub.Stats;
 import org.bukkit.Material;
 
@@ -42,11 +42,6 @@ public class LapisHelmet extends SkyblockItem implements IHasAbility, IHeadHelme
 
     @Override
     public String getTexture() {
-        return null;
-    }
-
-    @Override
-    public String getSignature() {
         return null;
     }
 }

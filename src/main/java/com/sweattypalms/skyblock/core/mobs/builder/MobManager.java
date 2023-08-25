@@ -1,10 +1,9 @@
-package com.sweattypalms.skyblock.core.mobs;
+package com.sweattypalms.skyblock.core.mobs.builder;
 
 import org.reflections.Reflections;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Logger;
 
 public class MobManager {
 
@@ -13,10 +12,11 @@ public class MobManager {
 
 
     public static void init(){
-        // use reflection to get all classes that implement ISkyblockMob
         Reflections reflections = new Reflections("com.sweattypalms.skyblock.core.mobs.regions");
         for (Class<? extends ISkyblockMob> clazz : reflections.getSubTypesOf(ISkyblockMob.class)) {
             try {
+                if (clazz.isInterface()) continue; // For abstract classes
+
                 String id = clazz.getDeclaredField("ID").get(null).toString();
                 MOBS_LIST.put(id, clazz);
             } catch (Exception e) {
@@ -24,6 +24,8 @@ public class MobManager {
                 System.out.println("Are you missing the ID field?");
             }
         }
+
+        System.out.println("Loaded " + MOBS_LIST.size() + " mobs.");
     }
 
     public static SkyblockMob getInstance(String id) throws IllegalArgumentException{

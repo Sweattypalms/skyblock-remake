@@ -1,6 +1,6 @@
 package com.sweattypalms.skyblock.core.events;
 
-import com.sweattypalms.skyblock.core.mobs.SkyblockMob;
+import com.sweattypalms.skyblock.core.mobs.builder.SkyblockMob;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;

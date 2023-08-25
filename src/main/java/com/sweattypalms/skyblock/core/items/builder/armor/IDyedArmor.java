@@ -1,4 +1,4 @@
-package com.sweattypalms.skyblock.core.items.builder.armor.interfaces;
+package com.sweattypalms.skyblock.core.items.builder.armor;
 
 import org.bukkit.Color;
 

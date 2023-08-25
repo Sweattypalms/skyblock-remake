@@ -5,6 +5,8 @@ api-version: '1.17'
 authors: [sweattypalms, devil_gamer_xd]
 description: A Hypixel Skyblock remake plugin
 website: sweattypalms.me
+depend:
+  - Multiverse-Core
 commands:
   test:
     description: Test command
@@ -26,4 +28,13 @@ commands:
     usage: /<command>
   stat:
     description: Set or show stats.
+    usage: /<command>
+  upgrade:
+    description: Upgrade your item
+    usage: /<command>
+  reforge:
+    description: Reforge your item
+    usage: /<command>
+  debug:
+    description: Debug command
     usage: /<command>

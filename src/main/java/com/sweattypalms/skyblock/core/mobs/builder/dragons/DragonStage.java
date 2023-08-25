@@ -1,22 +1,27 @@
-package com.sweattypalms.skyblock.core.mobs.regions.end.dragons;
+package com.sweattypalms.skyblock.core.mobs.builder.dragons;
 
+import com.sweattypalms.skyblock.core.helpers.MathHelper;
 import org.bukkit.util.Vector;
 
 import java.util.List;
 
-class DragonStage {
+public class DragonStage {
 
     final List<Vector> path;
     final double speed;
-    final Runnable onEnter;
 
-    public DragonStage(List<Vector> path, double speed, Runnable onEnter) {
+    public DragonStage(List<Vector> path, double speed) {
+        if(path.size() != 4 && path.size() != 2) throw new IllegalArgumentException("Path must be 2 or 4 points");
         this.path = path;
         this.speed = speed;
-        this.onEnter = onEnter;
     }
 
-    public Vector getPointOnBezierCurve(double t) {
+    public Vector getPoint(double t) {
+
+        if(path.size() == 2){
+            return MathHelper.lerp(path.get(0), path.get(1), t);
+        }
+
         double u = 1 - t;
         double tt = t * t;
         double uu = u * u;
@@ -29,9 +34,5 @@ class DragonStage {
         p.add(path.get(3).clone().multiply(ttt));
 
         return p;
-    }
-
-    public void onEnter(EnderDragon dragon) {
-        onEnter.run();
     }
 }

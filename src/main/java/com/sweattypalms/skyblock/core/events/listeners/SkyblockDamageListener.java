@@ -9,12 +9,10 @@ import com.sweattypalms.skyblock.core.items.builder.abilities.IHasAbility;
 import com.sweattypalms.skyblock.core.items.builder.abilities.types.DamageAbility;
 import com.sweattypalms.skyblock.core.items.builder.abilities.types.FullSetBonus;
 import com.sweattypalms.skyblock.core.items.builder.abilities.types.ITriggerable;
-import com.sweattypalms.skyblock.core.mobs.SkyblockMob;
+import com.sweattypalms.skyblock.core.mobs.builder.SkyblockMob;
 import com.sweattypalms.skyblock.core.player.sub.Stats;
-import com.sweattypalms.skyblock.core.player.sub.StatsManager;
 import org.bukkit.Location;
 import org.bukkit.Sound;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -29,8 +27,8 @@ public class SkyblockDamageListener implements Listener {
      */
     @EventHandler(priority = EventPriority.LOWEST)
     public void onSkyblockPlayerDamageEntityDamageCalculation(SkyblockPlayerDamageEntityEvent event) {
-        if(event.isCancelled()) return;
-        if(event.getSkyblockMob() == null) return;
+        if (event.isCancelled()) return;
+        if (event.getSkyblockMob() == null) return;
         // TODO: check for damage type : event.getDamageType()
 
         // Item Abilities (Item in hand)
@@ -54,7 +52,12 @@ public class SkyblockDamageListener implements Listener {
             fullSetBonus.apply(event);
         }
 
-        double damage = DamageCalculator.calculateNormalDamage(event);
+        double damage;
+        if (event.getDamageType() == SkyblockPlayerDamageEntityEvent.DamageType.ABILITY) {
+            damage = DamageCalculator.calculateAbilityDamage(event);
+        } else {
+            damage = DamageCalculator.calculateNormalDamage(event);
+        }
         event.setDamage(damage);
 //        System.out.printf(
 //                "Player %s damaged %s for %s damage%n",
@@ -68,7 +71,7 @@ public class SkyblockDamageListener implements Listener {
     @EventHandler
     public void onSkyblockPlayerDamageEntity(SkyblockPlayerDamageEntityEvent event) {
         if (event.isCancelled()) return;
-        if(event.getSkyblockMob() == null) return;
+        if (event.getSkyblockMob() == null) return;
 
         SkyblockMob skyblockMob = event.getSkyblockMob();
         double damage = event.getDamage();
@@ -93,7 +96,9 @@ public class SkyblockDamageListener implements Listener {
                 }
             });
         }
-        skyblockMob.damageEntityWithCause(damage, event.getDamageType(), event.getSkyblockPlayer());
+        skyblockMob.damageEntityWithCause(event);
+
+        if(event.getDamageType() == SkyblockPlayerDamageEntityEvent.DamageType.ABILITY) return;
 
         /* ------- FEROCITY ------- */
 
@@ -113,7 +118,7 @@ public class SkyblockDamageListener implements Listener {
                     if (skyblockMob.getEntityInstance() == null) return;
                     if (skyblockMob.getEntityInstance().isDead() || skyblockMob.getEntityInstance().getHealth() <= 0)
                         return;
-                    skyblockMob.damageEntityWithCause(damage, event.getDamageType(), event.getSkyblockPlayer());
+                    skyblockMob.damageEntityWithCause(event);
 
                     /* ------- SOUND ------- */
 

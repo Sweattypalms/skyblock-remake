@@ -7,12 +7,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class BonusManager {
     private final SkyblockPlayer player;
 
     @Getter
-    private Map<String, List<Bonus>> bonuses = new HashMap<>();
+    private Map<String, List<Bonus>> bonuses = new ConcurrentHashMap<>();
 
     public BonusManager(SkyblockPlayer player) {
         this.player = player;
@@ -48,6 +49,10 @@ public class BonusManager {
         for (String key : bonuses.keySet()) {
             bonuses.get(key).removeIf(Bonus::isExpired);
         }
+    }
+
+    public List<Bonus> getBonuses(String key) {
+        return this.bonuses.getOrDefault(key, new ArrayList<>());
     }
 
 }

@@ -1,16 +1,19 @@
 package com.sweattypalms.skyblock.core.items.builder.abilities;
 
+import com.sweattypalms.skyblock.SkyBlock;
 import com.sweattypalms.skyblock.core.events.SkyblockInteractEvent;
 import com.sweattypalms.skyblock.core.events.SkyblockPlayerDamageEntityEvent;
+import com.sweattypalms.skyblock.core.items.builder.SkyblockItem;
 import com.sweattypalms.skyblock.core.items.builder.abilities.types.*;
-import com.sweattypalms.skyblock.core.player.sub.Bonus;
+import com.sweattypalms.skyblock.core.items.builder.item.IShortBow;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
+import com.sweattypalms.skyblock.core.player.sub.Bonus;
+import com.sweattypalms.skyblock.core.player.sub.BonusManager;
 import com.sweattypalms.skyblock.core.player.sub.Stats;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import com.sweattypalms.skyblock.core.player.sub.StatsManager;
+import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.Event;
 import org.bukkit.util.Vector;
 
@@ -40,6 +43,7 @@ public class AbilityManager {
         public boolean preCalc() {
             return true;
         }
+
         @Override
         public boolean trigger(Event event) {
             if (!(event instanceof SkyblockPlayerDamageEntityEvent skyblockPlayerDamageEntityEvent)) return false;
@@ -77,42 +81,13 @@ public class AbilityManager {
 
         @Override
         public void apply(Event event) {
-            if(!(event instanceof SkyblockPlayerDamageEntityEvent skyblockPlayerDamageEntityEvent)) return;
-            if(skyblockPlayerDamageEntityEvent.getSkyblockPlayer().getRandom().nextInt(100) > 25) return;
+            if (!(event instanceof SkyblockPlayerDamageEntityEvent skyblockPlayerDamageEntityEvent)) return;
+            if (skyblockPlayerDamageEntityEvent.getSkyblockPlayer().getRandom().nextInt(100) > 25) return;
             skyblockPlayerDamageEntityEvent.getEntity().getWorld().strikeLightningEffect(skyblockPlayerDamageEntityEvent.getEntity().getLocation());
         }
     };
-    public static Ability ASPECT_OF_THE_END_TELEPORT_ABILITY = new TELEPORT_ABILITY(8) {
-        @Override
-        public Map<Stats, Double> getCost() {
-            return Map.of(
-                    Stats.INTELLIGENCE, 50.0
-            );
-        }
 
-        @Override
-        public String getName() {
-            return "Instant Transmission";
-        }
-
-        @Override
-        public List<String> getDescription() {
-            return List.of(
-                    "$7Teleport $a8 $7blocks ahead of",
-                    "$7you and gain $a+50 " + Stats.SPEED.getSymbol() + "Speed",
-                    "$7for $a3 seconds$7."
-            );
-        }
-
-        @Override
-        public void apply(Event event) {
-            super.apply(event);
-            SkyblockPlayer skyblockPlayer = ((SkyblockInteractEvent) event).getSkyblockPlayer();
-            Bonus speedBonus = new Bonus(Stats.SPEED, 50, 3000);
-            skyblockPlayer.getBonusManager().setBonus("aote.speed", speedBonus);
-        }
-    };
-    public static class LAPIS_ARMOR_ABILITY implements FullSetBonus, PassiveAbility{
+    public static class LAPIS_ARMOR_ABILITY implements FullSetBonus, PassiveAbility {
 
         @Override
         public String getName() {
@@ -133,6 +108,7 @@ public class AbilityManager {
             player.getStatsManager().setMaxStat(Stats.HEALTH, currentMaxHealth + 60);
         }
     }
+
     public static abstract class TELEPORT_ABILITY implements ITriggerable, IUsageCost {
 
         private final int range;
@@ -143,7 +119,7 @@ public class AbilityManager {
 
         @Override
         public void apply(Event event) {
-            if(!(event instanceof SkyblockInteractEvent skyblockInteractEvent)) return;
+            if (!(event instanceof SkyblockInteractEvent skyblockInteractEvent)) return;
             SkyblockPlayer skyblockPlayer = skyblockInteractEvent.getSkyblockPlayer();
             Player player = skyblockPlayer.getPlayer();
 
@@ -161,7 +137,7 @@ public class AbilityManager {
                 start.add(direction);
 
                 Block block = start.getBlock();
-                if(!whitelistedMaterials.contains(block.getType())){
+                if (!whitelistedMaterials.contains(block.getType())) {
                     start.subtract(direction);
                     player.sendMessage("There are blocks in the way!");
                     break;
@@ -178,9 +154,66 @@ public class AbilityManager {
 
         @Override
         public boolean trigger(Event event) {
-            if(!(event instanceof SkyblockInteractEvent skyblockInteractEvent)) return false;
+            if (!(event instanceof SkyblockInteractEvent skyblockInteractEvent)) return false;
             return skyblockInteractEvent.getInteractType() == TriggerType.RIGHT_CLICK;
         }
     }
+
+    public static abstract class SHORT_BOW implements ITriggerable {
+
+        @Override
+        public boolean nameVisible() {
+            return false;
+        }
+
+        @Override
+        public String getName() {
+            return "Shortbow";
+        }
+
+        @Override
+        public List<String> getDescription() {
+            return new ArrayList<>(List.of(
+                    "Shoot instantly. Lore not visible."
+            ));
+        }
+
+        @Override
+        public TriggerType getTriggerType() {
+            return TriggerType.NONE;
+        }
+
+        @Override
+        public boolean trigger(Event event) {
+            if (!(event instanceof SkyblockInteractEvent skyblockInteractEvent)) return false;
+            SkyblockItem skyblockItem = skyblockInteractEvent.getSkyblockPlayer().getInventoryManager().getSkyblockItemInHand();
+            TriggerType triggerType = skyblockInteractEvent.getInteractType();
+            boolean shortBow = skyblockItem instanceof IShortBow;
+            boolean correctTrigger = triggerType == TriggerType.LEFT_CLICK || triggerType == TriggerType.RIGHT_CLICK;
+            return shortBow && correctTrigger;
+        }
+
+        @Override
+        public void apply(Event event) {
+            if (!(event instanceof SkyblockInteractEvent skyblockInteractEvent)) return;
+            SkyblockPlayer skyblockPlayer = skyblockInteractEvent.getSkyblockPlayer();
+            Player player = skyblockPlayer.getPlayer();
+
+            player.getWorld().spawn(player.getEyeLocation().add(player.getEyeLocation().getDirection().multiply(1.5)), ArmorStand.class, as -> {
+                as.setInvisible(true);
+                as.setInvulnerable(true);
+                as.setMarker(true);
+                as.setSmall(true);
+                as.setCollidable(false);
+
+                Arrow arrow = as.launchProjectile(Arrow.class);
+                arrow.setShooter(player);
+
+                player.playSound(player.getLocation(), Sound.ENTITY_ARROW_SHOOT, 1, 1);
+                as.remove();
+            });
+        }
+    }
+
 }
 

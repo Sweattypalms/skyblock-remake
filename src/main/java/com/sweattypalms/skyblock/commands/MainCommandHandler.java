@@ -1,9 +1,12 @@
 package com.sweattypalms.skyblock.commands;
 
+import com.sweattypalms.skyblock.core.helpers.PDCHelper;
 import com.sweattypalms.skyblock.core.items.ItemManager;
 import com.sweattypalms.skyblock.core.items.builder.SkyblockItem;
-import com.sweattypalms.skyblock.core.mobs.MobManager;
-import com.sweattypalms.skyblock.core.mobs.SkyblockMob;
+import com.sweattypalms.skyblock.core.items.builder.reforges.Reforge;
+import com.sweattypalms.skyblock.core.items.builder.reforges.ReforgeManager;
+import com.sweattypalms.skyblock.core.mobs.builder.MobManager;
+import com.sweattypalms.skyblock.core.mobs.builder.SkyblockMob;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
 import com.sweattypalms.skyblock.core.player.sub.Stats;
 import org.bukkit.ChatColor;
@@ -14,6 +17,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
 
 public class MainCommandHandler implements CommandExecutor {
     @Override
@@ -35,18 +39,13 @@ public class MainCommandHandler implements CommandExecutor {
 //            case "test":
 //                testCommand(player, command, s, args);
 //                break;
-            case "item":
-                itemCommand(player, command, s, args);
-                break;
-            case "mob":
-                mobCommand(player, command, s, args);
-                break;
-            case "stat":
-                statCommand(player, command, s, args);
-                break;
-            default:
-                player.sendMessage(ChatColor.RED + "Unknown command!");
-                break;
+            case "item" -> itemCommand(player, command, s, args);
+            case "mob" -> mobCommand(player, command, s, args);
+            case "stat" -> statCommand(player, command, s, args);
+            case "upgrade" -> upgradeCommand(player, command, s, args);
+            case "reforge" -> reforgeCommand(player, command, s, args);
+            case "debug" -> debugCommand(player, command, s, args);
+            default -> player.sendMessage(ChatColor.RED + "Unknown command!");
         }
 
 
@@ -94,7 +93,19 @@ public class MainCommandHandler implements CommandExecutor {
         SkyblockItem skyblockItem = ItemManager.ITEMS_LIST.get(id);
         ItemStack itemStack = skyblockItem.toItemStack();
 
-        player.getInventory().addItem(itemStack);
+        int amount = 1;
+        if (args.length > 1) {
+            try {
+                amount = Integer.parseInt(args[1]);
+            } catch (NumberFormatException e) {
+                player.sendMessage(ChatColor.RED + "Invalid amount!");
+                return;
+            }
+        }
+        for(int i = 0; i < amount; i++) {
+            PDCHelper.setString(itemStack, "uuid", java.util.UUID.randomUUID().toString());
+            player.getInventory().addItem(itemStack);
+        }
     }
 
     private void statCommand(Player player, Command command, String s, String[] args) {
@@ -115,5 +126,63 @@ public class MainCommandHandler implements CommandExecutor {
 
         SkyblockPlayer skyblockPlayer = SkyblockPlayer.getSkyblockPlayer(player);
         skyblockPlayer.getStatsManager().setBaseStat(stat, value);
+    }
+
+
+    private void upgradeCommand(Player player, Command command, String s, String[] args) {
+        ItemStack item = player.getInventory().getItemInMainHand();
+        if (SkyblockItem.fromItemStack(item) == null) {
+            player.sendMessage(ChatColor.RED + "You must be holding a skyblock item!");
+            return;
+        }
+
+        SkyblockItem skyblockItem = SkyblockItem.fromItemStack(item);
+
+        PDCHelper.setString(item, "rarity", skyblockItem.getRarity().getUpgraded().name());
+        ItemStack updatedItemStack = SkyblockItem.updateItemStack(item);
+        player.getInventory().setItemInMainHand(updatedItemStack);
+    }
+
+    private void reforgeCommand(Player player, Command command, String s, String[] args) {
+        ItemStack item = player.getInventory().getItemInMainHand();
+        if (SkyblockItem.fromItemStack(item) == null) {
+            player.sendMessage(ChatColor.RED + "You must be holding a skyblock item!");
+            return;
+        }
+
+        if (args.length == 0) {
+            player.sendMessage(ChatColor.RED + "Usage: /reforge reforge");
+            return;
+        }
+
+        Reforge reforge = ReforgeManager.getReforge(args[0].toLowerCase());
+        if (reforge == null) {
+            player.sendMessage(ChatColor.RED + "Invalid reforge!");
+            return;
+        }
+
+        SkyblockItem skyblockItem = SkyblockItem.fromItemStack(item);
+
+        PDCHelper.setString(item, "reforge", reforge.getName().toLowerCase());
+        ItemStack updatedItemStack = SkyblockItem.updateItemStack(item);
+        player.getInventory().setItemInMainHand(updatedItemStack);
+    }
+    private void debugCommand(Player player, Command command, String s, String[] args){
+//        log all info about the item in hand with the name etc
+        ItemStack item = player.getInventory().getItemInMainHand();
+        if (SkyblockItem.fromItemStack(item) == null) {
+            player.sendMessage(ChatColor.RED + "You must be holding a skyblock item!");
+            return;
+        }
+        SkyblockItem skyblockItem = SkyblockItem.fromItemStack(item);
+        player.sendMessage(ChatColor.GREEN + "Item: " + skyblockItem.getId());
+        player.sendMessage(ChatColor.GREEN + "Rarity: " + skyblockItem.getRarity());
+        player.sendMessage(ChatColor.GREEN + "Reforge: " + PDCHelper.getString(item, "reforge"));
+        player.sendMessage(ChatColor.GREEN + "Stats: " + Arrays.toString(skyblockItem.getStats().entrySet().toArray()));
+//        player.sendMessage(ChatColor.GREEN + "Lore: " + Arrays.toString(skyblockItem.getStaticLore().toArray()));
+        player.sendMessage(ChatColor.GREEN + "-----------------");
+        SkyblockItem.getStatsFromItemStack(item).forEach((stat, value) -> {
+            player.sendMessage(ChatColor.GREEN + stat.name() + ": " + value);
+        });
     }
 }

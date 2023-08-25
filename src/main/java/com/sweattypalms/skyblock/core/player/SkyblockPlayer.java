@@ -1,10 +1,9 @@
 package com.sweattypalms.skyblock.core.player;
 
 import com.sweattypalms.skyblock.SkyBlock;
-import com.sweattypalms.skyblock.core.player.sub.ActionBarManager;
-import com.sweattypalms.skyblock.core.player.sub.BonusManager;
-import com.sweattypalms.skyblock.core.player.sub.InventoryManager;
-import com.sweattypalms.skyblock.core.player.sub.StatsManager;
+import com.sweattypalms.skyblock.core.helpers.DamageCalculator;
+import com.sweattypalms.skyblock.core.helpers.PlaceholderFormatter;
+import com.sweattypalms.skyblock.core.player.sub.*;
 import lombok.Getter;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -28,6 +27,8 @@ public class SkyblockPlayer {
     @Getter
     private final ActionBarManager actionBarManager;
     @Getter
+    private final ScoreboardManager scoreboardManager;
+    @Getter
     private final Player player;
     private BukkitTask tickRunnable;
 
@@ -39,6 +40,7 @@ public class SkyblockPlayer {
         this.inventoryManager = new InventoryManager(this);
         this.bonusManager = new BonusManager(this);
         this.actionBarManager = new ActionBarManager(this);
+        this.scoreboardManager = new ScoreboardManager(this);
 
         players.put(player.getUniqueId(), this);
         init();
@@ -53,6 +55,11 @@ public class SkyblockPlayer {
     }
 
     private void init() {
+
+        String displayName = "$c[OWNER] " + this.player.getName();
+        displayName = PlaceholderFormatter.format(displayName);
+        this.player.setDisplayName(displayName);
+
         this.tickRunnable = new BukkitRunnable() {
             @Override
             public void run() {
@@ -62,15 +69,19 @@ public class SkyblockPlayer {
 
         this.statsManager.initHealth();
     }
-
     private void tick() {
-        if (this.player.isDead() || !this.player.isOnline()) {
+        if (!this.player.isOnline()) {
             SkyblockPlayer.players.remove(this.player.getUniqueId());
             this.tickRunnable.cancel();
+        }
+        if(this.player.isDead()){
+            return;
         }
         this.bonusManager.cleanupExpiredBonuses();
         this.statsManager.tick();
         this.actionBarManager.actionBar();
+
+        this.scoreboardManager.updateScoreboard();
     }
 
     /**
@@ -86,6 +97,13 @@ public class SkyblockPlayer {
                 )
         );
     }
+
+    public void damageWithReduction(double damage){
+        double defense = this.statsManager.getMaxStats().get(Stats.DEFENSE);
+        double finalDamage = DamageCalculator.calculateDamageReduction(defense, damage);
+        this.damage(finalDamage);
+    }
+
 
 }
 

@@ -23,6 +23,12 @@ public enum Stats {
     HEALTH_REGEN(ChatColor.RED + "❣", "Health Regen", 100, false, ChatColor.RED, true),
     MANA_REGEN(ChatColor.AQUA + "❉", "Mana Regen", 100, false, ChatColor.AQUA, true),
 
+
+    /* ---------------------------- */
+    BOW_PULL(ChatColor.WHITE + "⇧", "Bow Pull", 0, false, ChatColor.WHITE, true), // => For bow crit calculation.
+    SHORTBOW_SHOT_COOLDOWN( "?", "Shot Cooldown", 0, false, ChatColor.WHITE, true), // => For Short bow cooldown.
+
+    CUSTOM("?", "Custom", 0, false, ChatColor.WHITE, true) // => For bonuses variable management.
     ;
     @Getter
     private final String symbol;

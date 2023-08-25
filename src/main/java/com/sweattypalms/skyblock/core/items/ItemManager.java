@@ -7,6 +7,7 @@ import com.sweattypalms.skyblock.core.items.builder.SkyblockItemType;
 import com.sweattypalms.skyblock.core.items.builder.abilities.AbilityManager;
 import com.sweattypalms.skyblock.core.player.sub.Stats;
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 import org.reflections.Reflections;
 
 import java.util.HashMap;
@@ -18,14 +19,23 @@ public class ItemManager {
     public static Map<String, SkyblockItem> ITEMS_LIST = new HashMap<>(Map.of(
     ));
 
-    public static void initSimpleItems() {
-        diamondSword();
-        undeadSword();
-        initReflection();
+    public static ItemStack getItemStack(String id) {
+        try {
+            return ITEMS_LIST.get(id).toItemStack();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
+    public static void init() {
+        initReflection();
+        initSimpleItems();
+    }
+
+
+
     private static void initReflection() {
-        Reflections reflections = new Reflections("com.sweattypalms.skyblock.core.items");
+        Reflections reflections = new Reflections("com.sweattypalms.skyblock.core.items.types");
         Set<Class<? extends SkyblockItem>> itemClasses = reflections.getSubTypesOf(SkyblockItem.class);
 
         for (Class<? extends SkyblockItem> clazz : itemClasses) {
@@ -37,8 +47,13 @@ public class ItemManager {
                 e.printStackTrace();
             }
         }
-    }
 
+        System.out.println("Loaded " + ITEMS_LIST.size() + " items.");
+    }
+    private static void initSimpleItems() {
+        diamondSword();
+        undeadSword();
+    }
     private static void diamondSword(){
         SkyblockItem diamondSword = SimpleSkyblockItem.builder()
                 .id("diamond_sword")

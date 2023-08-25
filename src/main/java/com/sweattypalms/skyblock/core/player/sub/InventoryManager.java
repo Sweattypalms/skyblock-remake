@@ -29,6 +29,9 @@ public class InventoryManager {
         String id = PDCHelper.getString(itemStack, "id");
         return ItemManager.ITEMS_LIST.get(id);
     }
+    public ItemStack getItemInHand() {
+        return this.player.getPlayer().getInventory().getItemInMainHand();
+    }
 
     public HashMap<SkyblockItemType, ItemStack> getInventoryItems() {
         HashMap<SkyblockItemType, ItemStack> items = new HashMap<>();
@@ -45,10 +48,11 @@ public class InventoryManager {
                     SkyblockItemType.LEGGINGS,
                     SkyblockItemType.BOOTS
             ));
-            if (
-                    skyblockItemFromItemstack != null
-                            && armorTypes.contains(skyblockItemFromItemstack.getItemType())
-                            && skyblockItemType.getSlot().equals(EquipmentSlot.HAND)) return;
+//            if (
+//                    skyblockItemFromItemstack != null
+//
+//                            && armorTypes.contains(skyblockItemFromItemstack.getItemType())
+//                            && skyblockItemType.getSlot().equals(EquipmentSlot.HAND)) return;
             if (PDCHelper.hasString(itemStack, "id"))
                 items.put(skyblockItemType, itemStack);
         });

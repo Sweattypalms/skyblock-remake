@@ -1,7 +1,7 @@
 package com.sweattypalms.skyblock.core.mobs.regions.test;
 
-import com.sweattypalms.skyblock.core.mobs.ISkyblockMob;
-import com.sweattypalms.skyblock.core.mobs.SkyblockMob;
+import com.sweattypalms.skyblock.core.mobs.builder.ISkyblockMob;
+import com.sweattypalms.skyblock.core.mobs.builder.SkyblockMob;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityLiving;
 import net.minecraft.world.entity.EntityTypes;
@@ -64,7 +64,7 @@ public class TestEntity extends EntityZombie implements ISkyblockMob {
     }
 
     private void damageEntityDebug() {
-        System.out.println("damageEntity called");
+//        System.out.println("damageEntity called");
         if (this.getHealth() <= 0.0F) {
             killEntityDebug();
         }

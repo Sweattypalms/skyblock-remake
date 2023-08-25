@@ -1,9 +1,9 @@
 package com.sweattypalms.skyblock.core.mobs.regions.graveyard;
 
-import com.sweattypalms.skyblock.core.mobs.IRegionEntity;
-import com.sweattypalms.skyblock.core.mobs.ISkyblockMob;
-import com.sweattypalms.skyblock.core.mobs.Regions;
-import com.sweattypalms.skyblock.core.mobs.SkyblockMob;
+import com.sweattypalms.skyblock.core.mobs.builder.IRegionEntity;
+import com.sweattypalms.skyblock.core.mobs.builder.ISkyblockMob;
+import com.sweattypalms.skyblock.core.mobs.builder.Regions;
+import com.sweattypalms.skyblock.core.mobs.builder.SkyblockMob;
 import net.minecraft.world.entity.EntityLiving;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.monster.EntityZombie;

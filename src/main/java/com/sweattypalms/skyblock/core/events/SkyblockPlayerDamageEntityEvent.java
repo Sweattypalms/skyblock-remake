@@ -1,7 +1,8 @@
 package com.sweattypalms.skyblock.core.events;
 
-import com.sweattypalms.skyblock.core.mobs.ISkyblockMob;
-import com.sweattypalms.skyblock.core.mobs.SkyblockMob;
+import com.sweattypalms.skyblock.core.items.builder.abilities.types.IAbilityActivator;
+import com.sweattypalms.skyblock.core.mobs.builder.ISkyblockMob;
+import com.sweattypalms.skyblock.core.mobs.builder.SkyblockMob;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.bukkit.inventory.ItemStack;
 
 public class SkyblockPlayerDamageEntityEvent extends Event implements Cancellable, ISkyblockPlayerEvent {
     private static final HandlerList HANDLERS = new HandlerList();
@@ -27,6 +29,12 @@ public class SkyblockPlayerDamageEntityEvent extends Event implements Cancellabl
     private boolean isCancelled;
     @Getter private double additiveMultiplier = 0;
     @Getter private double multiplicativeMultiplier = 1;
+
+    @Getter @Setter private boolean isCrit = false;
+    @Getter @Setter private boolean isForcedCrit = false;
+
+
+
 
     /**
      *
@@ -50,12 +58,10 @@ public class SkyblockPlayerDamageEntityEvent extends Event implements Cancellabl
     private double damage;
 
     /* Ability damage  */
-    @Getter
-    @Setter
-    private double abilityScaling;
-    @Getter
-    @Setter
-    private double specialAbilityDamage;
+    @Getter @Setter
+    private ItemStack abilityItem;
+    @Getter @Setter
+    private IAbilityActivator abilityActivator;
     /* Ability damage  */
 
     public SkyblockPlayerDamageEntityEvent(LivingEntity entity, Player player, DamageType damageType) {

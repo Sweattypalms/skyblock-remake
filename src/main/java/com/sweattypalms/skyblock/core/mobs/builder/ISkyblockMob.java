@@ -1,4 +1,4 @@
-package com.sweattypalms.skyblock.core.mobs;
+package com.sweattypalms.skyblock.core.mobs.builder;
 
 import net.minecraft.world.entity.EntityLiving;
 

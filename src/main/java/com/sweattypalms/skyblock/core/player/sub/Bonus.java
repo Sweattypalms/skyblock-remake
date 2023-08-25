@@ -11,6 +11,10 @@ public class Bonus {
         this.expiryTime = System.currentTimeMillis() + durationMillis;
     }
 
+    public void setCanExpire(boolean canExpire) {
+        if (!canExpire) this.expiryTime = Long.MAX_VALUE;
+    }
+
     public void setExpiryTime(long expiryTime) {
         this.expiryTime = expiryTime;
     }

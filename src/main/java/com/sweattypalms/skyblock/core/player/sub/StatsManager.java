@@ -1,11 +1,14 @@
 package com.sweattypalms.skyblock.core.player.sub;
 
 import com.sweattypalms.skyblock.core.helpers.PDCHelper;
+import com.sweattypalms.skyblock.core.items.builder.Rarity;
 import com.sweattypalms.skyblock.core.items.builder.SkyblockItem;
 import com.sweattypalms.skyblock.core.items.builder.abilities.Ability;
 import com.sweattypalms.skyblock.core.items.builder.abilities.IHasAbility;
 import com.sweattypalms.skyblock.core.items.builder.abilities.types.FullSetBonus;
 import com.sweattypalms.skyblock.core.items.builder.abilities.types.PassiveAbility;
+import com.sweattypalms.skyblock.core.items.builder.reforges.Reforge;
+import com.sweattypalms.skyblock.core.items.builder.reforges.ReforgeManager;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
 import lombok.Getter;
 import org.bukkit.attribute.Attribute;
@@ -87,14 +90,11 @@ public class StatsManager {
             stats.put(stat, value[0]);
             /* -------- ARMOR & ITEMS -------- */
 
-            /* TODO: Add passive abilities and others */
-
         });
 
         double oldMaxHealth = this.maxStats.get(Stats.HEALTH);
         double oldCurrentHealth = this.liveStats.get(Stats.HEALTH);
         this.maxStats.putAll(stats);
-        healthCorrection(oldMaxHealth, oldCurrentHealth);
 
 
         List<PassiveAbility> passiveAbilities = new ArrayList<>();
@@ -135,13 +135,8 @@ public class StatsManager {
                 }
             }
         }
-//        for (Bonus bonus : bonuses.values()) {
-//            if (!bonus.isExpired()) {
-//                double value = stats.get(bonus.getStat());
-//                value += bonus.getValue();
-//                this.maxStats.put(bonus.getStat(), this.maxStats.get(bonus.getStat()) + bonus.getValue());
-//            }
-//        }
+
+        healthCorrection(oldMaxHealth, oldCurrentHealth);
     }
 
 
@@ -213,8 +208,15 @@ public class StatsManager {
      * @return Stat value
      */
     private double getStat(Stats stat, ItemStack item) {
-        /* Add reforges */
-        return PDCHelper.getDouble(item, stat.name().toLowerCase());
+        double value = 0;
+        String reforgeString = PDCHelper.getOrDefault(item, "reforge", "none");
+        Reforge reforge = ReforgeManager.getReforge(reforgeString);
+        if(reforge != null){
+            Rarity rarity = Rarity.valueOf(PDCHelper.getOrDefault(item, "rarity", "COMMON"));
+            value += reforge.getReforgeStats(rarity).getOrDefault(stat, 0.0);
+        }
+        value += PDCHelper.getDouble(item, "stat." + stat.name().toLowerCase());
+        return value;
     }
 
     public void maxStats(Stats stat, double value) {
