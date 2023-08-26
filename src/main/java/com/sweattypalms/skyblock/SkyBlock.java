@@ -1,7 +1,7 @@
 package com.sweattypalms.skyblock;
 
-import com.sweattypalms.skyblock.commands.MainCommandHandler;
-import com.sweattypalms.skyblock.commands.UtilCommandHandler;
+import com.sweattypalms.skyblock.commands.CommandListener;
+import com.sweattypalms.skyblock.commands.CommandRegistry;
 import com.sweattypalms.skyblock.core.items.ItemManager;
 import com.sweattypalms.skyblock.core.items.builder.reforges.ReforgeManager;
 import com.sweattypalms.skyblock.core.mobs.builder.MobManager;
@@ -41,13 +41,13 @@ public final class SkyBlock extends JavaPlugin {
         registerCommands();
         registerCraft();
         registerServer();
+
         long end = System.currentTimeMillis() - start;
         if (debug) {
             getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "Skyblock has been enabled! This took " + ChatColor.YELLOW + end + "ms");
         }
 
 //        drawAscii();
-
         Bukkit.getOnlinePlayers().forEach(SkyblockPlayer::newPlayer);
         configs();
     }
@@ -91,19 +91,25 @@ public final class SkyBlock extends JavaPlugin {
 
     @SuppressWarnings("ConstantConditions")
     public void registerCommands() {
-        MainCommandHandler mainCommandHandler = new MainCommandHandler();
-        getCommand("test").setExecutor(mainCommandHandler);
-        getCommand("item").setExecutor(mainCommandHandler);
-        getCommand("mob").setExecutor(mainCommandHandler);
-        getCommand("stat").setExecutor(mainCommandHandler);
-        getCommand("upgrade").setExecutor(mainCommandHandler);
-        getCommand("reforge").setExecutor(mainCommandHandler);
-        getCommand("debug").setExecutor(mainCommandHandler);
-
-        UtilCommandHandler utilCommandHandler = new UtilCommandHandler();
-        getCommand("gms").setExecutor(utilCommandHandler);
-        getCommand("gmc").setExecutor(utilCommandHandler);
-        getCommand("gmss").setExecutor(utilCommandHandler);
+        System.out.println("Registering commands...");
+        CommandRegistry commandRegistry = new CommandRegistry();
+        commandRegistry.registerAll();
+        Bukkit.getPluginManager().registerEvents(new CommandListener(), this);
+        System.out.println(ChatColor.GREEN + "Successfully registered " + commandRegistry.getCommandsAmt() + " commands.");
+//        System.out.println(ChatColor.GREEN + "Successfully registered " + commandRegistry.getCommands().size() + " commands.");
+//        MainCommandHandler mainCommandHandler = new MainCommandHandler();
+//        getCommand("test").setExecutor(mainCommandHandler);
+//        getCommand("item").setExecutor(mainCommandHandler);
+//        getCommand("mob").setExecutor(mainCommandHandler);
+//        getCommand("stat").setExecutor(mainCommandHandler);
+//        getCommand("upgrade").setExecutor(mainCommandHandler);
+//        getCommand("reforge").setExecutor(mainCommandHandler);
+//        getCommand("debug").setExecutor(mainCommandHandler);
+//
+//        UtilCommandHandler utilCommandHandler = new UtilCommandHandler();
+//        getCommand("gms").setExecutor(utilCommandHandler);
+//        getCommand("gmc").setExecutor(utilCommandHandler);
+//        getCommand("gmss").setExecutor(utilCommandHandler);
     }
 
     private void configs() {

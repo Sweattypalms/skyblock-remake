@@ -21,8 +21,10 @@ import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPickupArrowEvent;
@@ -36,7 +38,6 @@ public class UtilityListener implements Listener {
         if (SkyblockPlayer.getSkyblockPlayer(event.getPlayer()) != null) return;
         new SkyblockPlayer(event.getPlayer());
     }
-
 
 
     @EventHandler(priority = EventPriority.LOW)
@@ -56,6 +57,7 @@ public class UtilityListener implements Listener {
 
         if (skyblockInteractEvent.isCancelled()) event.setCancelled(true);
     }
+
     @EventHandler
     public void equipHelmetThroughEvent(PlayerInteractEvent event) {
         Player player = event.getPlayer();
@@ -71,10 +73,12 @@ public class UtilityListener implements Listener {
             player.getInventory().setItemInMainHand(null);
         }
     }
+
     /**
      * For handling the player clicking on the helmet slot in their inventory.
      * EQUIP/UNEQUIP HEAD HELMETS
      * TODO: MAKE IT
+     *
      * @param event InventoryClickEvent
      * @author ChatGPT 💀💀
      */
@@ -189,9 +193,10 @@ public class UtilityListener implements Listener {
     @EventHandler
     public void projectileHitEvent(ProjectileHitEvent event) {
         if (event.getHitEntity() == null) return;
-        if(!(event.getHitEntity() instanceof LivingEntity) || !(event.getHitEntity() instanceof EnderDragonPart)) return;
-        if(event.getEntity() instanceof FallingBlock || event.getHitEntity() instanceof FallingBlock) return;
-        if(event.getEntity().getShooter() == null) return;
+        if (!(event.getHitEntity() instanceof LivingEntity) || !(event.getHitEntity() instanceof EnderDragonPart))
+            return;
+        if (event.getEntity() instanceof FallingBlock || event.getHitEntity() instanceof FallingBlock) return;
+        if (event.getEntity().getShooter() == null) return;
 
         LivingEntity shooter = (LivingEntity) event.getEntity().getShooter();
 
@@ -244,7 +249,7 @@ public class UtilityListener implements Listener {
 
     @EventHandler
     public void endermanTeleport(EntityTeleportEvent event) {
-        if(!(event.getEntity() instanceof Enderman)) return;
+        if (!(event.getEntity() instanceof Enderman)) return;
 
         event.setCancelled(true);
     }
@@ -253,33 +258,36 @@ public class UtilityListener implements Listener {
 
     /* -------------------- WORLD MANAGEMENT -------------------- */
 
-//    @EventHandler
-//    public void placeBlock(EntityPlaceEvent event){
-//        if(!(event.getEntity() instanceof Player player)) return;
-//        if(player.isOp()) return;
-//        event.setCancelled(true);
-//    }
-//
-//    @EventHandler
-//    public void breakBlock(BlockBreakEvent event){
-//        if(event.getPlayer().isOp()) return;
-//        event.setCancelled(true);
-//    }
-//
-//    @EventHandler
-//    public void onPhysicalInteract(PlayerInteractEvent event) {
-//        if (event.getClickedBlock() == null) return;
-//        if(event.getPlayer().isOp()) return;
-//        event.setCancelled(true);
-//    }
+    @EventHandler
+    public void placeBlock(EntityPlaceEvent event) {
+        if (!(event.getEntity() instanceof Player player)) return;
+        if (player.isOp()) return;
+        event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void breakBlock(BlockBreakEvent event) {
+        if (event.getPlayer().isOp()) return;
+        event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onPhysicalInteract(PlayerInteractEvent event) {
+        if (event.getClickedBlock() == null) return;
+        if (event.getPlayer().isOp()) return;
+        event.setCancelled(true);
+    }
 
     @EventHandler
     public void onFallingBlock(EntityChangeBlockEvent event) {
-        if(event.getEntity() instanceof FallingBlock) {
+        if (event.getEntity() instanceof FallingBlock) {
             event.setCancelled(true);
             event.getEntity().remove();
             event.getBlock().setType(Material.AIR);
         }
     }
+
+
+
 }
 

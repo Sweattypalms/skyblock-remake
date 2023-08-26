@@ -254,7 +254,7 @@ public class SkyblockMob {
         String star = "§f ✧ ";
         String customName = star + actualDmg + ChatColor.WHITE + " ✧";
         if (!showCritEffect) {
-            customName = "§7" + String.valueOf((int) Math.floor(damage));
+            customName = "§7" + (int) Math.floor(damage);
         }
         armorStand.setCustomName(customName);
         armorStand.setCustomNameVisible(true);
@@ -348,5 +348,7 @@ public class SkyblockMob {
         this.speed = speed;
         return this;
     }
+
+
 
 }

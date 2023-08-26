@@ -1,7 +1,10 @@
 package com.sweattypalms.skyblock.core.mobs.builder;
 
 import org.reflections.Reflections;
+import org.reflections.util.ClasspathHelper;
+import org.reflections.util.ConfigurationBuilder;
 
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,7 +18,7 @@ public class MobManager {
         Reflections reflections = new Reflections("com.sweattypalms.skyblock.core.mobs.regions");
         for (Class<? extends ISkyblockMob> clazz : reflections.getSubTypesOf(ISkyblockMob.class)) {
             try {
-                if (clazz.isInterface()) continue; // For abstract classes
+                if (clazz.isInterface() || Modifier.isAbstract(clazz.getModifiers())) continue;
 
                 String id = clazz.getDeclaredField("ID").get(null).toString();
                 MOBS_LIST.put(id, clazz);
@@ -25,7 +28,7 @@ public class MobManager {
             }
         }
 
-        System.out.println("Loaded " + MOBS_LIST.size() + " mobs.");
+//        System.out.println("Loaded " + MOBS_LIST.size() + " mobs.");
     }
 
     public static SkyblockMob getInstance(String id) throws IllegalArgumentException{
