@@ -1,7 +1,7 @@
 package com.sweattypalms.skyblock.core.helpers;
 
 import com.sweattypalms.skyblock.core.events.SkyblockPlayerDamageEntityEvent;
-import com.sweattypalms.skyblock.core.items.builder.abilities.types.IAbilityActivator;
+import com.sweattypalms.skyblock.core.items.builder.abilities.types.IHasAbilityDamage;
 import com.sweattypalms.skyblock.core.items.builder.item.IShortBow;
 import com.sweattypalms.skyblock.core.mobs.builder.SkyblockMob;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
@@ -69,12 +69,11 @@ public class DamageCalculator {
             throw new IllegalArgumentException("Ability must have an ability activator");
         }
 
-        if(event.getAbilityActivator() == null){
+        if(!(event.getAbility() instanceof IHasAbilityDamage abilityActivator)){
             return calculateNormalDamage(event);
-        }
-        SkyblockPlayer skyblockPlayer = event.getSkyblockPlayer();
+        };
 
-        IAbilityActivator abilityActivator = event.getAbilityActivator();
+        SkyblockPlayer skyblockPlayer = event.getSkyblockPlayer();
 
         boolean crit = event.isForcedCrit();
 

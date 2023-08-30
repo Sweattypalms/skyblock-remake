@@ -49,6 +49,7 @@ public class DragonManager {
     private int summoningEyes = 0;
     private SkyblockMob dragon;
 
+
     public DragonManager() {
         endWorld = Bukkit.getWorld("skyblock_end");
         instance = this;
@@ -271,6 +272,7 @@ public class DragonManager {
                 for (int z = -1; z <= 1; z++){
                     Location loc = new Location(location.getWorld(), location.getX() + x, location.getY() + y, location.getZ() + z);
                     if (loc.getBlock().getType().isAir() || loc.getBlock().getType().isTransparent()){
+                        loc.getBlock().setType(Material.AIR);
                         return false;
                     }
                 }

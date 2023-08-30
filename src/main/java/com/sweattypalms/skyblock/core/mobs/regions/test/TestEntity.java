@@ -25,8 +25,8 @@ public class TestEntity extends EntityZombie implements ISkyblockMob {
                 .setMaxHealth(100_000_000)
                 .setCustomName("$cFlorida man")
                 .setLevel(999)
-                .setAi(true);
-        skyblockMob.setAi(false);
+                ;
+//        skyblockMob.setAi(false);
     }
 
     @Override

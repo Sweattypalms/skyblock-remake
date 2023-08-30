@@ -1,6 +1,6 @@
 package com.sweattypalms.skyblock.core.events;
 
-import com.sweattypalms.skyblock.core.items.builder.abilities.types.IAbilityActivator;
+import com.sweattypalms.skyblock.core.items.builder.abilities.Ability;
 import com.sweattypalms.skyblock.core.mobs.builder.ISkyblockMob;
 import com.sweattypalms.skyblock.core.mobs.builder.SkyblockMob;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
@@ -61,7 +61,7 @@ public class SkyblockPlayerDamageEntityEvent extends Event implements Cancellabl
     @Getter @Setter
     private ItemStack abilityItem;
     @Getter @Setter
-    private IAbilityActivator abilityActivator;
+    private Ability ability;
     /* Ability damage  */
 
     public SkyblockPlayerDamageEntityEvent(LivingEntity entity, Player player, DamageType damageType) {

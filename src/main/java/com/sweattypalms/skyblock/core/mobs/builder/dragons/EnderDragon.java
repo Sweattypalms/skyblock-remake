@@ -39,12 +39,6 @@ public abstract class EnderDragon extends EntityEnderDragon implements ISkyblock
 
     @Getter
     private Random random = new Random();
-    private Player target = null;
-    private boolean isRushing = false;
-    private Vector startRushPosition;
-    private double rushProgress = 0.0; // 0 ~ 1 to control the linear motion
-
-    private boolean isDoingAbility = false;
 
     @Setter
     private IDragonAbility ability = null;

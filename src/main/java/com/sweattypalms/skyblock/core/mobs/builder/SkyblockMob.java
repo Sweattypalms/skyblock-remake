@@ -3,6 +3,7 @@ package com.sweattypalms.skyblock.core.mobs.builder;
 import com.sweattypalms.skyblock.SkyBlock;
 import com.sweattypalms.skyblock.core.events.SkyblockPlayerDamageEntityEvent;
 import com.sweattypalms.skyblock.core.helpers.PlaceholderFormatter;
+import com.sweattypalms.skyblock.core.items.builder.abilities.types.IHasAbilityDamage;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
 import lombok.Getter;
 import lombok.Setter;
@@ -59,6 +60,10 @@ public class SkyblockMob {
     @Getter
     @Setter
     protected  boolean showLevel = true;
+
+    @Getter @Setter
+    protected boolean isKnockbackImmune = false;
+
     @Getter
     private String customName;
     @Getter
@@ -208,7 +213,7 @@ public class SkyblockMob {
         entityInstance.setLastDamageCause(new EntityDamageEvent(entityInstance, EntityDamageEvent.DamageCause.ENTITY_ATTACK, 0.1));
         this.refreshName();
         boolean showCritEffect = event.isCrit();
-        if (event.getDamageType() == SkyblockPlayerDamageEntityEvent.DamageType.ABILITY && event.getAbilityActivator() != null)
+        if (event.getDamageType() == SkyblockPlayerDamageEntityEvent.DamageType.ABILITY && event.getAbility() instanceof IHasAbilityDamage)
             showCritEffect = false;
         showDamageIndicator(damage, showCritEffect);
     }

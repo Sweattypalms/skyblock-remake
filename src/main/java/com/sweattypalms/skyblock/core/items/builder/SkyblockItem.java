@@ -164,12 +164,8 @@ public abstract class SkyblockItem {
 
     public ItemStack toItemStack() {
         ItemStack item;
-        if (this instanceof IHeadHelmet headHelmet) {
-            if (headHelmet.getTexture() != null) {
+        if (this instanceof IHeadHelmet headHelmet && headHelmet.getTexture() != null) {
                 item = headHelmet.getHeadItemStack();
-            } else {
-                item = new ItemStack(this.material);
-            }
         } else {
             item = new ItemStack(this.material);
         }

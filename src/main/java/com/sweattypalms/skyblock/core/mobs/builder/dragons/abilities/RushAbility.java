@@ -48,7 +48,7 @@ public class RushAbility implements IDragonAbility{
             throw new NullPointerException("Target not found??? cancelling ability");
         }
 
-        Vector nextPosition = MathHelper.lerp(startRushPosition, target.getLocation().toVector(), rushProgress);
+        Vector nextPosition = MathHelper.linearInterpolation(startRushPosition, target.getLocation().toVector(), rushProgress);
         this.dragon.setPositionRotation(nextPosition.getX(), nextPosition.getY(), nextPosition.getZ(), target.getLocation().getYaw(), target.getLocation().getPitch());
 
         rushProgress += 0.025;
