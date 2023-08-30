@@ -1,10 +1,15 @@
+
 package com.sweattypalms.skyblock.core.player;
 
 import com.sweattypalms.skyblock.SkyBlock;
 import com.sweattypalms.skyblock.core.helpers.DamageCalculator;
 import com.sweattypalms.skyblock.core.helpers.PlaceholderFormatter;
 import com.sweattypalms.skyblock.core.player.sub.*;
+import com.sweattypalms.skyblock.core.regions.RegionManager;
+import com.sweattypalms.skyblock.core.regions.Regions;
 import lombok.Getter;
+import lombok.Setter;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
@@ -32,6 +37,8 @@ public class SkyblockPlayer {
     private final Player player;
     private BukkitTask tickRunnable;
 
+    @Getter @Setter
+    private Regions lastKnownRegion = null;
 
     public SkyblockPlayer(Player player) {
         this.player = player;
@@ -69,6 +76,7 @@ public class SkyblockPlayer {
 
         this.statsManager.initHealth();
     }
+    private int tickCount = 0;
     private void tick() {
         if (!this.player.isOnline()) {
             SkyblockPlayer.players.remove(this.player.getUniqueId());
@@ -77,11 +85,17 @@ public class SkyblockPlayer {
         if(this.player.isDead()){
             return;
         }
+        this.tickCount++;
+
+        if(this.tickCount % 20 != 0) return;
+
         this.bonusManager.cleanupExpiredBonuses();
         this.statsManager.tick();
         this.actionBarManager.actionBar();
 
         this.scoreboardManager.updateScoreboard();
+        RegionManager.updatePlayerRegion(this);
+
     }
 
     /**
@@ -90,6 +104,8 @@ public class SkyblockPlayer {
      * @param damage Damage to deal (With reduction)
      */
     public void damage(double damage) {
+        if(this.player.getGameMode() != GameMode.SURVIVAL)
+            return;
         this.player.setHealth(
                 Math.max(
                         this.player.getHealth() - damage,
@@ -106,4 +122,3 @@ public class SkyblockPlayer {
 
 
 }
-

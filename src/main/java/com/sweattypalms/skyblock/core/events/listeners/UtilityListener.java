@@ -1,6 +1,8 @@
 package com.sweattypalms.skyblock.core.events.listeners;
 
 import com.sweattypalms.skyblock.SkyBlock;
+import com.sweattypalms.skyblock.api.sequence.Sequence;
+import com.sweattypalms.skyblock.api.sequence.SequenceAction;
 import com.sweattypalms.skyblock.core.events.SkyblockDeathEvent;
 import com.sweattypalms.skyblock.core.events.SkyblockInteractEvent;
 import com.sweattypalms.skyblock.core.events.SkyblockMobDamagePlayerEvent;
@@ -13,10 +15,14 @@ import com.sweattypalms.skyblock.core.items.builder.item.IShortBow;
 import com.sweattypalms.skyblock.core.mobs.builder.ISkyblockMob;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
 import com.sweattypalms.skyblock.core.player.sub.Stats;
+import net.minecraft.network.protocol.game.PacketPlayInClientCommand;
+import net.minecraft.network.protocol.game.PacketPlayOutRespawn;
 import net.minecraft.world.entity.EntityLiving;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_17_R1.entity.CraftEnderDragonPart;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftLivingEntity;
+import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -24,10 +30,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerPickupArrowEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 
 public class UtilityListener implements Listener {
@@ -166,9 +169,13 @@ public class UtilityListener implements Listener {
         event.setKeepInventory(true);
         event.setKeepLevel(true);
         event.setDroppedExp(0);
-        event.getDrops().clear();
-        event.getEntity().spigot().respawn();
-        // TODO: from here
+        new Sequence().add(
+                new SequenceAction(() -> {
+
+                    event.getEntity().spigot().respawn();
+                    event.getEntity().updateInventory();
+                }, 1)
+        ).start();
     }
 
     @EventHandler
@@ -193,7 +200,7 @@ public class UtilityListener implements Listener {
     @EventHandler
     public void projectileHitEvent(ProjectileHitEvent event) {
         if (event.getHitEntity() == null) return;
-        if (!(event.getHitEntity() instanceof LivingEntity) || !(event.getHitEntity() instanceof EnderDragonPart))
+        if (!(event.getHitEntity() instanceof LivingEntity) && !(event.getHitEntity() instanceof CraftEnderDragonPart))
             return;
         if (event.getEntity() instanceof FallingBlock || event.getHitEntity() instanceof FallingBlock) return;
         if (event.getEntity().getShooter() == null) return;
@@ -287,7 +294,6 @@ public class UtilityListener implements Listener {
         }
     }
 
-
-
 }
+
 

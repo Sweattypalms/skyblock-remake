@@ -3,6 +3,7 @@ package com.sweattypalms.skyblock.core.player.sub;
 import com.sweattypalms.skyblock.core.helpers.PlaceholderFormatter;
 import com.sweattypalms.skyblock.core.mobs.builder.dragons.DragonManager;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
+import com.sweattypalms.skyblock.core.regions.Regions;
 import org.bukkit.Bukkit;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
@@ -234,11 +235,6 @@ public class ScoreboardManager {
     }
 
     public void updateScoreboard() {
-        this.tick++;
-        if (this.tick % 20 != 0) {
-            return;
-        }
-        this.tick = 0;
         this.score = 13;
         initializeSections(); // Refresh sections
         displayBoard();
@@ -249,19 +245,16 @@ public class ScoreboardManager {
 //        bukkitObjective.getScore(formattedScore).setScore(value);
         String formattedScore = PlaceholderFormatter.format(scoreText);
 
-        // Check if the score has changed
         if (!formattedScore.equals(scoreCache.get(value))) {
 
-            // Remove the old score entry
             String oldEntry = scoreCache.get(value);
             if (oldEntry != null) {
                 bukkitScoreboard.resetScores(oldEntry);
             }
 
-            // Set the new score entry
             bukkitObjective.getScore(formattedScore).setScore(value);
 
-            // Update the cache
+            // update the cache
             scoreCache.put(value, formattedScore);
         }
 
@@ -285,6 +278,11 @@ public class ScoreboardManager {
     }
 
     private String getRegion() {
-        return " $7⏣ " + "$5Dragon's Nest";
+        Regions region = this.player.getLastKnownRegion();
+        if(region != null) {
+            return " $7⏣ " + region.getDisplayName();
+        }else{
+            return " $7⏣ " + "Unknown";
+        }
     }
 }

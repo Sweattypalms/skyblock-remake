@@ -1,42 +1,43 @@
 package com.sweattypalms.skyblock.core.mobs.builder.dragons;
 
-import com.sweattypalms.skyblock.SkyBlock;
-import com.sweattypalms.skyblock.core.helpers.EntityHelper;
-import com.sweattypalms.skyblock.core.helpers.MathHelper;
-import com.sweattypalms.skyblock.core.helpers.PlaceholderFormatter;
 import com.sweattypalms.skyblock.core.mobs.builder.IRegionEntity;
 import com.sweattypalms.skyblock.core.mobs.builder.ISkyblockMob;
-import com.sweattypalms.skyblock.core.mobs.builder.Regions;
+import com.sweattypalms.skyblock.core.regions.Regions;
 import com.sweattypalms.skyblock.core.mobs.builder.SkyblockMob;
-import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
+import com.sweattypalms.skyblock.core.mobs.builder.dragons.abilities.FireballAbility;
+import com.sweattypalms.skyblock.core.mobs.builder.dragons.abilities.IDragonAbility;
+import com.sweattypalms.skyblock.core.mobs.builder.dragons.abilities.RushAbility;
+import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.world.entity.EntityLiving;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.boss.enderdragon.EntityEnderDragon;
-import net.minecraft.world.phys.Vec3D;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
-import org.bukkit.entity.Fireball;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class EnderDragon extends EntityEnderDragon implements ISkyblockMob, IRegionEntity, IEndDragon {
     private final SkyblockMob skyblockMob;
     private final List<DragonStage> stages;
-    boolean moving = true;
-    double visualizePathTick = 0;
-    private double t = 0.0; // 0 ~ 1
+
+    @Getter @Setter
+    private boolean moving = true;
+    private double visualizePathTick = 0;
+    @Setter
+    private double t = 0.0; // 0 ~ 1, to control the linear motion
+    @Getter @Setter
     private int currentStageIndex = 0;
+    @Getter @Setter
     private DragonStage currentStage;
 
+    @Getter
     private Random random = new Random();
     private Player target = null;
     private boolean isRushing = false;
@@ -44,6 +45,13 @@ public abstract class EnderDragon extends EntityEnderDragon implements ISkyblock
     private double rushProgress = 0.0; // 0 ~ 1 to control the linear motion
 
     private boolean isDoingAbility = false;
+
+    @Setter
+    private IDragonAbility ability = null;
+    private List<IDragonAbility> abilities = List.of(
+            new FireballAbility(this),
+            new RushAbility(this)
+    );
 
     public EnderDragon(Location location, SkyblockMob skyblockMob) {
         super(EntityTypes.v, ((CraftWorld) location.getWorld()).getHandle());
@@ -80,19 +88,37 @@ public abstract class EnderDragon extends EntityEnderDragon implements ISkyblock
     public void tick() {
         super.tick();
 
-        if (this.isRushing) {
-            rushTowardsPlayer();
+        if (this.ability != null) {
+            try {
+                this.ability.tick();
+            } catch (NullPointerException ex) {
+                this.ability = null;
+            }
             return;
         }
 
-        if (random.nextInt(1500) == 0) { // 1 in 1000 chance or per 50 seconds
-            executeRush();
-            return;
+        for (IDragonAbility ability : this.abilities) {
+            if (ability.shouldActivate()) {
+                this.ability = ability;
+                this.ability.start();
+                break;
+            }
         }
-        if (random.nextInt(500) == 0) { // 1 in 500 chance or per 25 seconds
-            fireball();
-            return;
-        }
+
+
+//        if (this.isRushing) {
+//            rushTowardsPlayer();
+//            return;
+//        }
+//
+//        if (random.nextInt(1500) == 0) { // 1 in 1000 chance or per 50 seconds
+//            executeRush();
+//            return;
+//        }
+//        if (random.nextInt(500) == 0) { // 1 in 500 chance or per 25 seconds
+//            fireball();
+//            return;
+//        }
 
         moveAlongPath();
 //        visualizePath();
@@ -125,136 +151,136 @@ public abstract class EnderDragon extends EntityEnderDragon implements ISkyblock
     }
 
     /********************** ABILITIES **********************/
-    private void executeRush() {
-        if (isDoingAbility) return;
-
-        isDoingAbility = true;
-        moving = false;
-        this.target = EntityHelper.getClosestPlayer((LivingEntity) this.getBukkitEntity());
-
-        if (target == null) {
-            throw new IllegalStateException("No target found??");
-        }
-
-        this.isRushing = true;
-        startRushPosition = this.getBukkitEntity().getLocation().toVector();
-        rushProgress = 0.0d;
-    }
-
-    private void rushTowardsPlayer() {
-        // Calculate the next position using LERP
-        Vector nextPosition = MathHelper.lerp(startRushPosition, target.getLocation().toVector(), rushProgress);
-        Location nextLoc = nextPosition.toLocation(this.getBukkitEntity().getWorld());
-
-        // Set the position and look direction towards the player
-        this.setPositionRotation(nextLoc.getX(), nextLoc.getY(), nextLoc.getZ(), target.getLocation().getYaw(), target.getLocation().getPitch());
-
-        rushProgress += 0.025;  // Adjust this value to control the speed
-
-        if (rushProgress >= 1 || this.getBukkitEntity().getLocation().distance(target.getLocation()) < 3) {
-            String message = "$5☬ $c" + getDragonName() + " $dused $eRush $don you for $c" + getDragonDamage() + " damage!";
-            message = PlaceholderFormatter.format(message);
-            target.sendMessage(message);
-            SkyblockPlayer.getSkyblockPlayer(target).damageWithReduction(getDragonDamage());
-            computeReturnPath();
-        }
-    }
-
-    private void computeReturnPath() {
-        Vector endPosition = currentStage.getPoint(1); // Get  the end position from the current path
-        Vector currentDragonPosition = this.getBukkitEntity().getLocation().toVector();
-
-        List<Vector> path = List.of(currentDragonPosition, endPosition);
-        DragonStage returnPath = new DragonStage(path, 0.02);
-
-        // Reset it so it starts lerping from the start of y = mx + n
-        t = 0.0;
-        currentStage = returnPath;
-
-
-        // To return to the main path
-        isRushing = false;
-        moving = true;
-    }
-
-    private void fireball() {
-        if (isDoingAbility) return;
-
-        isDoingAbility = true;
-        moving = false;
-
-        this.target = EntityHelper.getClosestPlayer((LivingEntity) this.getBukkitEntity());
-
-        if (target == null) {
-            throw new IllegalStateException("No target found??");
-        }
-        // 2 seconds warmup
-        // 5 seconds ability time
-
-
-        // get the mouth part of the dragon
-        Vec3D headPos = this.e.getPositionVector();
-        Location headLoc = new Location(this.getBukkitEntity().getWorld(), headPos.b, headPos.c, headPos.d);
-
-        AtomicInteger tick = new AtomicInteger(0);
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                tick.set(tick.get() + 10);
-
-                Bukkit.getOnlinePlayers().forEach(player -> {
-//                    spawn in 3d
-                    for (int x = -1; x < 1; x++){
-                        for (int y = -1; y < 1; y++){
-                            for (int z = -1; z < 1; z++){
-                                Location loc = headLoc.clone().add(x, y, z);
-                                player.spawnParticle(Particle.FLAME, loc, 0);
-                            }
-                        }
-                    }
-                });
-
-                if (tick.get() <= 40) {
-                    return;
-                }
-
-                if (tick.get() > 140) // 5 seconds after warmup
-                {
-                    cancel();
-                    isDoingAbility = false;
-                    moving = true;
-                    return;
-                }
-
-                if (!getEntityInstance().isAlive()) {
-                    cancel();
-                    isDoingAbility = false;
-                    moving = true;
-                    return;
-                }
-
-                Player closestPlayer = EntityHelper.getClosestPlayer((LivingEntity) getBukkitEntity());
-
-                Vector direction;
-
-                if (closestPlayer != null) {
-                    direction = closestPlayer.getLocation().toVector().subtract(headLoc.toVector()).normalize();
-                } else {
-                    direction = headLoc.getDirection();
-                }
-
-                assert headLoc.getWorld() != null;
-                Fireball fireball = headLoc.getWorld().spawn(headLoc, Fireball.class);
-                fireball.setDirection(direction);
-                fireball.setVelocity(direction.multiply(0.5));  // Adjust the multiplier to set the speed. 0.5 is just an example value.
-            }
-        }.runTaskTimer(SkyBlock.getInstance(), 0, 10);
-
-        Bukkit.getScheduler().runTaskLater(SkyBlock.getInstance(), () -> {
-            isDoingAbility = false;
-            moving = true;
-        }, 140);
-    }
+//    private void executeRush() {
+//        if (isDoingAbility) return;
+//
+//        isDoingAbility = true;
+//        moving = false;
+//        this.target = EntityHelper.getClosestPlayer((LivingEntity) this.getBukkitEntity());
+//
+//        if (target == null) {
+//            throw new IllegalStateException("No target found??");
+//        }
+//
+//        this.isRushing = true;
+//        startRushPosition = this.getBukkitEntity().getLocation().toVector();
+//        rushProgress = 0.0d;
+//    }
+//
+//    private void rushTowardsPlayer() {
+//        // Calculate the next position using LERP
+//        Vector nextPosition = MathHelper.lerp(startRushPosition, target.getLocation().toVector(), rushProgress);
+//        Location nextLoc = nextPosition.toLocation(this.getBukkitEntity().getWorld());
+//
+//        // Set the position and look direction towards the player
+//        this.setPositionRotation(nextLoc.getX(), nextLoc.getY(), nextLoc.getZ(), target.getLocation().getYaw(), target.getLocation().getPitch());
+//
+//        rushProgress += 0.025;  // Adjust this value to control the speed
+//
+//        if (rushProgress >= 1 || this.getBukkitEntity().getLocation().distance(target.getLocation()) < 3) {
+//            String message = "$5☬ $c" + getDragonName() + " $dused $eRush $don you for $c" + getDragonDamage() + " damage!";
+//            message = PlaceholderFormatter.format(message);
+//            target.sendMessage(message);
+//            SkyblockPlayer.getSkyblockPlayer(target).damageWithReduction(getDragonDamage());
+//            computeReturnPath();
+//        }
+//    }
+//
+//    private void computeReturnPath() {
+//        Vector endPosition = currentStage.getPoint(1); // Get  the end position from the current path
+//        Vector currentDragonPosition = this.getBukkitEntity().getLocation().toVector();
+//
+//        List<Vector> path = List.of(currentDragonPosition, endPosition);
+//        DragonStage returnPath = new DragonStage(path, 0.02);
+//
+//        // Reset it so it starts lerping from the start of y = mx + n
+//        t = 0.0;
+//        currentStage = returnPath;
+//
+//
+//        // To return to the main path
+//        isRushing = false;
+//        moving = true;
+//    }
+//
+//    private void fireball() {
+//        if (isDoingAbility) return;
+//
+//        isDoingAbility = true;
+//        moving = false;
+//
+//        this.target = EntityHelper.getClosestPlayer((LivingEntity) this.getBukkitEntity());
+//
+//        if (target == null) {
+//            throw new IllegalStateException("No target found??");
+//        }
+//        // 2 seconds warmup
+//        // 5 seconds ability time
+//
+//
+//        // get the mouth part of the dragon
+//        Vec3D headPos = this.e.getPositionVector();
+//        Location headLoc = new Location(this.getBukkitEntity().getWorld(), headPos.b, headPos.c, headPos.d);
+//
+//        AtomicInteger tick = new AtomicInteger(0);
+//        new BukkitRunnable() {
+//            @Override
+//            public void run() {
+//                tick.set(tick.get() + 10);
+//
+//                Bukkit.getOnlinePlayers().forEach(player -> {
+////                    spawn in 3d
+//                    for (int x = -1; x < 1; x++) {
+//                        for (int y = -1; y < 1; y++) {
+//                            for (int z = -1; z < 1; z++) {
+//                                Location loc = headLoc.clone().add(x, y, z);
+//                                player.spawnParticle(Particle.FLAME, loc, 0);
+//                            }
+//                        }
+//                    }
+//                });
+//
+//                if (tick.get() <= 40) {
+//                    return;
+//                }
+//
+//                if (tick.get() > 140) // 5 seconds after warmup
+//                {
+//                    cancel();
+//                    isDoingAbility = false;
+//                    moving = true;
+//                    return;
+//                }
+//
+//                if (!getEntityInstance().isAlive()) {
+//                    cancel();
+//                    isDoingAbility = false;
+//                    moving = true;
+//                    return;
+//                }
+//
+//                Player closestPlayer = EntityHelper.getClosestPlayer((LivingEntity) getBukkitEntity());
+//
+//                Vector direction;
+//
+//                if (closestPlayer != null) {
+//                    direction = closestPlayer.getLocation().toVector().subtract(headLoc.toVector()).normalize();
+//                } else {
+//                    direction = headLoc.getDirection();
+//                }
+//
+//                assert headLoc.getWorld() != null;
+//                Fireball fireball = headLoc.getWorld().spawn(headLoc, Fireball.class);
+//                fireball.setDirection(direction);
+//                fireball.setVelocity(direction.multiply(0.5));  // Adjust the multiplier to set the speed. 0.5 is just an example value.
+//            }
+//        }.runTaskTimer(SkyBlock.getInstance(), 0, 10);
+//
+//        Bukkit.getScheduler().runTaskLater(SkyBlock.getInstance(), () -> {
+//            isDoingAbility = false;
+//            moving = true;
+//        }, 140);
+//    }
 
     /********************** ABILITIES **********************/
     @Override
@@ -269,7 +295,7 @@ public abstract class EnderDragon extends EntityEnderDragon implements ISkyblock
 
     @Override
     public Regions getRegion() {
-        return Regions.END;
+        return Regions.THE_END;
     }
 
     @Override
@@ -279,6 +305,19 @@ public abstract class EnderDragon extends EntityEnderDragon implements ISkyblock
             Bukkit.broadcastMessage(ChatColor.RED + "Dragon died");
             DragonManager.getInstance().onEnderDragonDeath();
         }
+    }
+
+
+    /**
+     * isFlapping() override NMS method.
+     * @return true if the dragon is flapping its wings
+     */
+    @Override
+    public boolean aF() {
+        float f = net.minecraft.util.MathHelper.cos(this.bU * 500);
+        float f1 = net.minecraft.util.MathHelper.cos(this.bT * 500);
+        return false;
+//        return f1 <= -0.3F && f >= -0.3F;
     }
 }
 

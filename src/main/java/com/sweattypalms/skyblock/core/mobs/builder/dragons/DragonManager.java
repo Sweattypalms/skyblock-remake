@@ -1,5 +1,6 @@
 package com.sweattypalms.skyblock.core.mobs.builder.dragons;
 
+import com.sweattypalms.skyblock.api.Point;
 import com.sweattypalms.skyblock.api.sequence.Sequence;
 import com.sweattypalms.skyblock.api.sequence.SequenceAction;
 import com.sweattypalms.skyblock.core.helpers.PDCHelper;
@@ -298,23 +299,7 @@ public class DragonManager {
         return new Location(endWorld, point.getX(), 30, point.getZ());
     }
 
-    static class Point {
-        int x;
-        int z;
 
-        public Point(int x, int z) {
-            this.x = x;
-            this.z = z;
-        }
-
-        public int getX() {
-            return x;
-        }
-
-        public int getZ() {
-            return z;
-        }
-    }
 
     public boolean isDragonActive() {
         return dragon != null;

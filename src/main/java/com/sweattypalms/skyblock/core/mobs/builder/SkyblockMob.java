@@ -127,6 +127,7 @@ public class SkyblockMob {
                 assert healthAttribute != null;
                 healthAttribute.setBaseValue(maxHealth);
 
+
                 entityInstance.setAI(capture.isAi());
                 if (capture.isFrozen()) {
                     PotionEffect _frozenPotionEffect = new PotionEffect(PotionEffectType.SLOW, 15, 255, false, false);
@@ -348,7 +349,4 @@ public class SkyblockMob {
         this.speed = speed;
         return this;
     }
-
-
-
 }

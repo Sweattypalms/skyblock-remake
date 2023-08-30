@@ -96,20 +96,6 @@ public final class SkyBlock extends JavaPlugin {
         commandRegistry.registerAll();
         Bukkit.getPluginManager().registerEvents(new CommandListener(), this);
         System.out.println(ChatColor.GREEN + "Successfully registered " + commandRegistry.getCommandsAmt() + " commands.");
-//        System.out.println(ChatColor.GREEN + "Successfully registered " + commandRegistry.getCommands().size() + " commands.");
-//        MainCommandHandler mainCommandHandler = new MainCommandHandler();
-//        getCommand("test").setExecutor(mainCommandHandler);
-//        getCommand("item").setExecutor(mainCommandHandler);
-//        getCommand("mob").setExecutor(mainCommandHandler);
-//        getCommand("stat").setExecutor(mainCommandHandler);
-//        getCommand("upgrade").setExecutor(mainCommandHandler);
-//        getCommand("reforge").setExecutor(mainCommandHandler);
-//        getCommand("debug").setExecutor(mainCommandHandler);
-//
-//        UtilCommandHandler utilCommandHandler = new UtilCommandHandler();
-//        getCommand("gms").setExecutor(utilCommandHandler);
-//        getCommand("gmc").setExecutor(utilCommandHandler);
-//        getCommand("gmss").setExecutor(utilCommandHandler);
     }
 
     private void configs() {

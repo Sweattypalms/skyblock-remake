@@ -26,4 +26,11 @@ public class UtilCommands {
         player.setGameMode(GameMode.SPECTATOR);
         player.sendMessage(ChatColor.RED + "Your gamemode has been updated to spectator!");
     }
+
+
+    @Command(name = "fix_inventory", description = "Fix inventory")
+    public void fixInventoryCommand(Player player){
+        player.updateInventory();
+        player.sendMessage(ChatColor.RED + "Your inventory has been updated!");
+    }
 }

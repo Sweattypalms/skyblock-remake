@@ -17,6 +17,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class StatsManager {
     @Getter
@@ -48,11 +49,14 @@ public class StatsManager {
         player.setHealth(this.maxStats.get(Stats.HEALTH));
     }
 
+    /**
+     * {@link SkyblockPlayer#tick()} calls this function every 20 ticks.
+     */
     public void tick() {
         regenTick++;
         manageStats();
         calculateStats();
-        if (regenTick % 40 == 0) {
+        if (regenTick % 2 == 0) {
             regenerate();
             regenTick = 0;
         }
@@ -78,7 +82,7 @@ public class StatsManager {
         Enchantments
         Potions
  */
-        Map<Stats, Double> stats = new HashMap<>();
+        Map<Stats, Double> stats = new ConcurrentHashMap<>();
 
 
         this.baseStats.forEach((stat, baseValue) -> {
