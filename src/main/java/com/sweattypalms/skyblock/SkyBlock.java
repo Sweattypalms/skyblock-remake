@@ -60,6 +60,7 @@ public final class SkyBlock extends JavaPlugin {
     }
 
     private void registerCraft() {
+        Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
         System.out.println("Registering items...");
         ItemManager.init();
         System.out.println(ChatColor.GREEN + "Successfully loaded " + ItemManager.ITEMS_LIST.size() + " items.");
@@ -71,6 +72,7 @@ public final class SkyBlock extends JavaPlugin {
         System.out.println("Registering reforges...");
         ReforgeManager.init();
         System.out.println(ChatColor.GREEN + "Successfully loaded " + REFORGES_LIST.size() + " reforges.");
+        });
     }
 
     public void registerListeners() {
