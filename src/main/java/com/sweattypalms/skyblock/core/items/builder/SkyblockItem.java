@@ -60,7 +60,9 @@ public abstract class SkyblockItem {
         String id = PDCHelper.getString(item, "id");
         return ItemManager.ITEMS_LIST.getOrDefault(id, null);
     }
-
+    public static SkyblockItem get(String id) {
+        return ItemManager.ITEMS_LIST.getOrDefault(id, null);
+    }
     public static List<String> buildStatsLore(Map<Stats, Double> stats, @Nullable Reforge reforge, Rarity rarity) {
         List<String> lore = new ArrayList<>();
 
@@ -312,7 +314,7 @@ public abstract class SkyblockItem {
      *
      * @return "§l§6Diamond Sword"
      */
-    private String __getDisplayName() {
+    public String __getDisplayName() {
         return __getDisplayName(false , null);
     }
 

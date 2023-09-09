@@ -29,7 +29,6 @@ public class SkyblockDamageListener implements Listener {
     public void onSkyblockPlayerDamageEntityDamageCalculation(SkyblockPlayerDamageEntityEvent event) {
         if (event.isCancelled()) return;
         if (event.getSkyblockMob() == null) return;
-        // TODO: check for damage type : event.getDamageType()
 
         // Item Abilities (Item in hand)
         SkyblockItem item = event.getSkyblockPlayer().getInventoryManager().getSkyblockItemInHand();
@@ -102,7 +101,6 @@ public class SkyblockDamageListener implements Listener {
 
         /* ------- FEROCITY ------- */
 
-        // Implement extra logic ;; check for various damage types and apply ferocity / not.
         int ferocity = event.getSkyblockPlayer().getStatsManager().getMaxStats().get(Stats.FEROCITY).intValue();
 
         int guaranteedHits = ferocity / 100;
@@ -127,7 +125,7 @@ public class SkyblockDamageListener implements Listener {
 
                     /* ------- SOUND ------- */
                 }
-            }.runTaskLater(SkyBlock.getInstance(), 5L * i + 5);  // Assume 5 ticks (1/4 second) between hits
+            }.runTaskLater(SkyBlock.getInstance(), 5L * i + 5);
         }
 
         /* ------- FEROCITY ------- */

@@ -37,7 +37,6 @@ public class RushAbility implements IDragonAbility{
     double rushProgress = 0.0d;
     @Override
     public void stop() {
-//        dragon.setMoving(true); => will be handled by the tick method
         dragon.setAbility(null);
         tickCount = 0;
     }
@@ -77,59 +76,5 @@ dragon.setT(0.0);
     public boolean shouldActivate() {
         return dragon.getRandom().nextInt(500) == 0; // 1 in 1500 chance or every 75 seconds
     }
-
-    //    private void executeRush() {
-//        if (isDoingAbility) return;
-//
-//        isDoingAbility = true;
-//        moving = false;
-//        this.target = EntityHelper.getClosestPlayer((LivingEntity) this.getBukkitEntity());
-//
-//        if (target == null) {
-//            throw new IllegalStateException("No target found??");
-//        }
-//
-//        this.isRushing = true;
-//        startRushPosition = this.getBukkitEntity().getLocation().toVector();
-//        rushProgress = 0.0d;
-//    }
-//
-//    private void rushTowardsPlayer() {
-//        // Calculate the next position using LERP
-//        Vector nextPosition = MathHelper.lerp(startRushPosition, target.getLocation().toVector(), rushProgress);
-//        Location nextLoc = nextPosition.toLocation(this.getBukkitEntity().getWorld());
-//
-//        // Set the position and look direction towards the player
-//        this.setPositionRotation(nextLoc.getX(), nextLoc.getY(), nextLoc.getZ(), target.getLocation().getYaw(), target.getLocation().getPitch());
-//
-//        rushProgress += 0.025;  // Adjust this value to control the speed
-//
-//        if (rushProgress >= 1 || this.getBukkitEntity().getLocation().distance(target.getLocation()) < 3) {
-//            String message = "$5☬ $c" + getDragonName() + " $dused $eRush $don you for $c" + getDragonDamage() + " damage!";
-//            message = PlaceholderFormatter.format(message);
-//            target.sendMessage(message);
-//            SkyblockPlayer.getSkyblockPlayer(target).damageWithReduction(getDragonDamage());
-//            computeReturnPath();
-//        }
-//    }
-//
-//    private void computeReturnPath() {
-//        Vector endPosition = currentStage.getPoint(1); // Get  the end position from the current path
-//        Vector currentDragonPosition = this.getBukkitEntity().getLocation().toVector();
-//
-//        List<Vector> path = List.of(currentDragonPosition, endPosition);
-//        DragonStage returnPath = new DragonStage(path, 0.02);
-//
-//        // Reset it so it starts lerping from the start of y = mx + n
-//        t = 0.0;
-//        currentStage = returnPath;
-//
-//
-//        // To return to the main path
-//        isRushing = false;
-//        moving = true;
-//    }
-
-
 }
 

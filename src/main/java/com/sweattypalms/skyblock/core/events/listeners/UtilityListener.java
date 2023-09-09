@@ -7,22 +7,25 @@ import com.sweattypalms.skyblock.core.events.SkyblockDeathEvent;
 import com.sweattypalms.skyblock.core.events.SkyblockInteractEvent;
 import com.sweattypalms.skyblock.core.events.SkyblockMobDamagePlayerEvent;
 import com.sweattypalms.skyblock.core.events.SkyblockPlayerDamageEntityEvent;
+import com.sweattypalms.skyblock.core.helpers.PlaceholderFormatter;
 import com.sweattypalms.skyblock.core.items.builder.SkyblockItem;
 import com.sweattypalms.skyblock.core.items.builder.SkyblockItemType;
 import com.sweattypalms.skyblock.core.items.builder.abilities.TriggerType;
 import com.sweattypalms.skyblock.core.items.builder.armor.IHeadHelmet;
 import com.sweattypalms.skyblock.core.items.builder.item.IShortBow;
 import com.sweattypalms.skyblock.core.mobs.builder.ISkyblockMob;
+import com.sweattypalms.skyblock.core.mobs.builder.dragons.DragonManager;
+import com.sweattypalms.skyblock.core.mobs.builder.dragons.IEndDragon;
+import com.sweattypalms.skyblock.core.mobs.builder.dragons.loot.IDragonLoot;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
 import com.sweattypalms.skyblock.core.player.sub.Stats;
-import net.minecraft.network.protocol.game.PacketPlayInClientCommand;
-import net.minecraft.network.protocol.game.PacketPlayOutRespawn;
 import net.minecraft.world.entity.EntityLiving;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftEnderDragonPart;
+import org.bukkit.craftbukkit.v1_17_R1.entity.CraftItem;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftLivingEntity;
-import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -30,14 +33,18 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.*;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerPickupArrowEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class UtilityListener implements Listener {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-        event.getPlayer().sendMessage("Welcome to Skyblock!");
+        String message = "$eWelcome to $cSkyblock$e!";
+        message = PlaceholderFormatter.format(message);
+        event.getPlayer().sendMessage(message);
         if (SkyblockPlayer.getSkyblockPlayer(event.getPlayer()) != null) return;
         new SkyblockPlayer(event.getPlayer());
     }
@@ -76,56 +83,6 @@ public class UtilityListener implements Listener {
             player.getInventory().setItemInMainHand(null);
         }
     }
-
-    /**
-     * For handling the player clicking on the helmet slot in their inventory.
-     * EQUIP/UNEQUIP HEAD HELMETS
-     * TODO: MAKE IT
-     *
-     * @param event InventoryClickEvent
-     * @author ChatGPT 💀💀
-     */
-    @EventHandler
-    public void onInventoryClick(InventoryClickEvent event) {
-    }
-//        if (!(event.getWhoClicked() instanceof Player)) return;
-//
-//        Player player = (Player) event.getWhoClicked();
-//        ItemStack clickedItem = event.getCurrentItem();
-//
-//        int headSlot = 39;
-//
-//        SkyblockItem clickedItemSkyblock = SkyblockItem.fromItemStack(clickedItem);
-//
-//        if (!(clickedItemSkyblock instanceof IHeadHelmet)) return;
-//
-//        if (event.getSlot() == headSlot && clickedItemSkyblock instanceof IHeadHelmet) {
-//            event.setCurrentItem(player.getInventory().getHelmet());
-//            player.getInventory().setHelmet(null);
-//        } else {
-//            // Equip
-//            if(event.getCurrentItem() == null) return;
-//            if(event.getCurrentItem().getType() == Material.AIR) return;
-//            if(!(clickedItemSkyblock instanceof IHeadHelmet)) return;
-//            if(player.getInventory().getHelmet() != null && player.getInventory().getHelmet().getType() != Material.AIR) return;
-//            player.getInventory().setHelmet(event.getCurrentItem());
-//            event.setCurrentItem(null);
-//        }
-//
-//        // Else, if the clicked item is not a head helmet, try to equip it if it is in hand
-////        else if (player.getInventory().getItemInMainHand().getType() != Material.AIR) {
-////            ItemStack itemInHand = player.getInventory().getItemInMainHand();
-////            SkyblockItem handSkyblockItem = SkyblockItem.fromItemStack(itemInHand);
-////
-////            if (handSkyblockItem instanceof IHeadHelmet) {
-////                // Move the item from the player's hand to their helmet slot
-////                player.getInventory().setHelmet(itemInHand);
-////                // Remove the item from the player's hand
-////                player.getInventory().setItemInMainHand(null);
-////            }
-////        }
-//    }
-//
 
     /**
      * For forwarding the EntityDeathEvent to the SkyblockDeathEvent
@@ -244,6 +201,12 @@ public class UtilityListener implements Listener {
         if (!(event.getEntity() instanceof Player player)) return;
         Item item = event.getItem();
         ItemStack itemStack = item.getItemStack();
+
+        if (((CraftItem) event.getItem()).getHandle() instanceof IDragonLoot dragonLoot) {
+            player.sendMessage(ChatColor.RED + "You cannot pick up this item! (owner: " + dragonLoot.getDropOwner().getPlayer().getName() + ")");
+            event.setCancelled(true);
+        }
+
         if (itemStack.getType() == Material.ARROW) {
             event.setCancelled(true);
         }
@@ -292,6 +255,15 @@ public class UtilityListener implements Listener {
             event.getEntity().remove();
             event.getBlock().setType(Material.AIR);
         }
+    }
+
+    @EventHandler
+    public void enderDragonDamage(SkyblockPlayerDamageEntityEvent event){
+        if(event.getSkyblockMob() == null) return;
+        if(event.getSkyblockMob().getEntityInstance() == null) return;
+        if(!(((CraftLivingEntity) event.getSkyblockMob().getEntityInstance()).getHandle() instanceof IEndDragon enderDragon)) return;
+
+        DragonManager.getInstance().addPlayerDamage(event.getPlayer().getUniqueId(), event.getDamage());
     }
 
 }

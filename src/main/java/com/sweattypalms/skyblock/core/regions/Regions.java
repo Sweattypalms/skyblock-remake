@@ -73,7 +73,7 @@ public enum Regions {
     }
 
     public String getDisplayName() {
-//        capitalize and split _
+//        split _ and capitalize each word
         String[] parts = this.name().split("_");
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < parts.length; i++) {

@@ -24,11 +24,9 @@ public class MobManager {
                 MOBS_LIST.put(id, clazz);
             } catch (Exception e) {
                 System.out.println("Failed to load mob: " + clazz.getName());
-                System.out.println("Are you missing the ID field?");
+                System.out.println("Are you missing the `ID` field?");
             }
         }
-
-//        System.out.println("Loaded " + MOBS_LIST.size() + " mobs.");
     }
 
     public static SkyblockMob getInstance(String id) throws IllegalArgumentException{
@@ -38,13 +36,4 @@ public class MobManager {
             throw new IllegalArgumentException("Unknown mob id: " + id);
         }
     }
-
-//    public static SkyblockMob getMob(String id) throws IllegalArgumentException{
-//        try {
-//
-//            return SkyblockMobTypes.valueOf(id.toUpperCase()).getInstance();
-//        } catch (Exception e) {
-//            throw new IllegalArgumentException("Unknown mob id: " + id);
-//        }
-//    }
 }

@@ -7,11 +7,15 @@ import com.sweattypalms.skyblock.core.items.ItemManager;
 import com.sweattypalms.skyblock.core.items.builder.SkyblockItem;
 import com.sweattypalms.skyblock.core.items.builder.reforges.Reforge;
 import com.sweattypalms.skyblock.core.items.builder.reforges.ReforgeManager;
+import com.sweattypalms.skyblock.core.items.types.end.armor.SuperiorChestplate;
 import com.sweattypalms.skyblock.core.mobs.builder.MobManager;
 import com.sweattypalms.skyblock.core.mobs.builder.SkyblockMob;
+import com.sweattypalms.skyblock.core.mobs.builder.dragons.loot.DragonDropItemEntity;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
 import com.sweattypalms.skyblock.core.player.sub.Stats;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -67,20 +71,19 @@ public class AdminCommands {
     }
 
     @TabCompleter(command = "item")
-    public List<String> itemTabCompleter(Player player, String[] args){
+    public List<String> itemTabCompleter(Player player, String[] args) {
         // Smart tab completer to only serve the correct part :)
-        if(args.length > 1){
+        if (args.length > 1) {
             return List.of();
         }
 
-        if(args.length == 0){
+        if (args.length == 0) {
             return ItemManager.ITEMS_LIST.keySet().stream().toList();
         }
 
         String id = args[0].toLowerCase();
         return ItemManager.ITEMS_LIST.keySet().stream().filter(s -> s.startsWith(id)).toList();
     }
-
 
 
     @Command(name = "stat", description = "Stat command", op = true)
@@ -147,4 +150,15 @@ public class AdminCommands {
 
     }
 
+    @Command(name = "dragloot", description = "Drag loot command", op = true)
+    public void dragLootCommand(Player player, String[] args) {
+        Location location = player.getLocation().getBlock().getLocation();
+        location.add(3, 0, 0);
+        while (location.getBlock().getType() != Material.AIR) {
+            location.subtract(0, 1, 0);
+        }
+        DragonDropItemEntity dragonDropItemEntity = new
+                DragonDropItemEntity(player, location, SkyblockItem.get(SuperiorChestplate.ID));
+//        player.sendMessage(ChatColor.RED + "Spawned dragon loot.");
+    }
 }

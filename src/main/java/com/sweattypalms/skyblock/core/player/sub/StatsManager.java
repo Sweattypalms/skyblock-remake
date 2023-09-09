@@ -63,7 +63,6 @@ public class StatsManager {
     }
 
     public void manageStats() {
-//        TODO: Add regeneration. (Health, Mana)
         Player player = this.player.getPlayer();
         setLiveStat(Stats.HEALTH, player.getHealth());
         player.setFoodLevel(20);
@@ -78,7 +77,6 @@ public class StatsManager {
         Fairy Souls
         Slayer Bonuses
         Dungeons Bonuses
-        Reforges
         Enchantments
         Potions
  */
@@ -114,6 +112,7 @@ public class StatsManager {
                 }
             }
         });
+
         // To not include duplicates
         Set<PassiveAbility> passiveAbilitiesSet = new HashSet<>(passiveAbilities);
         passiveAbilities.clear();
@@ -157,7 +156,7 @@ public class StatsManager {
         AttributeInstance attribute = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
         assert attribute != null;
         attribute.setBaseValue(maxHealth);
-        double correction1Percent = oldMaxHealth * 0.01; // This is because of the double precision
+        double correction1Percent = oldMaxHealth * 0.01; // This is because of the funny
         if (oldCurrentHealth >= oldMaxHealth - correction1Percent) {
             player.setHealth(maxHealth);
         }

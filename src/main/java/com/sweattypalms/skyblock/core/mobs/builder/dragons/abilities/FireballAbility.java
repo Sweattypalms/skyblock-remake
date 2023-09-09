@@ -12,8 +12,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 public class FireballAbility implements IDragonAbility {
-
-    //    private boolean running = false;
     private final EnderDragon dragon;
     private int tickCount = 0;
 
@@ -84,7 +82,7 @@ public class FireballAbility implements IDragonAbility {
         assert headLoc.getWorld() != null;
         Fireball fireball = headLoc.getWorld().spawn(headLoc, Fireball.class);
         fireball.setDirection(direction);
-        fireball.setVelocity(direction.multiply(0.5));  // Adjust the multiplier to set the speed. 0.5 is just an example value.
+        fireball.setVelocity(direction.multiply(0.5));
     }
 
     @Override

@@ -25,7 +25,7 @@ public interface IEndDragon {
         ));
         stages.add(new DragonStage(
                 List.of(
-                        new Vector(50, 60, -60),      // Start at middle
+                        new Vector(50, 60, -60),
                         new Vector(63.5, 60, -68.25),
                         new Vector(59.25, 60, 53.25),
                         new Vector(-32.75, 60, 24.75)

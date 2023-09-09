@@ -66,7 +66,6 @@ public class SkyblockPlayerDamageEntityEvent extends Event implements Cancellabl
 
     public SkyblockPlayerDamageEntityEvent(LivingEntity entity, Player player, DamageType damageType) {
         if(((CraftEntity) entity).getHandle() instanceof ISkyblockMob skyblockMob){
-//            System.out.println("entity is a skyblock mob");
             this.skyblockMob = skyblockMob.getSkyblockMob();
         }else{
             this.skyblockMob = null;

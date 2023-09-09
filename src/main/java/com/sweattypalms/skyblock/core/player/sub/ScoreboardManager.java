@@ -209,7 +209,8 @@ public class ScoreboardManager {
             double currentHealth = dragonManager.getActiveDragon().getEntityInstance().getHealth();
             section.put("dragonHealth", "$fDragon Health: $a" + PlaceholderFormatter.formatDecimalCSV(currentHealth) + Stats.HEALTH.getSymbol());
 
-            double playerDamage = dragonManager.getActiveDragon().getMaxHealth() - currentHealth;
+//            double playerDamage = dragonManager.getActiveDragon().getMaxHealth() - currentHealth;
+            double playerDamage = dragonManager.getPlayerDamage(player.getPlayer().getUniqueId());
             section.put("playerDamage", "$fYour Damage: $c" + PlaceholderFormatter.formatDecimalCSV(playerDamage));
         } else {
             section.put("objective", " $fObjective");

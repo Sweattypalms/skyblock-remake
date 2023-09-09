@@ -15,7 +15,10 @@ public class ActionBarManager {
     }
 
 
-    public void actionBar() {
+    /**
+     * Triggered every 20 ticks
+     */
+    public void tick() {
         String space = "        ";
         String healthComponent = getHealthComponent();
         String defenceComponent = getDefenceComponent();

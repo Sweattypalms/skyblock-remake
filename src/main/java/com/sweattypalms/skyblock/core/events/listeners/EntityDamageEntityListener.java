@@ -11,28 +11,6 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 
 public class EntityDamageEntityListener implements Listener {
-//    @EventHandler
-//    public void onPlayerAttackEntity(EntityDamageByEntityEvent event) {
-//        if (!(event.getDamager() instanceof Player) || !(event.getEntity() instanceof LivingEntity)) {
-//            return;
-//        }
-//
-//        Player player = (Player) event.getDamager();
-//        ItemStack itemInHand = player.getInventory().getItemInMainHand();
-//
-//        // Get your SkyblockItem from itemInHand, here's a placeholder
-//        SkyblockItem skyblockItem = ItemManager.ITEMS_LIST.getOrDefault(PDCHelper.getOrDefault(itemInHand, "id", "null"), null);
-//
-//        if (skyblockItem != null && skyblockItem.getAbilities() != null) {
-//            for (Ability ability : skyblockItem.getAbilities()) {
-//                if (ability.getTriggerType() == TriggerType.ATTACK && ability.trigger(event)) {
-//                    // convert Player to SkyblockPlayer, here's a placeholder
-//                    SkyblockPlayer skyblockPlayer = SkyblockPlayer.getSkyblockPlayer(player);
-//                    ability.apply(skyblockPlayer, event);
-//                }
-//            }
-//        }
-//    }
     @EventHandler
     public void onEntityDamageEntity(EntityDamageByEntityEvent  event){
         event.setDamage(0);
@@ -43,7 +21,6 @@ public class EntityDamageEntityListener implements Listener {
             return;
 
         if(event.getDamager() instanceof Player player){
-            // Add more checks like checking if the item is a bow etc.
             SkyblockPlayerDamageEntityEvent skyblockPlayerDamageEntityEvent = new SkyblockPlayerDamageEntityEvent(
                     livingEntity,
                     player,

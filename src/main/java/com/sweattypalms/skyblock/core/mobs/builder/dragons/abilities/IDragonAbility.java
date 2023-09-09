@@ -4,6 +4,5 @@ public interface IDragonAbility {
     void start();
     void stop();
     void tick();
-//    boolean isRunning();
     boolean shouldActivate();
 }

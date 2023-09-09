@@ -25,11 +25,9 @@ public class MathHelper {
 
     public static void spiralParticles(LivingEntity entity, double f, double delta, Particle particle) {
         Location eyeLocation = entity.getEyeLocation();
-//        float initialPitch = entity.getEyeLocation().getPitch();
-//        float initialYaw = entity.getEyeLocation().getYaw();
 
         new BukkitRunnable() {
-            final int stepsPerTick = 5;  // You can adjust this value
+            final int stepsPerTick = 5;
             int step = 0;
 
             @Override

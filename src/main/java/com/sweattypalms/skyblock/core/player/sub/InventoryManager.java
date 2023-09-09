@@ -48,11 +48,6 @@ public class InventoryManager {
                     SkyblockItemType.LEGGINGS,
                     SkyblockItemType.BOOTS
             ));
-//            if (
-//                    skyblockItemFromItemstack != null
-//
-//                            && armorTypes.contains(skyblockItemFromItemstack.getItemType())
-//                            && skyblockItemType.getSlot().equals(EquipmentSlot.HAND)) return;
             if (PDCHelper.hasString(itemStack, "id"))
                 items.put(skyblockItemType, itemStack);
         });
@@ -89,4 +84,7 @@ public class InventoryManager {
         return null;
     }
 
+    public void addItem(SkyblockItem skyblockItem) {
+        this.player.getPlayer().getInventory().addItem(skyblockItem.toItemStack());
+    }
 }

@@ -15,6 +15,7 @@ import com.sweattypalms.skyblock.core.mobs.regions.end.dragons.StrongDragon;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.type.EndPortalFrame;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
@@ -28,7 +29,7 @@ import java.util.*;
  * Singleton class that manages all dragons in the end.
  */
 public class DragonManager {
-    private static World endWorld; // TODO: implement better system
+    // (relative to 0,0)
     private final static List<Point> altarPoints = List.of(
             new Point(2, 1),
             new Point(2, -1),
@@ -43,11 +44,21 @@ public class DragonManager {
             new Point(-2, -1)
     );
     public static Map<Location, Material> temp_save_backup = new HashMap<>();
+    private static World endWorld; // TODO: mplement better systemi
     private static DragonManager instance;
     private final Map<Block, UUID> altarBlocks = new HashMap<>();
 
     private int summoningEyes = 0;
     private SkyblockMob dragon;
+    private Map<UUID, Double> playerDamage = new HashMap<>();
+    public double getPlayerDamage(UUID playerUUID){
+        return this.playerDamage.getOrDefault(playerUUID, 0d);
+    }
+    public void  addPlayerDamage(UUID playerUUID, double damage){
+        double before = this.playerDamage.getOrDefault(playerUUID, 0.0);
+        this.playerDamage.put(playerUUID, before + damage);
+    }
+
 
 
     public DragonManager() {
@@ -184,7 +195,7 @@ public class DragonManager {
                         Location loc = new Location(endWorld, x, finalY, z);
                         if (loc.getBlock().getType() == Material.AIR) continue;
                         if (finalY > allStart) {
-                            if(checkSolidBlock(loc.getBlock())) continue;
+                            if (checkSolidBlock(loc.getBlock())) continue;
                             temp_save_backup.put(loc.getBlock().getLocation(), loc.getBlock().getType());
                             endWorld.getBlockAt(loc).setType(Material.AIR);
                         }
@@ -204,7 +215,7 @@ public class DragonManager {
         }
 
         sequence.add(new SequenceAction(() -> {
-            Location eggCenter = new Location(endWorld, 0, 83, 0); // Adjust y-value to the center of your egg shape.
+            Location eggCenter = new Location(endWorld, 0, 83, 0);
 
             List<FallingBlock> blocks = new ArrayList<>();
             for (int y = 68; y < 100; y++) {
@@ -264,20 +275,16 @@ public class DragonManager {
             block.setVelocity(direction);
         }
     }
-    private boolean checkSolidBlock(Block block){
-        Location location =  block.getLocation();
 
-        for (int x = -1; x <= 1; x++){
-            for (int y = -1; y <= 1; y++){
-                for (int z = -1; z <= 1; z++){
-                    Location loc = new Location(location.getWorld(), location.getX() + x, location.getY() + y, location.getZ() + z);
-                    if (loc.getBlock().getType().isAir() || loc.getBlock().getType().isTransparent()){
-                        loc.getBlock().setType(Material.AIR);
-                        return false;
-                    }
-                }
+    private boolean checkSolidBlock(Block block) {
+        BlockFace[] faces = { BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST, BlockFace.UP, BlockFace.DOWN };
+
+        for (BlockFace face : faces) {
+            if (block.getRelative(face).getType() == Material.AIR) {
+                return false;
             }
         }
+
         return true;
     }
 
@@ -302,10 +309,10 @@ public class DragonManager {
     }
 
 
-
     public boolean isDragonActive() {
         return dragon != null;
     }
+
     public SkyblockMob getActiveDragon() {
         return dragon;
     }

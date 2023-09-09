@@ -47,7 +47,7 @@ public final class SkyBlock extends JavaPlugin {
             getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "Skyblock has been enabled! This took " + ChatColor.YELLOW + end + "ms");
         }
 
-//        drawAscii();
+        drawAscii();
         Bukkit.getOnlinePlayers().forEach(SkyblockPlayer::newPlayer);
         configs();
     }
@@ -101,17 +101,15 @@ public final class SkyBlock extends JavaPlugin {
     private void configs() {
         File configuration = new File(this.getDataFolder(), "skyblock_config.yml");
         FileConfiguration config = YamlConfiguration.loadConfiguration(configuration);
-        if (!configuration.exists()) {
-            config.set("ratio", true);
-            try {
-                config.save(configuration);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        config.set("ratio", true);
+        try {
+            config.save(configuration);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-    private void drawAscii(){
+    private void drawAscii() {
         int width = 220;
         int height = 30;
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
@@ -119,8 +117,7 @@ public final class SkyBlock extends JavaPlugin {
         Graphics2D graphics2D = (Graphics2D) graphics;
         graphics2D.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         graphics.setFont(new Font("SansSerif", Font.BOLD, 24));
-        graphics.drawString("SKYITEMS", 10, 20);
-
+        graphics.drawString("SWEATTY", 10, 20);
 
 
         System.out.println("\n\n\n");

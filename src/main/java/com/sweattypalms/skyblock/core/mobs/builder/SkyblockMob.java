@@ -179,7 +179,6 @@ public class SkyblockMob {
         if (!entityInstance.isDead()) {
             entityInstance.setHealth(0);
         }
-        // shouldn't do .remove() because it will literally remove the entity from the world, no animation or anything.
         entityInstance = null;
     }
 
@@ -201,7 +200,7 @@ public class SkyblockMob {
 
         double newHealth = entityInstance.getHealth() - damage;
         if (newHealth <= 0) {
-            // This will kill the entity, triggering the EntityDeathEvent.
+            // This will kill the entity, triggering the EntityDeathEvent. which is forwards to the SkyblockDeathEvent.
             entityInstance.setHealth(0);
         } else {
             entityInstance.setHealth(newHealth);

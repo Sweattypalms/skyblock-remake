@@ -47,8 +47,6 @@ public class ItemManager {
                 e.printStackTrace();
             }
         }
-
-//        System.out.println("Loaded " + ITEMS_LIST.size() + " items.");
     }
     private static void initSimpleItems() {
         diamondSword();
