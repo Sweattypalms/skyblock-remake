@@ -1,9 +1,12 @@
 package com.sweattypalms.skyblock.core.mobs.builder;
 
+import joptsimple.internal.Reflection;
 import org.reflections.Reflections;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
+import org.reflections.util.FilterBuilder;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +18,8 @@ public class MobManager {
 
 
     public static void init(){
-        Reflections reflections = new Reflections("com.sweattypalms.skyblock.core.mobs.regions");
+        Reflections reflections = new Reflections("com.sweattypalms.skyblock");
+
         for (Class<? extends ISkyblockMob> clazz : reflections.getSubTypesOf(ISkyblockMob.class)) {
             try {
                 if (clazz.isInterface() || Modifier.isAbstract(clazz.getModifiers())) continue;
@@ -30,8 +34,18 @@ public class MobManager {
     }
 
     public static SkyblockMob getInstance(String id) throws IllegalArgumentException{
+//        try {
+//            return new SkyblockMob(id, MOBS_LIST.get(id));
+//        } catch (Exception e) {
+//            throw new IllegalArgumentException("Unknown mob id: " + id);
+//        }
+        Class<? extends ISkyblockMob> clazz = MOBS_LIST.get(id);
+        if (clazz == null) {
+            throw new IllegalArgumentException("Unknown mob id: " + id);
+        }
+
         try {
-            return new SkyblockMob(id, MOBS_LIST.get(id));
+            return new SkyblockMob(id, clazz);
         } catch (Exception e) {
             throw new IllegalArgumentException("Unknown mob id: " + id);
         }

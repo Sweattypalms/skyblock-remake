@@ -9,6 +9,7 @@ import com.sweattypalms.skyblock.core.items.builder.abilities.IHasAbility;
 import com.sweattypalms.skyblock.core.items.builder.abilities.types.DamageAbility;
 import com.sweattypalms.skyblock.core.items.builder.abilities.types.FullSetBonus;
 import com.sweattypalms.skyblock.core.items.builder.abilities.types.ITriggerable;
+import com.sweattypalms.skyblock.core.mobs.builder.MobAttributes;
 import com.sweattypalms.skyblock.core.mobs.builder.SkyblockMob;
 import com.sweattypalms.skyblock.core.player.sub.Stats;
 import org.bukkit.Location;
@@ -140,7 +141,7 @@ public class SkyblockDamageListener implements Listener {
         /* Cancel event if needed */
 
         SkyblockMob skyblockMob = event.getSkyblockMob();
-        double damage = skyblockMob.getDamage();
+        double damage = skyblockMob.getAttribute(MobAttributes.DAMAGE);
         event.setDamage(damage);
     }
 

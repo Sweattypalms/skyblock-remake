@@ -1,6 +1,7 @@
 package com.sweattypalms.skyblock.core.mobs.regions.test;
 
 import com.sweattypalms.skyblock.core.mobs.builder.ISkyblockMob;
+import com.sweattypalms.skyblock.core.mobs.builder.MobAttributes;
 import com.sweattypalms.skyblock.core.mobs.builder.SkyblockMob;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityLiving;
@@ -26,7 +27,7 @@ public class TestEntity extends EntityZombie implements ISkyblockMob {
                 .setCustomName("$cFlorida man")
                 .setLevel(999)
                 ;
-        skyblockMob.setAi(false);
+        skyblockMob.setAttribute(MobAttributes.AI_ENABLED, false);
     }
 
     @Override

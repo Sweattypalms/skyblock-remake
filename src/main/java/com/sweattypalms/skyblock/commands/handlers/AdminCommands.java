@@ -161,4 +161,27 @@ public class AdminCommands {
                 DragonDropItemEntity(player, location, SkyblockItem.get(SuperiorChestplate.ID));
 //        player.sendMessage(ChatColor.RED + "Spawned dragon loot.");
     }
+
+    @Command(name = "slayer", description = "Slayer command", op = true)
+    public void slayerCommand(Player player, String[] args) {
+        mobCommand(player, args);
+    }
+
+    @TabCompleter(command = "slayer")
+    public List<String> slayerTabCompleter(Player player, String[] args) {
+        List<String> slayerMobs = MobManager.MOBS_LIST.keySet().stream().filter(s -> s.contains("+slayer")).toList();
+
+        if (args.length > 1) {
+            return List.of();
+        }
+
+        if (args.length == 0) {
+            return slayerMobs;
+        }
+
+        String id = args[0].toLowerCase();
+        return slayerMobs.stream().filter(s -> s.startsWith(id)).toList();
+    }
+
+
 }

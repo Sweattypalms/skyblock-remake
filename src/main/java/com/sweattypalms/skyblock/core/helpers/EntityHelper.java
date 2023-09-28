@@ -4,6 +4,7 @@ import com.sweattypalms.skyblock.core.items.builder.SkyblockItemType;
 import net.minecraft.world.entity.EntityLiving;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EntityEquipment;
@@ -53,13 +54,17 @@ public class EntityHelper {
         }
     }
 
+    public static void equipItem(EntityLiving entity, SkyblockItemType armorSlot, ItemStack item) {
+        equipItem((LivingEntity) entity.getBukkitEntity(), armorSlot, item);
+    }
+
     /**
      * <h3>Make sure to null check.</h3>
      *
      * @param livingEnt The entity for which u want the closest player.
      * @return The closest player or null if no player was found.
      */
-    public static Player getClosestPlayer(LivingEntity livingEnt) {
+    public static Player getClosestPlayer(Entity livingEnt) {
         final double[] distance = {Double.MAX_VALUE};
         Player[] target = {null};
         List<Player> possibleTarget = livingEnt.getWorld()

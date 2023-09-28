@@ -8,18 +8,26 @@ import com.sweattypalms.skyblock.core.mobs.builder.MobManager;
 import com.sweattypalms.skyblock.core.mobs.builder.dragons.DragonManager;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
 import com.sweattypalms.skyblock.core.world.WorldManager;
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.reflections.Reflections;
+import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Set;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static com.sweattypalms.skyblock.core.items.builder.reforges.ReforgeManager.REFORGES_LIST;
 
@@ -37,19 +45,21 @@ public final class SkyBlock extends JavaPlugin {
     public void onEnable() {
         instance = this;
         long start = System.currentTimeMillis();
-        registerListeners();
-        registerCommands();
-        registerCraft();
-        registerServer();
 
-        long end = System.currentTimeMillis() - start;
-        if (debug) {
-            getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "Skyblock has been enabled! This took " + ChatColor.YELLOW + end + "ms");
-        }
 
-        drawAscii();
+        // Init the plugin asynchronously to speed up
+        Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
+            registerListeners();
+            registerCommands();
+            registerCraft();
+            configs();
+
+            long end = System.currentTimeMillis() - start;
+            System.out.println(ChatColor.GREEN + "Skyblock has been enabled! This took " + ChatColor.YELLOW + end + "ms");
+        });
+
+        this.registerServer();
         Bukkit.getOnlinePlayers().forEach(SkyblockPlayer::newPlayer);
-        configs();
     }
 
     private void registerServer() {

@@ -24,6 +24,8 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.lang.reflect.Constructor;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -33,39 +35,11 @@ public class SkyblockMob {
     public final String id;
     private final Class<? extends ISkyblockMob> nmsClass;
     private final Queue<ArmorStand> damageIndicators = new ConcurrentLinkedQueue<>();
-    @Getter
-    protected int level = 1;
-    @Getter
-    protected double damage = 0;
-    @Getter
-    protected double maxHealth;
-    @Getter
-    protected double defense = 0;
-    @Getter
-    protected double speed = 100;
-    @Getter
-    @Setter
-    protected boolean isAi = true;
-    @Getter
-    @Setter
-    protected boolean isFrozen = false;
-    @Getter
-    @Setter
-    protected boolean formattedHp = false;
-    @Getter
-    protected boolean customNameVisible = true;
-    @Getter
-    @Setter
-    protected boolean showHp = true;
-    @Getter
-    @Setter
-    protected  boolean showLevel = true;
 
-    @Getter @Setter
-    protected boolean isKnockbackImmune = false;
 
-    @Getter
-    private String customName;
+    private final Map<MobAttributes, Object> attributes = MobAttributes.getDefault();
+    private final Map<NameAttributes, Object> nameAttributes = NameAttributes.getDefault();
+
     @Getter
     @Setter
     private LivingEntity entityInstance;
@@ -108,13 +82,13 @@ public class SkyblockMob {
 
     private void initMob() {
         LivingEntity entity = this.entityInstance;
-        entity.setCustomNameVisible(customNameVisible);
+        entity.setCustomNameVisible(getNameAttribute(NameAttributes.CUSTOM_NAME_VISIBLE));
         entity.setRemoveWhenFarAway(false);
         entity.setCanPickupItems(false);
-        entity.setAI(isAi);
+        entity.setAI(getAttribute(MobAttributes.AI_ENABLED));
         entity.setMaximumNoDamageTicks(0);
         entity.setNoDamageTicks(0);
-        setEntityInstanceMaxHealth(maxHealth);
+        setEntityInstanceMaxHealth(getAttribute(MobAttributes.MAX_HEALTH));
     }
 
     private void heartbeat() {
@@ -130,18 +104,18 @@ public class SkyblockMob {
                 }
                 AttributeInstance healthAttribute = entityInstance.getAttribute(Attribute.GENERIC_MAX_HEALTH);
                 assert healthAttribute != null;
-                healthAttribute.setBaseValue(maxHealth);
+                healthAttribute.setBaseValue(getAttribute(MobAttributes.MAX_HEALTH));
 
 
-                entityInstance.setAI(capture.isAi());
-                if (capture.isFrozen()) {
+                entityInstance.setAI(getAttribute(MobAttributes.AI_ENABLED));
+                if (getAttribute(MobAttributes.FROZEN)) {
                     PotionEffect _frozenPotionEffect = new PotionEffect(PotionEffectType.SLOW, 15, 255, false, false);
                     entityInstance.addPotionEffect(_frozenPotionEffect);
                 }
 
                 AttributeInstance speedAttribute = entityInstance.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED);
                 if (speedAttribute != null)
-                    speedAttribute.setBaseValue(speed / 500f);
+                    speedAttribute.setBaseValue((int) getAttribute(MobAttributes.SPEED) / 500f);
 
                 refreshName();
             }
@@ -149,8 +123,9 @@ public class SkyblockMob {
     }
 
     private void refreshName() {
-        String levelComponent = this.showLevel ? "$8[$7Lv" + level + "$8] " : "";
+        String levelComponent = this.getNameAttribute(NameAttributes.SHOW_LEVEL) ? "$8[$7Lv" + getAttribute(MobAttributes.LEVEL) + "$8] " : "";
 
+        double maxHealth = getAttribute(MobAttributes.MAX_HEALTH);
         String healthColour =
                 entityInstance.getHealth() > maxHealth * 0.66 ? "$a" :
                         entityInstance.getHealth() > maxHealth * 0.33 ? "$e" :
@@ -159,18 +134,18 @@ public class SkyblockMob {
 
         String formattedHp = healthColour + PlaceholderFormatter.compactNumber((int) entityInstance.getHealth()) + "$c❤";
         String noneFormatted =
-                healthColour + String.format("%.0f", Math.floor(entityInstance.getHealth())) + "$f/$a" + String.format("%.0f", getMaxHealth()) + "$c❤";
+                healthColour + String.format("%.0f", Math.floor(entityInstance.getHealth())) + "$f/$a" + String.format("%.0f", maxHealth) + "$c❤";
 
         String customName =
-                this.showHp ?
-                        this.formattedHp ? formattedHp : noneFormatted
+                this.getNameAttribute(NameAttributes.SHOW_HP) ?
+                        this.getNameAttribute(NameAttributes.FORMATTED) ? formattedHp : noneFormatted
                         :
                         "";
-        customName = levelComponent + getCustomName() + " " + customName;
+        customName = levelComponent + getNameAttribute(NameAttributes.CUSTOM_NAME) + " " + customName;
 
         customName = PlaceholderFormatter.format(customName);
 
-        if(this.customNameVisible)
+        if (this.getNameAttribute(NameAttributes.CUSTOM_NAME_VISIBLE))
             entityInstance.setCustomName(customName);
     }
 
@@ -289,49 +264,50 @@ public class SkyblockMob {
 
     public SkyblockMob setCustomName(String customName, boolean formatted) {
         this.setCustomName(customName);
-        this.formattedHp = formatted;
+        this.setNameAttribute(NameAttributes.FORMATTED, formatted);
 
         return this;
     }
 
     public SkyblockMob setCustomName(String customName) {
-        this.customName = PlaceholderFormatter.format(customName);
+        customName = PlaceholderFormatter.format(customName);
+        this.setNameAttribute(NameAttributes.CUSTOM_NAME, customName);
         if (entityInstance != null) {
-            entityInstance.setCustomName(this.customName);
+            entityInstance.setCustomName(customName);
             entityInstance.setCustomNameVisible(true);
         }
         return this;
     }
 
     public SkyblockMob setCustomNameVisible(boolean customNameVisible) {
-        this.customNameVisible = customNameVisible;
+        this.setNameAttribute(NameAttributes.CUSTOM_NAME_VISIBLE, customNameVisible);
         if (entityInstance != null)
             entityInstance.setCustomNameVisible(customNameVisible);
         return this;
     }
 
     public SkyblockMob setDamage(double damage) {
-        this.damage = damage;
+        this.setAttribute(MobAttributes.DAMAGE, damage);
         return this;
     }
 
     public SkyblockMob setDefense(int defense) {
-        this.defense = defense;
+        this.setAttribute(MobAttributes.DEFENSE, defense);
         return this;
     }
 
     public SkyblockMob setSpeed(int speed) {
-        this.speed = speed;
+        this.setAttribute(MobAttributes.SPEED, speed);
         return this;
     }
 
     public SkyblockMob setLevel(int level) {
-        this.level = level;
+        this.setAttribute(MobAttributes.LEVEL, level);
         return this;
     }
 
     public SkyblockMob setMaxHealth(double health) {
-        this.maxHealth = health;
+        this.setAttribute(MobAttributes.MAX_HEALTH, health);
         if (entityInstance != null)
             setEntityInstanceMaxHealth(health);
         return this;
@@ -345,12 +321,39 @@ public class SkyblockMob {
     }
 
     public SkyblockMob setDefense(double defense) {
-        this.defense = defense;
+        this.setAttribute(MobAttributes.DEFENSE, defense);
         return this;
     }
 
     public SkyblockMob setSpeed(double speed) {
-        this.speed = speed;
+        this.setAttribute(MobAttributes.SPEED, speed);
         return this;
     }
+
+    public <T> void setAttribute(MobAttributes key, T value) {
+        if (key.getAttribute().getType().isInstance(value)) {
+            attributes.put(key, value);
+        } else {
+            throw new IllegalArgumentException("Value type doesn't match the expected type for the attribute.");
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> T getAttribute(MobAttributes key) {
+        return (T) attributes.get(key);
+    }
+
+    public <T> SkyblockMob setNameAttribute(NameAttributes key, T value) {
+        if (key.getAttribute().getType().isInstance(value)) {
+            nameAttributes.put(key, value);
+        } else {
+            throw new IllegalArgumentException("Value type doesn't match the expected type for the attribute.");
+        }
+        return this;
+    }
+    @SuppressWarnings("unchecked")
+    public <T> T getNameAttribute(NameAttributes key) {
+        return (T) nameAttributes.get(key);
+    }
+
 }

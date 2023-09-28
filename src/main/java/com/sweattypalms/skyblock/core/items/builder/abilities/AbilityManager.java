@@ -139,7 +139,7 @@ public class AbilityManager {
                 Block block = start.getBlock();
                 if (!whitelistedMaterials.contains(block.getType())) {
                     start.subtract(direction);
-                    player.sendMessage("There are blocks in the way!");
+                    player.sendMessage(ChatColor.RED + "There are blocks in the way!");
                     break;
                 }
             }

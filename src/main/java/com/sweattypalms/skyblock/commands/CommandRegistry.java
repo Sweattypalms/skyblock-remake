@@ -127,7 +127,7 @@ public class CommandRegistry {
             try {
                 container.commandMethod.invoke(container.instance, player);
                 return true;
-            } catch (IllegalAccessException | InvocationTargetException ignored) {
+            } catch (Exception ignored) {
             }
         }
 
@@ -149,7 +149,7 @@ public class CommandRegistry {
         return new ArrayList<>();
     }
 
-    public class MethodContainer {
+    public static class MethodContainer {
         public Method commandMethod;
         public Method tabCompleterMethod;
         public Object instance;

@@ -13,6 +13,7 @@ import com.sweattypalms.skyblock.core.items.builder.abilities.types.IHasAbilityD
 import com.sweattypalms.skyblock.core.items.builder.abilities.types.ITriggerable;
 import com.sweattypalms.skyblock.core.items.builder.abilities.types.IUsageCost;
 import com.sweattypalms.skyblock.core.mobs.builder.ISkyblockMob;
+import com.sweattypalms.skyblock.core.mobs.builder.MobAttributes;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
 import com.sweattypalms.skyblock.core.player.sub.Stats;
 import net.minecraft.world.entity.EntityLiving;
@@ -98,7 +99,7 @@ public class AspectOfTheDragons extends SkyblockItem implements IHasAbility {
                 if (angle > 60) continue;
 
 
-                if (!skyblockMob.getSkyblockMob().isKnockbackImmune()) {
+                if (!(boolean) skyblockMob.getSkyblockMob().getAttribute(MobAttributes.KNOCKBACK_RESISTANT)) {
                     // Check if the entity is within 30 degrees of the player's view direction
                     double distance = playerLoc.distance(mobLoc);
                     double knockbackFactor = baseKnockback + maxKnockback * Math.pow((maxDistance - distance) / maxDistance, 2);

@@ -3,6 +3,7 @@ package com.sweattypalms.skyblock.core.helpers;
 import com.sweattypalms.skyblock.core.events.SkyblockPlayerDamageEntityEvent;
 import com.sweattypalms.skyblock.core.items.builder.abilities.types.IHasAbilityDamage;
 import com.sweattypalms.skyblock.core.items.builder.item.IShortBow;
+import com.sweattypalms.skyblock.core.mobs.builder.MobAttributes;
 import com.sweattypalms.skyblock.core.mobs.builder.SkyblockMob;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
 import com.sweattypalms.skyblock.core.player.sub.Stats;
@@ -40,7 +41,7 @@ public class DamageCalculator {
         }
 
 
-        double entityDefense = skyblockMob.getDefense();
+        double entityDefense = skyblockMob.getAttribute(MobAttributes.DEFENSE);
 
         double baseDamage = PDCHelper.getDouble(item, "stat." + Stats.DAMAGE.name().toLowerCase());
         double strength = skyblockPlayer.getStatsManager().getMaxStats().get(Stats.STRENGTH);
@@ -79,7 +80,7 @@ public class DamageCalculator {
 
         event.setCrit(crit);
 
-        double entityDefense = event.getSkyblockMob().getDefense();
+        double entityDefense = event.getSkyblockMob().getAttribute(MobAttributes.DEFENSE);
 
         double baseAbilityDamage = abilityActivator.getBaseAbilityDamage();
         double abilityScaling = abilityActivator.getAbilityScaling();
