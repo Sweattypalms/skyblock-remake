@@ -4,10 +4,9 @@ import com.sweattypalms.skyblock.core.items.builder.abilities.TriggerType;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
 import org.bukkit.block.Block;
 import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class SkyblockInteractEvent extends Event implements ISkyblockPlayerEvent, Cancellable {
+public class SkyblockInteractEvent extends SkyblockPlayerEvent implements Cancellable {
 
     private static final HandlerList HANDLERS = new HandlerList();
     private boolean isCancelled;

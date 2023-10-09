@@ -5,10 +5,9 @@ import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class SkyblockMobDamagePlayerEvent extends Event implements ISkyblockPlayerEvent, Cancellable {
+public class SkyblockMobDamagePlayerEvent extends SkyblockPlayerEvent implements Cancellable {
     public static final HandlerList HANDLERS = new HandlerList();
 
     private final SkyblockPlayer skyblockPlayer;

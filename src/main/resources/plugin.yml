@@ -7,3 +7,6 @@ description: A Hypixel Skyblock remake plugin
 website: sweattypalms.me
 depend:
   - Multiverse-Core
+commands:
+  wtf:
+    description: WTF

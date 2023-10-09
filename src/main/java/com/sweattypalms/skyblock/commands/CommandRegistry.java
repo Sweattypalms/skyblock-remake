@@ -5,6 +5,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.defaults.BukkitCommand;
+import org.bukkit.craftbukkit.v1_17_R1.command.CraftCommandMap;
 import org.bukkit.entity.Player;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
@@ -72,10 +73,12 @@ public class CommandRegistry {
                 @Override
                 public boolean execute(org.bukkit.command.CommandSender sender, String commandLabel, String[] args) {
                     // This method will be overridden regardless by the CommandPreProcess event
-                    return false;
+                    return true;
                 }
             });
+
         } catch (NoSuchFieldException | IllegalAccessException e) {
+            System.out.printf("Failed to register command %s%n", container.commandMethod.getName());
             throw new RuntimeException(e);
         }
     }
@@ -123,6 +126,7 @@ public class CommandRegistry {
             container.commandMethod.invoke(container.instance, player, args);
             return true;
         } catch (Exception e) {
+            e.printStackTrace();
             // If first failed, try to get a commandMethod with args of (Player player)
             try {
                 container.commandMethod.invoke(container.instance, player);

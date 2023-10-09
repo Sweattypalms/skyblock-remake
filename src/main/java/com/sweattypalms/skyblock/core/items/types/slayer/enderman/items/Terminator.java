@@ -101,6 +101,7 @@ public class Terminator extends SkyblockItem implements IHasAbility, IShortBow {
                 Arrow arrowRight = as.getWorld().spawn(as.getEyeLocation(), Arrow.class);
                 Arrow arrowLeft = as.getWorld().spawn(as.getEyeLocation(), Arrow.class);
 
+
                 arrow.setShooter(player);
                 arrowRight.setShooter(player);
                 arrowLeft.setShooter(player);

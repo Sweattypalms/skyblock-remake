@@ -1,6 +1,6 @@
 package com.sweattypalms.skyblock.core.items.builder.abilities.types;
 
-import com.sweattypalms.skyblock.core.events.ISkyblockPlayerEvent;
+import com.sweattypalms.skyblock.core.events.SkyblockPlayerEvent;
 import com.sweattypalms.skyblock.core.items.builder.SkyblockItem;
 import com.sweattypalms.skyblock.core.items.builder.abilities.Ability;
 import com.sweattypalms.skyblock.core.items.builder.abilities.IHasAbility;
@@ -47,7 +47,7 @@ public interface FullSetBonus extends Ability, ITriggerable {
 
     @Override
     default boolean trigger(Event event){
-        if(!(event instanceof ISkyblockPlayerEvent skyblockPlayerEvent)) return false;
+        if(!(event instanceof SkyblockPlayerEvent skyblockPlayerEvent)) return false;
         return isFullSetEquipped(skyblockPlayerEvent.getSkyblockPlayer());
     }
 }

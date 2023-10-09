@@ -9,13 +9,17 @@ import com.sweattypalms.skyblock.core.items.builder.reforges.Reforge;
 import com.sweattypalms.skyblock.core.items.builder.reforges.ReforgeManager;
 import com.sweattypalms.skyblock.core.items.types.end.armor.SuperiorChestplate;
 import com.sweattypalms.skyblock.core.mobs.builder.MobManager;
+import com.sweattypalms.skyblock.core.mobs.builder.NameAttributes;
 import com.sweattypalms.skyblock.core.mobs.builder.SkyblockMob;
 import com.sweattypalms.skyblock.core.mobs.builder.dragons.loot.DragonDropItemEntity;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
 import com.sweattypalms.skyblock.core.player.sub.Stats;
+import com.sweattypalms.skyblock.slayers.ISlayerMob;
+import com.sweattypalms.skyblock.ui.guis.ItemsGUI;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_17_R1.entity.CraftZombie;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -26,25 +30,28 @@ public class AdminCommands {
     public void mobCommand(Player player, String[] args) {
         if (args.length == 0) {
             player.sendMessage(ChatColor.RED + "Usage: /mob id");
+            return;
         }
         String id = args[0].toLowerCase();
 
-        SkyblockMob skyblockMob;
-        try {
-            skyblockMob = MobManager.getInstance(id);
-        } catch (IllegalArgumentException e) {
-            player.sendMessage(ChatColor.RED + e.getMessage());
-            return;
-        }
+        SkyblockMob skyblockMob = getAndSpawnMob(id, player);
 
-        skyblockMob.spawn(player.getLocation());
-        player.sendMessage(ChatColor.RED + "Successfully spawned: " + skyblockMob.getId());
+        if (skyblockMob == null) return;
+
+        player.sendMessage(ChatColor.RED + "Successfully spawned: " + skyblockMob.getNameAttribute(NameAttributes.CUSTOM_NAME));
     }
 
     @Command(name = "item", description = "Item command", op = true)
     public void itemCommand(Player player, String[] args) {
         if (args.length == 0) {
-            player.sendMessage(ChatColor.RED + "Usage: /item id");
+            ItemsGUI gui = new ItemsGUI();
+            gui.open(player);
+
+            String message = ChatColor.YELLOW + "If you want to get an item of a specific id, do:";
+            message += "\n" + ChatColor.YELLOW + "/item <id> [optional: amount]";
+            player.sendMessage(message);
+
+            return;
         }
         String id = args[0].toLowerCase();
         if (!ItemManager.ITEMS_LIST.containsKey(id)) {
@@ -90,6 +97,7 @@ public class AdminCommands {
     public void statCommand(Player player, String[] args) {
         if (args.length == 0) {
             player.sendMessage(ChatColor.RED + "Usage: /stat stat value");
+            return;
         }
         Stats stat;
         double value = 0;
@@ -162,12 +170,25 @@ public class AdminCommands {
 //        player.sendMessage(ChatColor.RED + "Spawned dragon loot.");
     }
 
-    @Command(name = "slayer", description = "Slayer command", op = true)
+    @Command(name = "slayer_id", description = "Slayer command", op = true)
     public void slayerCommand(Player player, String[] args) {
-        mobCommand(player, args);
+        if (args.length == 0) {
+            player.sendMessage(ChatColor.RED + "Usage: /slayer id");
+            return;
+        }
+        String id = args[0].toLowerCase();
+
+        SkyblockMob skyblockMob = getAndSpawnMob(id, player);
+
+        if(skyblockMob == null) return;
+
+        ISlayerMob slayerMob = (ISlayerMob) ((CraftZombie)skyblockMob.getEntityInstance()).getHandle();
+        slayerMob.setOwnerPlayer(SkyblockPlayer.getSkyblockPlayer(player));
+
+        player.sendMessage(ChatColor.RED + "Successfully spawned: " + skyblockMob.getNameAttribute(NameAttributes.CUSTOM_NAME));
     }
 
-    @TabCompleter(command = "slayer")
+    @TabCompleter(command = "slayer_id")
     public List<String> slayerTabCompleter(Player player, String[] args) {
         List<String> slayerMobs = MobManager.MOBS_LIST.keySet().stream().filter(s -> s.contains("+slayer")).toList();
 
@@ -183,5 +204,30 @@ public class AdminCommands {
         return slayerMobs.stream().filter(s -> s.startsWith(id)).toList();
     }
 
+    @Command(name = "?cancel_slayer", description = "Cancel slayer command", op = true)
+    public void cancelSlayerCommand(Player player, String[] args) {
+        SkyblockPlayer skyblockPlayer = SkyblockPlayer.getSkyblockPlayer(player);
+        skyblockPlayer.getSlayerManager().cancelSlayer();
+        skyblockPlayer.sendMessage(" $c$lSlayer quest cancelled!");
+    }
 
+    private SkyblockMob getAndSpawnMob(String id, Player player) {
+        SkyblockMob skyblockMob;
+        try {
+            skyblockMob = MobManager.getInstance(id);
+        } catch (IllegalArgumentException e) {
+            player.sendMessage(ChatColor.RED + e.getMessage());
+            return null;
+        }
+
+        skyblockMob.spawn(player.getLocation());
+
+        return skyblockMob;
+    }
+
+    @Command(name = "sbrl", description = "Skyblock reload command", op = true)
+    public void sbrlCommand(Player player, String[] args) {
+        player.sendMessage(ChatColor.YELLOW + "Reloading Skyblock...");
+        player.performCommand("pm reload skyblock");
+    }
 }

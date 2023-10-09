@@ -76,8 +76,7 @@ public class DragonManager {
     public void addSummoningEye(SkyblockPlayer player, Location location) {
         if (summoningEyes >= altarPoints.size()) {
             String message = "$cThe altar is full!";
-            message = PlaceholderFormatter.format(message);
-            player.getPlayer().sendMessage(message);
+            player.sendMessage(message);
             return;
         }
 
@@ -87,21 +86,19 @@ public class DragonManager {
 
         if (endPortalFrame.hasEye()) {
             String message = "$cSorry, there is already an eye here!";
-            message = PlaceholderFormatter.format(message);
-            player.getPlayer().sendMessage(message);
+            player.sendMessage(message);
             return;
         }
 
         if (this.dragon != null) {
             String message = "$cThere is already a dragon in place!";
-            message = PlaceholderFormatter.format(message);
-            player.getPlayer().sendMessage(message);
+            player.sendMessage(message);
             return;
         }
 
         summoningEyes++;
 
-        String defaultMessage = "$5>> %s $5placed a Summoning Eye! $7(%s%d$7/$a%d$7)";
+        String defaultMessage = "$5⇒ %s $5placed a Summoning Eye! $7(%s%d$7/$a%d$7)";
         String message = PlaceholderFormatter.format(String.format(defaultMessage, player.getPlayer().getDisplayName(), summoningEyes == altarPoints.size() ? "$a" : "$e", summoningEyes, altarPoints.size()));
         String myMessage = PlaceholderFormatter.format(String.format(defaultMessage, "You", summoningEyes == altarPoints.size() ? "$a" : "$e", summoningEyes, altarPoints.size()));
         assert endWorld != null;
@@ -242,7 +239,7 @@ public class DragonManager {
 
         sequence.add(new SequenceAction(
                 () -> {
-                    String summonMessage = String.format("$5>> $l%s $5Dragon Spawned!", "Strong");
+                    String summonMessage = String.format("$5⇒ $l%s $5Dragon Spawned!", "Strong");
                     summonMessage = PlaceholderFormatter.format(summonMessage);
                     String finalSummonMessage = summonMessage;
                     endWorld.getPlayers().forEach(player -> player.sendMessage(finalSummonMessage));

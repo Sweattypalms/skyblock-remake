@@ -15,13 +15,13 @@ public interface ISlayerMob {
 
     List<SlayerDrop> getRngDrops();
 
-    int getCostToStart();
-
-    int getRequiredXpToSpawn();
 
     int getSlayerXpReward();
 
     boolean requirementsMet(SkyblockPlayer skyblockPlayer);
 
-    long startTime();
+    long getStartTime();
+
+    SkyblockPlayer getOwnerPlayer();
+    void setOwnerPlayer(SkyblockPlayer skyblockPlayer);
 }

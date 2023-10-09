@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.function.Function;
 
 public class SkyblockMob {
 
@@ -42,9 +43,20 @@ public class SkyblockMob {
 
     @Getter
     @Setter
+    private MobLoot mobLoot;
+
+
+    @Getter
+    @Setter
     private LivingEntity entityInstance;
     @Getter
     private SkyblockPlayer lastDamager;
+
+    public void onSpawn(Runnable onSpawn) {
+        this.onSpawn = onSpawn;
+    }
+
+    Runnable onSpawn;
 
     public SkyblockMob(String id, Class<? extends ISkyblockMob> nmsClass) {
         this.id = id;
@@ -78,6 +90,8 @@ public class SkyblockMob {
 
         initMob();
         heartbeat();
+
+        if (onSpawn != null) onSpawn.run();
     }
 
     private void initMob() {
@@ -351,9 +365,14 @@ public class SkyblockMob {
         }
         return this;
     }
+
     @SuppressWarnings("unchecked")
     public <T> T getNameAttribute(NameAttributes key) {
         return (T) nameAttributes.get(key);
     }
 
+    public SkyblockMob setLoot(MobLoot mobLoot) {
+        this.mobLoot = mobLoot;
+        return this;
+    }
 }

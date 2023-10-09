@@ -4,10 +4,9 @@ import com.sweattypalms.skyblock.core.items.builder.abilities.Ability;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
 import lombok.Getter;
 import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class SkyblockAbilityUseEvent extends Event implements ISkyblockPlayerEvent, Cancellable {
+public class SkyblockAbilityUseEvent extends SkyblockPlayerEvent implements Cancellable {
 
     private static final HandlerList HANDLERS = new HandlerList();
     private final SkyblockPlayer skyblockPlayer;

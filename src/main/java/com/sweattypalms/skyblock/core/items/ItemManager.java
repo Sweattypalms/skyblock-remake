@@ -5,6 +5,7 @@ import com.sweattypalms.skyblock.core.items.builder.SimpleSkyblockItem;
 import com.sweattypalms.skyblock.core.items.builder.SkyblockItem;
 import com.sweattypalms.skyblock.core.items.builder.SkyblockItemType;
 import com.sweattypalms.skyblock.core.items.builder.abilities.AbilityManager;
+import com.sweattypalms.skyblock.core.items.types.Vanilla;
 import com.sweattypalms.skyblock.core.player.sub.Stats;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -30,6 +31,7 @@ public class ItemManager {
     public static void init() {
         initReflection();
         initSimpleItems();
+        Vanilla.init();
     }
 
 
@@ -74,5 +76,25 @@ public class ItemManager {
                 .itemType(SkyblockItemType.SWORD)
                 .abilities(List.of(AbilityManager.UNDEAD_SWORD_ABILITY))
                 .build();
+    }
+
+    public SkyblockItem getFromVanillaItem(Material material) {
+
+        SkyblockItemType itemType;
+
+        for (SkyblockItemType value : SkyblockItemType.values()) {
+            if(material.toString().contains(value.toString())) {
+                itemType = value;
+                break;
+            }
+        }
+
+        return null;
+//
+//        SkyblockItem skyblockItem = SimpleSkyblockItem
+//                .builder()
+//                .material(material)
+//                .itemType(itemType)
+//                .
     }
 }

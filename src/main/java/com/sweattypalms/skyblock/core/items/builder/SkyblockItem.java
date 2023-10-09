@@ -359,6 +359,4 @@ public abstract class SkyblockItem {
     private List<String> __getRarityLine() {
         return __getRarityLine(false);
     }
-
-
 }

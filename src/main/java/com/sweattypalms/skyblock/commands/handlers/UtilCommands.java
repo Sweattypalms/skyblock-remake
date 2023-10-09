@@ -1,9 +1,7 @@
 package com.sweattypalms.skyblock.commands.handlers;
 
 import com.sweattypalms.skyblock.commands.Command;
-import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -29,6 +27,8 @@ public class UtilCommands {
     public void gmssCommand(Player player) {
         player.setGameMode(GameMode.SPECTATOR);
         player.sendMessage(ChatColor.RED + "Your gamemode has been updated to spectator!");
+
+
     }
 
 

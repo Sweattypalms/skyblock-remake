@@ -25,11 +25,7 @@ public class LightningBoots extends SkyblockItem implements IHasAbility, IDyedAr
                 ID,
                 "Lightning Armor Boots",
                 Material.LEATHER_BOOTS,
-                List.of(
-                        "$7Each piece of this armor grants",
-                        "$a+50% $7bonus experience when",
-                        "$7mining ores."
-                ),
+                null,
                 stats,
                 Rarity.SPECIAL,
                 SkyblockItemType.BOOTS
@@ -43,6 +39,6 @@ public class LightningBoots extends SkyblockItem implements IHasAbility, IDyedAr
 
     @Override
     public String getHexColor() {
-        return "0000ff";
+        return "FFFF00";
     }
 }

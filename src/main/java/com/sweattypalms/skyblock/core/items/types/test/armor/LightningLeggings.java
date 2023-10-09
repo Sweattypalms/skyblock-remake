@@ -24,11 +24,7 @@ public class LightningLeggings extends SkyblockItem implements IHasAbility, IDye
                 ID,
                 "Lightning Armor Leggings",
                 Material.LEATHER_LEGGINGS,
-                List.of(
-                        "$7Each piece of this armor grants",
-                        "$a+50% $7bonus experience when",
-                        "$7mining ores."
-                ),
+                null,
                 stats,
                 Rarity.SPECIAL,
                 SkyblockItemType.LEGGINGS
@@ -42,6 +38,6 @@ public class LightningLeggings extends SkyblockItem implements IHasAbility, IDye
 
     @Override
     public String getHexColor() {
-        return "0000ff";
+        return "FFFF00";
     }
 }

@@ -24,11 +24,7 @@ public class LightningHelmet extends SkyblockItem implements IHasAbility, IDyedA
                 ID,
                 "Lightning Armor Helmet",
                 Material.LEATHER_HELMET,
-                List.of(
-                        "$7Each piece of this armor grants",
-                        "$a+50% $7bonus experience when",
-                        "$7mining ores."
-                ),
+                null,
                 stats,
                 Rarity.SPECIAL,
                 SkyblockItemType.HELMET
@@ -40,6 +36,6 @@ public class LightningHelmet extends SkyblockItem implements IHasAbility, IDyedA
     }
     @Override
     public String getHexColor() {
-        return "0000ff";
+        return "FFFF00";
     }
 }

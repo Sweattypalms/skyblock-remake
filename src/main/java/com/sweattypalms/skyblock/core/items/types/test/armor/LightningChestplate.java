@@ -24,11 +24,7 @@ public class LightningChestplate extends SkyblockItem implements IHasAbility, ID
                 ID,
                 "Lightning Armor Chestplate",
                 Material.LEATHER_CHESTPLATE,
-                List.of(
-                        "$7Each piece of this armor grants",
-                        "$a+50% $7bonus experience when",
-                        "$7mining ores."
-                ),
+                null,
                 stats,
                 Rarity.SPECIAL,
                 SkyblockItemType.CHESTPLATE
@@ -42,6 +38,6 @@ public class LightningChestplate extends SkyblockItem implements IHasAbility, ID
 
     @Override
     public String getHexColor() {
-        return "0000ff";
+        return "FFFF00";
     }
 }

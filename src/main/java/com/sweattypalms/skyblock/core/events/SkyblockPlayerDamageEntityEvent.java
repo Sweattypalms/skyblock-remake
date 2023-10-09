@@ -14,7 +14,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 
-public class SkyblockPlayerDamageEntityEvent extends Event implements Cancellable, ISkyblockPlayerEvent {
+public class SkyblockPlayerDamageEntityEvent extends SkyblockPlayerEvent implements Cancellable {
     private static final HandlerList HANDLERS = new HandlerList();
     @Getter
     private final SkyblockMob skyblockMob;

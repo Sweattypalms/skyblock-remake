@@ -4,6 +4,7 @@ import com.sweattypalms.skyblock.core.helpers.PlaceholderFormatter;
 import com.sweattypalms.skyblock.core.mobs.builder.dragons.DragonManager;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
 import com.sweattypalms.skyblock.core.regions.Regions;
+import com.sweattypalms.skyblock.slayers.Slayer;
 import org.bukkit.Bukkit;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
@@ -205,17 +206,36 @@ public class ScoreboardManager {
 
         section.put("spacing4", " $4");
 
+        if(player.getSlayerManager().getActiveSlayer() != null) {
+            Slayer activeSlayer = player.getSlayerManager().getActiveSlayer();
+            section.put("slayer_quest", "$fSlayer Quest");
+            StringBuilder slayerType = new StringBuilder(activeSlayer.slayerType().toString());
+            String[] slayerTypeSplit = slayerType.toString().split("_");
+            slayerType = new StringBuilder();
+            for (String s : slayerTypeSplit) {
+                slayerType.append(PlaceholderFormatter.capitalize(s)).append(" ");
+            }
+
+            section.put("quest_name", "$5" + slayerType + activeSlayer.level());
+            section.put("slayer_xp", "$7(" + player.getSlayerManager().getGatheredXp() + "/$c" + activeSlayer.xpRequiredToSpawn() + "$7) Combat XP");
+
+            return section;
+        }
+
         if (dragonManager.isDragonActive()) {
             double currentHealth = dragonManager.getActiveDragon().getEntityInstance().getHealth();
             section.put("dragonHealth", "$fDragon Health: $a" + PlaceholderFormatter.formatDecimalCSV(currentHealth) + Stats.HEALTH.getSymbol());
 
-//            double playerDamage = dragonManager.getActiveDragon().getMaxHealth() - currentHealth;
             double playerDamage = dragonManager.getPlayerDamage(player.getPlayer().getUniqueId());
             section.put("playerDamage", "$fYour Damage: $c" + PlaceholderFormatter.formatDecimalCSV(playerDamage));
-        } else {
-            section.put("objective", " $fObjective");
-            section.put("message", " $eGet good :)");
+            return section;
         }
+
+
+
+        section.put("objective", " $fObjective");
+        section.put("message", " $eGet good :)");
+
         return section;
     }
 
@@ -227,7 +247,7 @@ public class ScoreboardManager {
     }
 
     private void displayBoard() {
-        this.score = 13;
+        score = getScore();
         for (Map<String, String> section : sections) {
             for (String value : section.values()) {
                 setScore(value, score--);
@@ -235,8 +255,21 @@ public class ScoreboardManager {
         }
     }
 
+    public int getScore(){
+        return 14;
+//        int maxScore = 0;
+//
+//        for (Map<String, String> section : sections) {
+//            for (String ignored : section.values()) {
+//                maxScore++;
+//            }
+//        }
+//
+//        return maxScore;
+    }
+
     public void updateScoreboard() {
-        this.score = 13;
+        this.score = 14;
         initializeSections(); // Refresh sections
         displayBoard();
     }
@@ -280,9 +313,9 @@ public class ScoreboardManager {
 
     private String getRegion() {
         Regions region = this.player.getLastKnownRegion();
-        if(region != null) {
+        if (region != null) {
             return " $7⏣ " + region.getDisplayName();
-        }else{
+        } else {
             return " $7⏣ " + "Unknown";
         }
     }

@@ -2,7 +2,9 @@ package com.sweattypalms.skyblock.commands.handlers;
 
 import com.sweattypalms.skyblock.commands.Command;
 import com.sweattypalms.skyblock.commands.TabCompleter;
+import com.sweattypalms.skyblock.ui.GUIRouter;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Recipe;
 
@@ -1398,4 +1400,8 @@ public class TestCommands {
     }
 
 
+    @Command(name = "breakpoint", description = "Used for debugging")
+    public void breakpointCommand(Player player) {
+        player.sendMessage(ChatColor.RED + "You sussy baka");
+    }
 }

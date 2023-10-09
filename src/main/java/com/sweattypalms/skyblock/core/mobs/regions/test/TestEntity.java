@@ -1,7 +1,9 @@
 package com.sweattypalms.skyblock.core.mobs.regions.test;
 
+import com.sweattypalms.skyblock.core.items.builder.SkyblockItem;
 import com.sweattypalms.skyblock.core.mobs.builder.ISkyblockMob;
 import com.sweattypalms.skyblock.core.mobs.builder.MobAttributes;
+import com.sweattypalms.skyblock.core.mobs.builder.MobLoot;
 import com.sweattypalms.skyblock.core.mobs.builder.SkyblockMob;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityLiving;
@@ -26,6 +28,7 @@ public class TestEntity extends EntityZombie implements ISkyblockMob {
                 .setMaxHealth(100_000_000)
                 .setCustomName("$cFlorida man")
                 .setLevel(999)
+//                .setLoot(new MobLoot().addConfirmedDrop(SkyblockItem.get()))
                 ;
         skyblockMob.setAttribute(MobAttributes.AI_ENABLED, false);
     }

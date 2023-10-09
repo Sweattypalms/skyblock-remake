@@ -15,6 +15,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
@@ -34,11 +35,21 @@ public class SkyblockPlayer {
     @Getter
     private final ScoreboardManager scoreboardManager;
     @Getter
+    private final SlayerManager slayerManager;
+    @Getter
+    private final SkillManager skillManager;
+    @Getter
     private final Player player;
     private BukkitTask tickRunnable;
 
     @Getter @Setter
     private Regions lastKnownRegion = null;
+
+
+    /**
+     * This is used to get last use time of abilities
+     */
+    private Map<String, Long> cooldowns = new HashMap<>();
 
     public SkyblockPlayer(Player player) {
         this.player = player;
@@ -47,6 +58,9 @@ public class SkyblockPlayer {
         this.inventoryManager = new InventoryManager(this);
         this.bonusManager = new BonusManager(this);
         this.actionBarManager = new ActionBarManager(this);
+        this.slayerManager = new SlayerManager(this);
+        this.skillManager = new SkillManager(this);
+        // Should be last because it uses the other managers
         this.scoreboardManager = new ScoreboardManager(this);
 
         players.put(player.getUniqueId(), this);
@@ -120,5 +134,20 @@ public class SkyblockPlayer {
         this.damage(finalDamage);
     }
 
+    /**
+     * Send auto formatted message to player
+     * @param s Message to send
+     */
+    public void sendMessage(String s) {
+        this.player.sendMessage(PlaceholderFormatter.format(s));
+    }
+
+    public long getLastUseTime(String key){
+        return this.cooldowns.getOrDefault(key, 0L);
+    }
+
+    public void setLastUseTime(String key, long time){
+        this.cooldowns.put(key, time);
+    }
 
 }

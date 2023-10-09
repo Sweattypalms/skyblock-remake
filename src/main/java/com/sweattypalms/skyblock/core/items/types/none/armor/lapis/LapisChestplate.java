@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class LapisChestplate extends SkyblockItem implements IHasAbility, IDyedArmor {
     public static final String ID = "lapis_chestplate";
-    private static Map<Stats, Double> stats = new HashMap<>(Map.of(
+    private static final Map<Stats, Double> stats = new HashMap<>(Map.of(
             Stats.DEFENSE, 40d
     ));
 
