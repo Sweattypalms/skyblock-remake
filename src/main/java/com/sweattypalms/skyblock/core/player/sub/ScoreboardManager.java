@@ -206,7 +206,7 @@ public class ScoreboardManager {
 
         section.put("spacing4", " $4");
 
-        if(player.getSlayerManager().getActiveSlayer() != null) {
+        if (player.getSlayerManager().getActiveSlayer() != null) {
             Slayer activeSlayer = player.getSlayerManager().getActiveSlayer();
             section.put("slayer_quest", "$fSlayer Quest");
             StringBuilder slayerType = new StringBuilder(activeSlayer.slayerType().toString());

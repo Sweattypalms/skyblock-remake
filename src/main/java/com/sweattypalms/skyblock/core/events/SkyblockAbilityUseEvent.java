@@ -12,7 +12,6 @@ public class SkyblockAbilityUseEvent extends SkyblockPlayerEvent implements Canc
     private final SkyblockPlayer skyblockPlayer;
     @Getter
     private final Ability ability;
-
     private boolean cancelled = false;
 
     public SkyblockAbilityUseEvent(SkyblockPlayer skyblockPlayer, Ability ability) {

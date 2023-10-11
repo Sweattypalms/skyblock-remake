@@ -15,6 +15,7 @@ import com.sweattypalms.skyblock.core.items.builder.reforges.IAdvancedReforge;
 import com.sweattypalms.skyblock.core.items.builder.reforges.Reforge;
 import com.sweattypalms.skyblock.core.items.builder.reforges.ReforgeManager;
 import com.sweattypalms.skyblock.core.player.sub.Stats;
+import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -24,6 +25,7 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import javax.annotation.Nullable;
 import java.util.*;
 
+@Getter
 public abstract class SkyblockItem {
     private final String id;
     private final String displayName;
@@ -32,7 +34,6 @@ public abstract class SkyblockItem {
     private final Map<Stats, Double> stats;
     private final Rarity rarity;
     private final SkyblockItemType itemType;
-
 
     /**
      * @param id          "diamond_sword"
@@ -49,9 +50,7 @@ public abstract class SkyblockItem {
         this.material = material;
         this.staticLore = staticLore;
         this.stats = new HashMap<>();
-        Arrays.stream(Stats.values()).toList().forEach(stat -> {
-            this.stats.put(stat, stats.getOrDefault(stat, 0d));
-        });
+        Arrays.stream(Stats.values()).toList().forEach(stat -> this.stats.put(stat, stats.getOrDefault(stat, 0d)));
         this.rarity = baseRarity;
         this.itemType = itemType;
     }
@@ -60,9 +59,11 @@ public abstract class SkyblockItem {
         String id = PDCHelper.getString(item, "id");
         return ItemManager.ITEMS_LIST.getOrDefault(id, null);
     }
+
     public static SkyblockItem get(String id) {
         return ItemManager.ITEMS_LIST.getOrDefault(id, null);
     }
+
     public static List<String> buildStatsLore(Map<Stats, Double> stats, @Nullable Reforge reforge, Rarity rarity) {
         List<String> lore = new ArrayList<>();
 
@@ -105,9 +106,7 @@ public abstract class SkyblockItem {
     }
 
     private static void buildStatsPDC(ItemStack item, Map<Stats, Double> stats) {
-        stats.forEach((stat, value) -> {
-            PDCHelper.setDouble(item, "stat." + stat.name().toLowerCase(), value);
-        });
+        stats.forEach((stat, value) -> PDCHelper.setDouble(item, "stat." + stat.name().toLowerCase(), value));
     }
 
     @SuppressWarnings("ReplaceAll")
@@ -146,7 +145,7 @@ public abstract class SkyblockItem {
 
         lore.addAll(ReforgeManager.getReforgeLore(reforge));
 
-        if(reforge instanceof IAdvancedReforge) lore.add("§7"); // Will automatically check if the reforge isn't null
+        if (reforge instanceof IAdvancedReforge) lore.add("§7"); // Will automatically check if the reforge isn't null
 
         lore.addAll(skyblockItem.__getRarityLine(upgraded));
 
@@ -158,9 +157,7 @@ public abstract class SkyblockItem {
 
     public static Map<Stats, Double> getStatsFromItemStack(ItemStack itemStack) {
         Map<Stats, Double> stats = new HashMap<>();
-        Arrays.stream(Stats.values()).toList().forEach(stat -> {
-            stats.put(stat, PDCHelper.getOrDefault(itemStack, "stat." + stat.name().toLowerCase(), 0d));
-        });
+        Arrays.stream(Stats.values()).toList().forEach(stat -> stats.put(stat, PDCHelper.getOrDefault(itemStack, "stat." + stat.name().toLowerCase(), 0d)));
         return stats;
     }
 
@@ -185,10 +182,8 @@ public abstract class SkyblockItem {
         // ------- DISPLAY NAME -------
 
         // ------- LORE -------
-
         List<String> lore = buildLore();
         meta.setLore(lore);
-
         // ------- LORE -------
 
         Arrays.stream(ItemFlag.values()).toList().forEach(meta::addItemFlags);
@@ -206,7 +201,6 @@ public abstract class SkyblockItem {
         PDCHelper.set(item, "rarity", this.rarity.name());
         // ------- PERSISTENT DATA CONTAINER -------
 
-
         return item;
     }
 
@@ -215,13 +209,13 @@ public abstract class SkyblockItem {
         List<String> lore = new ArrayList<>(
                 buildStatsLore(stats)
         );
-        if(!lore.isEmpty()) lore.add("§7");
+        if (!lore.isEmpty()) lore.add("§7");
 
         lore.addAll(__getStaticLore());
 
         if (this.staticLore != null) lore.add("§7");
 
-        if(this instanceof IShortBow shortBow){
+        if (this instanceof IShortBow shortBow){
             lore.add("§6Shortbow: Instantly shoots!");
             lore.addAll(PlaceholderFormatter.format(shortBow.getShortBowDescription()));
             lore.add("§7");
@@ -243,34 +237,6 @@ public abstract class SkyblockItem {
 
     private void buildStatsPDC(ItemStack item) {
         buildStatsPDC(item, this.stats);
-    }
-
-    public String getId() {
-        return this.id;
-    }
-
-    public String getDisplayName() {
-        return this.displayName;
-    }
-
-    public Material getMaterial() {
-        return this.material;
-    }
-
-    public List<String> getStaticLore() {
-        return this.staticLore;
-    }
-
-    public Map<Stats, Double> getStats() {
-        return this.stats;
-    }
-
-    public Rarity getRarity() {
-        return this.rarity;
-    }
-
-    public SkyblockItemType getItemType() {
-        return this.itemType;
     }
 
     private List<String> __getAbilityLore() {
@@ -330,8 +296,6 @@ public abstract class SkyblockItem {
     private List<String> __getStaticLore() {
         return this.staticLore == null ? new ArrayList<>() : PlaceholderFormatter.format(this.staticLore);
     }
-
-
 
     public List<String> __getRarityLine(boolean upgraded) {
         List<String> lore = new ArrayList<>();

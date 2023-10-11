@@ -19,7 +19,6 @@ public class LapisChestplate extends SkyblockItem implements IHasAbility, IDyedA
     private static final Map<Stats, Double> stats = new HashMap<>(Map.of(
             Stats.DEFENSE, 40d
     ));
-
     public LapisChestplate() {
         super(
                 ID,

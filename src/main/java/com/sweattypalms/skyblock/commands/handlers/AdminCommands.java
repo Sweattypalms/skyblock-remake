@@ -167,7 +167,7 @@ public class AdminCommands {
         }
         DragonDropItemEntity dragonDropItemEntity = new
                 DragonDropItemEntity(player, location, SkyblockItem.get(SuperiorChestplate.ID));
-//        player.sendMessage(ChatColor.RED + "Spawned dragon loot.");
+        //player.sendMessage(ChatColor.RED + "Spawned dragon loot.");
     }
 
     @Command(name = "slayer_id", description = "Slayer command", op = true)

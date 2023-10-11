@@ -18,7 +18,7 @@ public class DragonStage {
 
     public Vector getPoint(double t) {
 
-        if(path.size() == 2){
+        if (path.size() == 2){
             return MathHelper.linearInterpolation(path.get(0), path.get(1), t);
         }
 

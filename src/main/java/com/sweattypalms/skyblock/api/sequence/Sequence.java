@@ -1,14 +1,13 @@
 package com.sweattypalms.skyblock.api.sequence;
 
+import lombok.Getter;
+
 import java.util.LinkedList;
 import java.util.Queue;
 
 public class Sequence {
+    @Getter
     private final Queue<SequencedAction> actionQueue = new LinkedList<>();
-    public Queue<SequencedAction> getActionQueue() {
-        return actionQueue;
-    }
-
     private Runnable onFinish = () -> {};
     public void onFinishEvent(Runnable onFinish) {
         this.onFinish = onFinish;
@@ -21,14 +20,16 @@ public class Sequence {
     public void start() {
         processNextAction();
     }
+
     public void stop() {
         actionQueue.clear();
     }
+
     private void processNextAction() {
         if (!actionQueue.isEmpty()) {
             SequencedAction action = actionQueue.poll();
             action.perform(t -> processNextAction());
-        }else{
+        } else {
             onFinish.run();
         }
     }

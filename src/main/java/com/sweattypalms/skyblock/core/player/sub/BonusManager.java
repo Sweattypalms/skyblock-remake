@@ -4,20 +4,15 @@ import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
 import lombok.Getter;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Getter
 public class BonusManager {
-    private final SkyblockPlayer player;
 
-    @Getter
-    private Map<String, List<Bonus>> bonuses = new ConcurrentHashMap<>();
-
-    public BonusManager(SkyblockPlayer player) {
-        this.player = player;
-    }
+    private final Map<String, List<Bonus>> bonuses = new ConcurrentHashMap<>();
+    public BonusManager(SkyblockPlayer player) {}
 
     /**
      * <!> This will add the bonus to the stat <!>
@@ -54,5 +49,4 @@ public class BonusManager {
     public List<Bonus> getBonuses(String key) {
         return this.bonuses.getOrDefault(key, new ArrayList<>());
     }
-
 }

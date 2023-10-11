@@ -73,6 +73,6 @@ public class AspectOfTheEnd extends SkyblockItem implements IHasAbility {
             Bonus speedBonus = new Bonus(Stats.SPEED, 50, 3000);
             skyblockPlayer.getBonusManager().setBonus("aote.speed", speedBonus);
         }
-    };
+    }
 
 }

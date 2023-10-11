@@ -14,7 +14,6 @@ public class ActionBarManager {
         this.player = player;
     }
 
-
     /**
      * Triggered every 20 ticks
      */
@@ -22,7 +21,7 @@ public class ActionBarManager {
         String space = "        ";
         String healthComponent = getHealthComponent();
         String defenceComponent = getDefenceComponent();
-        defenceComponent = defenceComponent.equals("") ? "" : space + defenceComponent;
+        defenceComponent = defenceComponent.isEmpty() ? "" : space + defenceComponent;
         String intelligenceComponent = space + getIntelligenceComponent();
 
         this.player.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR,
@@ -54,6 +53,4 @@ public class ActionBarManager {
 
         return ChatColor.AQUA + Stats.INTELLIGENCE.getSymbol() + " " + currentIntelligenceString + " / " + intelligenceString;
     }
-
-
 }

@@ -1,12 +1,7 @@
 package com.sweattypalms.skyblock.core.mobs.builder;
 
-import joptsimple.internal.Reflection;
 import org.reflections.Reflections;
-import org.reflections.util.ClasspathHelper;
-import org.reflections.util.ConfigurationBuilder;
-import org.reflections.util.FilterBuilder;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,8 +9,6 @@ import java.util.Map;
 public class MobManager {
 
     public static Map<String, Class<? extends ISkyblockMob>> MOBS_LIST = new HashMap<>();
-
-
 
     public static void init(){
         Reflections reflections = new Reflections("com.sweattypalms.skyblock");

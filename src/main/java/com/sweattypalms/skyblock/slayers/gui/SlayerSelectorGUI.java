@@ -43,7 +43,6 @@ public class SlayerSelectorGUI extends BaseGUI {
         this.setItemAt(5, 4, CLOSE_GUI());
     }
 
-
     public static ClickableItem getSlayerItem(Material material, String name, List<String> lore, Consumer<Player> onClick) {
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();

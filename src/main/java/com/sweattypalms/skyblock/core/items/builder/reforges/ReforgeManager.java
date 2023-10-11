@@ -7,7 +7,6 @@ import javax.annotation.Nullable;
 import java.util.*;
 
 public class ReforgeManager {
-
     public static Map<String, Reforge> REFORGES_LIST = new HashMap<>();
 
     public static void init(){
@@ -34,6 +33,7 @@ public class ReforgeManager {
         lore = PlaceholderFormatter.format(lore);
         return lore;
     }
+
     public static Reforge getReforge(String name){
         if(REFORGES_LIST.containsKey(name)){
             return REFORGES_LIST.get(name);

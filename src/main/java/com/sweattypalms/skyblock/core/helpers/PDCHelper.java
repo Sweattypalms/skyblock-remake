@@ -32,11 +32,11 @@ public class PDCHelper {
     }
     public static <T> void set(ItemStack item, String key, T value){
         ItemMeta meta = item.getItemMeta();
-        if(value instanceof Integer)
+        if (value instanceof Integer)
             meta.getPersistentDataContainer().set(new NamespacedKey(getInstance(), key), PersistentDataType.INTEGER, (int) value);
-        else if(value instanceof String)
+        else if (value instanceof String)
             meta.getPersistentDataContainer().set(new NamespacedKey(getInstance(), key), PersistentDataType.STRING, (String) value);
-        else if(value instanceof Double)
+        else if (value instanceof Double)
             meta.getPersistentDataContainer().set(new NamespacedKey(getInstance(), key), PersistentDataType.DOUBLE, (double) value);
         item.setItemMeta(meta);
     }
@@ -59,14 +59,13 @@ public class PDCHelper {
         item.setItemMeta(meta);
     }
     public static <T> T getOrDefault(ItemStack item, String key, T def){
-        if(def instanceof Double && hasDouble(item, key))
+        if (def instanceof Double && hasDouble(item, key))
             return (T) getDouble(item, key);
-        if(def instanceof String && hasString(item, key))
+        if (def instanceof String && hasString(item, key))
             return (T) getString(item, key);
-        if(def instanceof Integer && hasInt(item, key))
+        if (def instanceof Integer && hasInt(item, key))
             return (T) getInt(item, key);
 
         return def;
     }
-
 }

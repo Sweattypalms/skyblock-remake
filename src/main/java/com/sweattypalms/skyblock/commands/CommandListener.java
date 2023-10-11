@@ -1,6 +1,5 @@
 package com.sweattypalms.skyblock.commands;
 
-import org.bukkit.command.CommandSender;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
@@ -44,5 +43,4 @@ public class CommandListener implements Listener {
         List<String> completions = registry.handleTabCompletion(event.getSender(), baseCommand, modified.toArray(new String[args.length + (isEndSpace ? 1 : 0)]));
         event.setCompletions(completions);
     }
-
 }

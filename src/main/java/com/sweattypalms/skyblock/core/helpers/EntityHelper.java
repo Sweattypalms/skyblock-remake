@@ -2,7 +2,6 @@ package com.sweattypalms.skyblock.core.helpers;
 
 import com.sweattypalms.skyblock.core.items.builder.SkyblockItemType;
 import net.minecraft.world.entity.EntityLiving;
-import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -78,6 +77,4 @@ public class EntityHelper {
         });
         return target[0];
     }
-
-
 }

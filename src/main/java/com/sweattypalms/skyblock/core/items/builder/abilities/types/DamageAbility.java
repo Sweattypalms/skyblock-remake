@@ -8,7 +8,6 @@ public interface DamageAbility extends Ability, ITriggerable {
      * @return If ability will be executed before damage calculation or after.
      */
     boolean preCalc();
-
     default TriggerType getTriggerType(){
         return TriggerType.NONE;
     }

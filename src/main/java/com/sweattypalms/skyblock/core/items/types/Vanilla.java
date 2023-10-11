@@ -2,7 +2,6 @@ package com.sweattypalms.skyblock.core.items.types;
 
 import com.sweattypalms.skyblock.core.items.builder.Rarity;
 import com.sweattypalms.skyblock.core.items.builder.SimpleSkyblockItem;
-import com.sweattypalms.skyblock.core.items.builder.SkyblockItem;
 import com.sweattypalms.skyblock.core.items.builder.SkyblockItemType;
 import com.sweattypalms.skyblock.core.player.sub.Stats;
 import org.bukkit.Material;

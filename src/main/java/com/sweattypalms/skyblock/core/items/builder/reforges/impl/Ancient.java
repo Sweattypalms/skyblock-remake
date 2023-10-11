@@ -19,7 +19,6 @@ public class Ancient implements Reforge, IAdvancedReforge {
             Stats.DEFENSE, 7.0,
             Stats.INTELLIGENCE, 6.0
     );
-
     Map<Stats, Double> UNCOMMON = Map.of(
             Stats.STRENGTH, 8.0,
             Stats.CRIT_CHANCE, 5.0,
@@ -27,7 +26,6 @@ public class Ancient implements Reforge, IAdvancedReforge {
             Stats.DEFENSE, 7.0,
             Stats.INTELLIGENCE, 9.0
     );
-
     Map<Stats, Double> RARE = Map.of(
             Stats.STRENGTH, 12.0,
             Stats.CRIT_CHANCE, 7.0,
@@ -35,7 +33,6 @@ public class Ancient implements Reforge, IAdvancedReforge {
             Stats.DEFENSE, 7.0,
             Stats.INTELLIGENCE, 12.0
     );
-
     Map<Stats, Double> EPIC = Map.of(
             Stats.STRENGTH, 18.0,
             Stats.CRIT_CHANCE, 9.0,
@@ -43,7 +40,6 @@ public class Ancient implements Reforge, IAdvancedReforge {
             Stats.DEFENSE, 7.0,
             Stats.INTELLIGENCE, 16.0
     );
-
     Map<Stats, Double> LEGENDARY = Map.of(
             Stats.STRENGTH, 25.0,
             Stats.CRIT_CHANCE, 12.0,
@@ -51,7 +47,6 @@ public class Ancient implements Reforge, IAdvancedReforge {
             Stats.DEFENSE, 7.0,
             Stats.INTELLIGENCE, 20.0
     );
-
     Map<Stats, Double> MYTHIC = Map.of(
             Stats.STRENGTH, 35.0,
             Stats.CRIT_CHANCE, 15.0,

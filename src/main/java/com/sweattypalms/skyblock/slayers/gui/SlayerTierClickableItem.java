@@ -1,9 +1,7 @@
 package com.sweattypalms.skyblock.slayers.gui;
 
-import com.sweattypalms.skyblock.commands.handlers.PlayerCommands;
 import com.sweattypalms.skyblock.core.helpers.PlaceholderFormatter;
 import com.sweattypalms.skyblock.ui.ClickableItem;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -22,16 +20,16 @@ public class SlayerTierClickableItem {
         EXCRUCIATING,
     }
 
-    private Material material;
-    private String name;
-    private Difficulty difficulty;
-    private double health;
-    private double damage;
-    private List<String> lore;
-    private int reward;
-    private String rewardType;
-    private int costToStart;
-    private Consumer<Player> onClick;
+    private final Material material;
+    private final String name;
+    private final Difficulty difficulty;
+    private final double health;
+    private final double damage;
+    private final List<String> lore;
+    private final int reward;
+    private final String rewardType;
+    private final int costToStart;
+    private final Consumer<Player> onClick;
 
     public SlayerTierClickableItem(Material material, String name, Difficulty difficulty, double health, double damage, List<String> lore, int reward, String rewardType, int costToStart, Consumer<Player> onClick) {
         this.material = material;
@@ -143,8 +141,5 @@ public class SlayerTierClickableItem {
         public SlayerTierClickableItem build() {
             return new SlayerTierClickableItem(material, name, difficulty, health, damage, lore, reward, rewardType, costToStart, onClick);
         }
-
     }
-
 }
-

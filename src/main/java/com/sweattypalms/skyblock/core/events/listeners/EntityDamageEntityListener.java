@@ -14,21 +14,20 @@ public class EntityDamageEntityListener implements Listener {
     @EventHandler
     public void onEntityDamageEntity(EntityDamageByEntityEvent  event){
         event.setDamage(0);
-        if(!(event.getEntity() instanceof LivingEntity livingEntity))
+        if (!(event.getEntity() instanceof LivingEntity livingEntity))
             return;
 
-        if(event.getDamager() instanceof Player && event.getEntity() instanceof Player)
+        if (event.getDamager() instanceof Player && event.getEntity() instanceof Player)
             return;
 
-        if(event.getDamager() instanceof Player player){
+        if (event.getDamager() instanceof Player player){
             SkyblockPlayerDamageEntityEvent skyblockPlayerDamageEntityEvent = new SkyblockPlayerDamageEntityEvent(
                     livingEntity,
                     player,
                     SkyblockPlayerDamageEntityEvent.DamageType.MELEE
             );
             Bukkit.getPluginManager().callEvent(skyblockPlayerDamageEntityEvent);
-        }
-        else if(event.getDamager() instanceof LivingEntity livingEntity_ && event.getEntity() instanceof Player player){
+        } else if (event.getDamager() instanceof LivingEntity livingEntity_ && event.getEntity() instanceof Player player){
             SkyblockMobDamagePlayerEvent skyblockMobDamagePlayerEvent = new SkyblockMobDamagePlayerEvent(
                     player,
                     livingEntity_

@@ -14,7 +14,7 @@ public class SkyblockDeathEvent extends Event {
     @Getter
     private LivingEntity damager;
     @Getter
-    private DeathCause cause;
+    private final DeathCause cause;
 
     public SkyblockDeathEvent(LivingEntity damager, LivingEntity deadEntity) {
         this.damager = damager;

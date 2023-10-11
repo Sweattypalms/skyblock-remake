@@ -29,5 +29,4 @@ public class GUIListener implements Listener {
         assert event.getClickedItem().getItem().getItemMeta() != null;
         event.getClickedItem().click(event.getSkyblockPlayer().getPlayer());
     }
-
 }

@@ -30,7 +30,7 @@ import java.util.Map;
 
 public class AspectOfTheDragons extends SkyblockItem implements IHasAbility {
     public static final String ID = "aspect_of_the_dragons";
-    private static Map<Stats, Double> stats = new HashMap<>(Map.of(
+    private static final Map<Stats, Double> stats = new HashMap<>(Map.of(
             Stats.DAMAGE, 225d,
             Stats.STRENGTH, 100d
     ));

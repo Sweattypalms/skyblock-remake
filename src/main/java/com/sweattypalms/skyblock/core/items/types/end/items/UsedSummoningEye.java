@@ -36,12 +36,10 @@ public class UsedSummoningEye extends SkyblockItem implements IHeadHelmet , IHas
         );
     }
 
-
     @Override
     public String getTexture() {
         return "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMzdjMGQwMTBkZDBlNTEyZmZlYTEwOGQ3YzVmZTY5ZDU3NmMzMWVjMjY2Yzg4NGI1MWVjMGIyOGNjNDU3In19fQ==";
     }
-
 
     @Override
     public List<Ability> getAbilities() {
@@ -58,13 +56,13 @@ public class UsedSummoningEye extends SkyblockItem implements IHeadHelmet , IHas
 
             Block block = skyblockInteractEvent.getInteractedBlock();
 
-            if(block.getType() != Material.END_PORTAL_FRAME) return;
+            if (block.getType() != Material.END_PORTAL_FRAME) return;
 
             skyblockInteractEvent.setCancelled(true);
 
             EndPortalFrame  frame = (EndPortalFrame) block.getBlockData();
 
-            if(!frame.hasEye()) return;
+            if (!frame.hasEye()) return;
 
             DragonManager.getInstance().removeSummoningEye(skyblockInteractEvent.getSkyblockPlayer(), block.getLocation());
         }

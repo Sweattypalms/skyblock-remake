@@ -32,5 +32,4 @@ public class SequenceAction implements SequencedAction {
 
         Bukkit.getScheduler().runTaskLater(getInstance(), () -> nextAction.accept(this), thisDelay + nextDelay);
     }
-
 }

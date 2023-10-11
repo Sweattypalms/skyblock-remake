@@ -34,8 +34,6 @@ public class ItemManager {
         Vanilla.init();
     }
 
-
-
     private static void initReflection() {
         Reflections reflections = new Reflections("com.sweattypalms.skyblock.core.items.types");
         Set<Class<? extends SkyblockItem>> itemClasses = reflections.getSubTypesOf(SkyblockItem.class);
@@ -79,7 +77,6 @@ public class ItemManager {
     }
 
     public SkyblockItem getFromVanillaItem(Material material) {
-
         SkyblockItemType itemType;
 
         for (SkyblockItemType value : SkyblockItemType.values()) {

@@ -4,10 +4,6 @@ import com.sweattypalms.skyblock.commands.Command;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
 public class UtilCommands {
 
     @Command(name = "gms", description = "Change gamemode to survival", op = true)
@@ -27,10 +23,7 @@ public class UtilCommands {
     public void gmssCommand(Player player) {
         player.setGameMode(GameMode.SPECTATOR);
         player.sendMessage(ChatColor.RED + "Your gamemode has been updated to spectator!");
-
-
     }
-
 
     @Command(name = "fix_inventory", description = "Fix inventory")
     public void fixInventoryCommand(Player player) {

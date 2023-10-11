@@ -27,15 +27,12 @@ public class StatsManager {
     @Getter
     Map<Stats, Double> liveStats = new HashMap<>();
     int regenTick = 0;
-    private SkyblockPlayer player;
-
+    private final SkyblockPlayer player;
 
     public StatsManager(SkyblockPlayer player) {
         this.player = player;
 
-        Arrays.stream(Stats.values()).toList().forEach(stat -> {
-            this.baseStats.put(stat, stat.getBaseValue());
-        });
+        Arrays.stream(Stats.values()).toList().forEach(stat -> this.baseStats.put(stat, stat.getBaseValue()));
         this.maxStats = new HashMap<>(this.baseStats);
         this.liveStats = new HashMap<>(this.baseStats);
     }
@@ -86,9 +83,7 @@ public class StatsManager {
         this.baseStats.forEach((stat, baseValue) -> {
             final double[] value = {baseValue};
             /* -------- ARMOR & ITEMS -------- */
-            player.getInventoryManager().getInventoryItems().forEach((skyblockItemType, itemStack) -> {
-                value[0] += getStat(stat, itemStack);
-            });
+            player.getInventoryManager().getInventoryItems().forEach((skyblockItemType, itemStack) -> value[0] += getStat(stat, itemStack));
             stats.put(stat, value[0]);
             /* -------- ARMOR & ITEMS -------- */
 
@@ -254,7 +249,6 @@ public class StatsManager {
         double health = this.liveStats.get(Stats.HEALTH);
         double defense = this.liveStats.get(Stats.DEFENSE);
 
-        double ehp = health * (1 + (defense / 100));
-        return ehp;
+        return health * (1 + (defense / 100));
     }
 }

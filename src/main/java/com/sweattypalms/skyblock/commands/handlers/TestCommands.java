@@ -2,15 +2,10 @@ package com.sweattypalms.skyblock.commands.handlers;
 
 import com.sweattypalms.skyblock.commands.Command;
 import com.sweattypalms.skyblock.commands.TabCompleter;
-import com.sweattypalms.skyblock.ui.GUIRouter;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Recipe;
 
-import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
 
 public class TestCommands {
     @Command(name = "test", description = "Test command")
@@ -1398,7 +1393,6 @@ public class TestCommands {
 
         return script;
     }
-
 
     @Command(name = "breakpoint", description = "Used for debugging")
     public void breakpointCommand(Player player) {

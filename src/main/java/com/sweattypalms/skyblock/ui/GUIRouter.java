@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Stack;
 
 public class GUIRouter {
-    private static Map<Player, Stack<BaseGUI>> guiHistory = new HashMap<>();
+    private static final Map<Player, Stack<BaseGUI>> guiHistory = new HashMap<>();
 
     public static void openGUI(Player player, BaseGUI gui) {
         closeCurrentGUI(player);  // Close any currently open GUI

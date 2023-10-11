@@ -9,7 +9,6 @@ import com.sweattypalms.skyblock.core.items.builder.armor.IDyedArmor;
 import com.sweattypalms.skyblock.core.player.sub.Stats;
 import org.bukkit.Material;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 

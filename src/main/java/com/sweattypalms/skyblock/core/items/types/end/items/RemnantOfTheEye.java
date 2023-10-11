@@ -5,7 +5,6 @@ import com.sweattypalms.skyblock.core.items.builder.SkyblockItem;
 import com.sweattypalms.skyblock.core.items.builder.SkyblockItemType;
 import com.sweattypalms.skyblock.core.items.builder.armor.IHeadHelmet;
 import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 import java.util.List;
@@ -33,9 +32,6 @@ public class RemnantOfTheEye extends SkyblockItem implements IHeadHelmet {
                 SkyblockItemType.NONE
         );
     }
-
-
-
 
     @Override
     public String getTexture() {

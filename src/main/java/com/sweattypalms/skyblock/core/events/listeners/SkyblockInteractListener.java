@@ -23,6 +23,7 @@ public class SkyblockInteractListener implements Listener {
                         .filter(ability -> ability instanceof ITriggerable)
                         .map(ability -> (ITriggerable) ability)
                         .toList();
+
         abilities.forEach(ability -> {
             if (ability.trigger(event)) {
                 SkyblockAbilityUseEvent abilityUseEvent = new SkyblockAbilityUseEvent(event.getSkyblockPlayer(), ability);

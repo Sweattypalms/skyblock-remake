@@ -23,7 +23,6 @@ public class InventoryManager {
         this.player = player;
     }
 
-
     public SkyblockItem getSkyblockItemInHand() {
         ItemStack itemStack = this.player.getPlayer().getInventory().getItemInMainHand();
         String id = PDCHelper.getString(itemStack, "id");

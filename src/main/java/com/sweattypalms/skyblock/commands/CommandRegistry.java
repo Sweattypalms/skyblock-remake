@@ -5,7 +5,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.defaults.BukkitCommand;
-import org.bukkit.craftbukkit.v1_17_R1.command.CraftCommandMap;
 import org.bukkit.entity.Player;
 import org.reflections.Reflections;
 import org.reflections.scanners.Scanners;
@@ -18,7 +17,6 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 public class CommandRegistry {
-
     private static CommandRegistry instance;
     private final Map<String, MethodContainer> commands = new HashMap<>();
 
@@ -38,7 +36,7 @@ public class CommandRegistry {
     }
 
     public void registerAll() {
-//        Reflections reflections = new Reflections("com.sweattypalms.skyblock.commands.handlers");
+        //Reflections reflections = new Reflections("com.sweattypalms.skyblock.commands.handlers");
         Reflections reflections = new Reflections(new ConfigurationBuilder()
                 .setUrls(ClasspathHelper.forPackage("com.sweattypalms.skyblock.commands.handlers"))
                 .setScanners(Scanners.MethodsAnnotated));
@@ -94,7 +92,7 @@ public class CommandRegistry {
                 }
             }
         }
-//        Run tab completer afterwards because the command may not be registered before.
+        // Run tab completer afterwards because the command may not be registered before.
         for (Method method : obj.getClass().getDeclaredMethods()) {
             // Register tab completer methods
             if (method.isAnnotationPresent(TabCompleter.class)) {
@@ -137,7 +135,6 @@ public class CommandRegistry {
 
         return false;
     }
-
 
     public List<String> handleTabCompletion(CommandSender sender, String command, String[] args) {
         MethodContainer container = commands.get(command.toLowerCase());

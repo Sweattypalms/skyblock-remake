@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class LapisLeggings extends SkyblockItem implements IHasAbility, IDyedArmor {
     public static final String ID = "lapis_leggings";
-    private static Map<Stats, Double> stats = new HashMap<>(Map.of(
+    private static final Map<Stats, Double> stats = new HashMap<>(Map.of(
             Stats.HEALTH, 35d
     ));
     public LapisLeggings() {
@@ -34,7 +34,6 @@ public class LapisLeggings extends SkyblockItem implements IHasAbility, IDyedArm
                 SkyblockItemType.LEGGINGS
         );
     }
-
 
     @Override
     public List<Ability> getAbilities() {

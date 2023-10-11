@@ -1,6 +1,5 @@
 package com.sweattypalms.skyblock.ui;
 
-import com.sweattypalms.skyblock.core.items.ItemManager;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -13,13 +12,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
 public abstract class BaseGUI implements ISkyblockInventory {
-
 
     public static ClickableItem EMPTY_PANE() {
         ItemStack emptyPane = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
@@ -56,8 +52,6 @@ public abstract class BaseGUI implements ISkyblockInventory {
         closeButton.setItemMeta(closeButtonMeta);
         return new ClickableItem(closeButton, GUIRouter::closeCurrentGUI);
     }
-
-
 
     @Getter
     protected Inventory inventory;

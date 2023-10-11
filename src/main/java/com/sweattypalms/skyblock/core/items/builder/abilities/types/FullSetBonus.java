@@ -32,7 +32,7 @@ public interface FullSetBonus extends Ability, ITriggerable {
 
         if (armor.isEmpty()) return 0;
 
-        int size = armor.stream().filter(abilityItem -> {
+        return armor.stream().filter(abilityItem -> {
             List<Ability> abilities = abilityItem.getAbilities();
             for(Ability ability : abilities) {
                 if(ability instanceof FullSetBonus) {
@@ -41,13 +41,11 @@ public interface FullSetBonus extends Ability, ITriggerable {
             }
             return false;
         }).toList().size();
-
-        return size;
     }
 
     @Override
     default boolean trigger(Event event){
-        if(!(event instanceof SkyblockPlayerEvent skyblockPlayerEvent)) return false;
+        if (!(event instanceof SkyblockPlayerEvent skyblockPlayerEvent)) return false;
         return isFullSetEquipped(skyblockPlayerEvent.getSkyblockPlayer());
     }
 }

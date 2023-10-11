@@ -26,7 +26,7 @@ public enum Regions {
     @Getter
     private Point max;
     @Getter
-    private String world;
+    private final String world;
 
     int getArea(){
         return (max.getX() - min.getX()) * (max.getZ() - min.getZ());
@@ -89,5 +89,4 @@ public enum Regions {
     public boolean contains(int x, int z) {
         return x >= min.getX() && x <= max.getX() && z >= min.getZ() && z <= max.getZ();
     }
-
 }

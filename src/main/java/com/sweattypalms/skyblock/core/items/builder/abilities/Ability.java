@@ -6,8 +6,6 @@ import org.bukkit.event.Event;
 import java.util.List;
 
 public interface Ability {
-
-
     String getName();
     default boolean nameVisible(){
         return true;

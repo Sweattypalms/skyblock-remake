@@ -10,7 +10,6 @@ import org.bukkit.craftbukkit.v1_17_R1.entity.CraftEntity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 
@@ -33,9 +32,6 @@ public class SkyblockPlayerDamageEntityEvent extends SkyblockPlayerEvent impleme
     @Getter @Setter private boolean isCrit = false;
     @Getter @Setter private boolean isForcedCrit = false;
 
-
-
-
     /**
      *
      * @param amount Amount in percent. 80% etc
@@ -52,7 +48,6 @@ public class SkyblockPlayerDamageEntityEvent extends SkyblockPlayerEvent impleme
         this.multiplicativeMultiplier *= (1 + (percent / 100));
     }
 
-
     @Getter
     @Setter
     private double damage;
@@ -65,9 +60,9 @@ public class SkyblockPlayerDamageEntityEvent extends SkyblockPlayerEvent impleme
     /* Ability damage  */
 
     public SkyblockPlayerDamageEntityEvent(LivingEntity entity, Player player, DamageType damageType) {
-        if(((CraftEntity) entity).getHandle() instanceof ISkyblockMob skyblockMob){
+        if (((CraftEntity) entity).getHandle() instanceof ISkyblockMob skyblockMob){
             this.skyblockMob = skyblockMob.getSkyblockMob();
-        }else{
+        } else{
             this.skyblockMob = null;
         }
         this.entity = entity;

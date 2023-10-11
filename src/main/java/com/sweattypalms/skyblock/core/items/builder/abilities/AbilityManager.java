@@ -1,16 +1,12 @@
 package com.sweattypalms.skyblock.core.items.builder.abilities;
 
-import com.sweattypalms.skyblock.SkyBlock;
 import com.sweattypalms.skyblock.core.events.SkyblockInteractEvent;
 import com.sweattypalms.skyblock.core.events.SkyblockPlayerDamageEntityEvent;
 import com.sweattypalms.skyblock.core.items.builder.SkyblockItem;
 import com.sweattypalms.skyblock.core.items.builder.abilities.types.*;
 import com.sweattypalms.skyblock.core.items.builder.item.IShortBow;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
-import com.sweattypalms.skyblock.core.player.sub.Bonus;
-import com.sweattypalms.skyblock.core.player.sub.BonusManager;
 import com.sweattypalms.skyblock.core.player.sub.Stats;
-import com.sweattypalms.skyblock.core.player.sub.StatsManager;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
@@ -19,7 +15,6 @@ import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class AbilityManager {
     public static final Ability LAPIS_ARMOR_ABILITY = new LAPIS_ARMOR_ABILITY();
@@ -54,8 +49,8 @@ public class AbilityManager {
                     EntityType.WITHER,
                     EntityType.PIGLIN
             );
-            boolean undead = whitelistedEntities.contains(skyblockPlayerDamageEntityEvent.getEntity().getType());
-            return undead;
+
+            return whitelistedEntities.contains(skyblockPlayerDamageEntityEvent.getEntity().getType());
         }
 
         @Override
@@ -83,12 +78,12 @@ public class AbilityManager {
         public void apply(Event event) {
             if (!(event instanceof SkyblockPlayerDamageEntityEvent skyblockPlayerDamageEntityEvent)) return;
             if (skyblockPlayerDamageEntityEvent.getSkyblockPlayer().getRandom().nextInt(100) > 25) return;
+
             skyblockPlayerDamageEntityEvent.getEntity().getWorld().strikeLightningEffect(skyblockPlayerDamageEntityEvent.getEntity().getLocation());
         }
     };
 
     public static class LAPIS_ARMOR_ABILITY implements FullSetBonus, PassiveAbility {
-
         @Override
         public String getName() {
             return "Health";
@@ -110,7 +105,6 @@ public class AbilityManager {
     }
 
     public static abstract class TELEPORT_ABILITY implements ITriggerable, IUsageCost {
-
         private final int range;
 
         public TELEPORT_ABILITY(int range) {
@@ -160,7 +154,6 @@ public class AbilityManager {
     }
 
     public static abstract class SHORT_BOW implements ITriggerable {
-
         @Override
         public boolean nameVisible() {
             return false;
@@ -214,6 +207,5 @@ public class AbilityManager {
             });
         }
     }
-
 }
 

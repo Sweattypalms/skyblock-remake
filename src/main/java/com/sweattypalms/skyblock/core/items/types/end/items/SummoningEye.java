@@ -87,9 +87,9 @@ public class SummoningEye extends SkyblockItem implements IHasAbility, IHeadHelm
             skyblockInteractEvent.setCancelled(true);
 
             EndPortalFrame endPortalFrame = (EndPortalFrame) block.getBlockData();
-            if(endPortalFrame.hasEye()){
+            if (endPortalFrame.hasEye()){
                 return;
-            };
+            }
 
             DragonManager.getInstance().addSummoningEye(skyblockInteractEvent.getSkyblockPlayer(), block.getLocation());
         }

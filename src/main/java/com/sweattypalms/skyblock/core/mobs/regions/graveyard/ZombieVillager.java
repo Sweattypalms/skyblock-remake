@@ -16,7 +16,7 @@ public class ZombieVillager extends EntityZombieVillager implements ISkyblockMob
 
     public static final String ID = "zombie_villager";
 
-    private SkyblockMob skyblockMob;
+    private final SkyblockMob skyblockMob;
 
     public ZombieVillager(Location location, SkyblockMob skyblockMob) {
         super(EntityTypes.bg, ((CraftWorld) location.getWorld()).getHandle());
