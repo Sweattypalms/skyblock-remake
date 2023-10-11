@@ -134,7 +134,6 @@ public class SkyblockDamageListener implements Listener {
 
     }
 
-
     @EventHandler(priority = EventPriority.LOWEST)
     public void onSkyblockMobDamageEntity(SkyblockMobDamagePlayerEvent event) {
         if (event.getSkyblockMob() == null) return;
@@ -154,5 +153,4 @@ public class SkyblockDamageListener implements Listener {
 
         event.getSkyblockPlayer().damage(damage);
     }
-
 }

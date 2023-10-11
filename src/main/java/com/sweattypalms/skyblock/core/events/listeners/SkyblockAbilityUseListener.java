@@ -11,9 +11,10 @@ public class SkyblockAbilityUseListener implements Listener {
 
     @EventHandler
     public void onUse(SkyblockAbilityUseEvent event) {
-        if(!(event.getAbility() instanceof IUsageCost costAbility)) return;
+        if (!(event.getAbility() instanceof IUsageCost costAbility)) return;
+
         costAbility.getCost().forEach((stat, value) -> {
-            if(event.getSkyblockPlayer().getStatsManager().getLiveStats().get(stat) < value) {
+            if (event.getSkyblockPlayer().getStatsManager().getLiveStats().get(stat) < value) {
                 event.setCancelled(true);
                 String message = "$cYou don't have enough " + stat.getName().toLowerCase() + " to use this ability!";
                 message = PlaceholderFormatter.format(message);

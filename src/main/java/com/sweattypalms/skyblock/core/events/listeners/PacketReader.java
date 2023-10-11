@@ -47,5 +47,4 @@ public class PacketReader implements Listener {
         ChannelPipeline pipeline = ((CraftPlayer) p).getHandle().b.a.k.pipeline();
         pipeline.addBefore("packet_handler", p.getName(), channelDuplexHandler);
     }
-
 }

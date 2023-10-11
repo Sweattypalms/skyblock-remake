@@ -32,7 +32,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.*;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPickupArrowEvent;
@@ -48,7 +47,6 @@ public class UtilityListener implements Listener {
         if (SkyblockPlayer.getSkyblockPlayer(event.getPlayer()) != null) return;
         new SkyblockPlayer(event.getPlayer());
     }
-
 
     @EventHandler(priority = EventPriority.LOW)
     public void interactEventForwarder(PlayerInteractEvent event) {
@@ -170,7 +168,7 @@ public class UtilityListener implements Listener {
         }
 
         EntityLiving entityLiving = ((CraftLivingEntity) shooter).getHandle();
-        if (entityLiving instanceof ISkyblockMob skyblockMob && event.getHitEntity() instanceof Player player) {
+        if (entityLiving instanceof ISkyblockMob && event.getHitEntity() instanceof Player player) {
             event.setCancelled(true);
             SkyblockMobDamagePlayerEvent skyblockMobDamagePlayerEvent = new SkyblockMobDamagePlayerEvent(
                     player,
@@ -181,7 +179,7 @@ public class UtilityListener implements Listener {
         }
 
         LivingEntity hitEntity = event.getHitEntity() instanceof EnderDragonPart ? ((EnderDragonPart) event.getHitEntity()).getParent() : (LivingEntity) event.getHitEntity();
-        if (shooter instanceof Player player && ((CraftLivingEntity) hitEntity).getHandle() instanceof ISkyblockMob skyblockMob) {
+        if (shooter instanceof Player player && ((CraftLivingEntity) hitEntity).getHandle() instanceof ISkyblockMob) {
             SkyblockPlayerDamageEntityEvent skyblockPlayerDamageEntityEvent = new SkyblockPlayerDamageEntityEvent(
                     hitEntity,
                     player,
@@ -192,8 +190,6 @@ public class UtilityListener implements Listener {
         }
 
         event.setCancelled(true);
-
-
     }
 
     @EventHandler
@@ -223,8 +219,6 @@ public class UtilityListener implements Listener {
 
         event.setCancelled(true);
     }
-
-
 
     /* -------------------- WORLD MANAGEMENT -------------------- */
 
@@ -261,7 +255,7 @@ public class UtilityListener implements Listener {
     public void enderDragonDamage(SkyblockPlayerDamageEntityEvent event){
         if(event.getSkyblockMob() == null) return;
         if(event.getSkyblockMob().getEntityInstance() == null) return;
-        if(!(((CraftLivingEntity) event.getSkyblockMob().getEntityInstance()).getHandle() instanceof IEndDragon enderDragon)) return;
+        if(!(((CraftLivingEntity) event.getSkyblockMob().getEntityInstance()).getHandle() instanceof IEndDragon)) return;
 
         DragonManager.getInstance().addPlayerDamage(event.getPlayer().getUniqueId(), event.getDamage());
     }

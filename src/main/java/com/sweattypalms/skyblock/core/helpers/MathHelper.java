@@ -8,6 +8,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 public class MathHelper {
+
     /**
      * Lerp between two locations
      *
@@ -59,7 +60,6 @@ public class MathHelper {
             }
         }.runTaskTimerAsynchronously(SkyBlock.getInstance(), 0L, 1L);
     }
-
 
     private static Vector rotateAroundAxisX(Vector v, double angle) {
         angle = Math.toRadians(angle);

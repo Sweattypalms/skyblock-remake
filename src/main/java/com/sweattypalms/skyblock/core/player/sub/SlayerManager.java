@@ -5,21 +5,17 @@ import com.sweattypalms.skyblock.slayers.Slayer;
 import lombok.Getter;
 import lombok.Setter;
 
+@Getter
 public class SlayerManager {
-
-    private final SkyblockPlayer skyblockPlayer;
-
-    @Getter
     private Slayer activeSlayer;
 
-    @Getter @Setter
+    @Setter
     private int gatheredXp;
 
-
-    @Getter @Setter
+    @Setter
     private long lastMaddoxBatphoneUse = 0L;
 
-    @Getter @Setter
+    @Setter
     private int failedBatphoneAttempts = 0;
 
     public void addFailedBatphoneAttempt() {
@@ -28,7 +24,6 @@ public class SlayerManager {
 
 
     public SlayerManager(SkyblockPlayer skyblockPlayer) {
-        this.skyblockPlayer = skyblockPlayer;
     }
 
     public void setActiveSlayer(Slayer slayer) {

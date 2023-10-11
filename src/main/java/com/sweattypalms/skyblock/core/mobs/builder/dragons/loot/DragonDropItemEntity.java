@@ -55,7 +55,6 @@ public class DragonDropItemEntity extends EntityItem implements IDragonLoot {
         PacketPlayOutEntityMetadata packetPlayOutEntityMetadata = new PacketPlayOutEntityMetadata(this.getId(), this.getDataWatcher(), true);
         ((CraftPlayer) owner).getHandle().b.sendPacket(packetPlayOutEntityMetadata);
 
-
         this.spawnNametag();
 
         this.tick = new BukkitRunnable() {
@@ -94,7 +93,6 @@ public class DragonDropItemEntity extends EntityItem implements IDragonLoot {
         return dropOwner;
     }
 
-
     @Override
     public void tick() {
         if (this.isRemoved()) {
@@ -110,9 +108,7 @@ public class DragonDropItemEntity extends EntityItem implements IDragonLoot {
         String displayName = this.getDropOwner().getPlayer().getDisplayName();
         String message = PlaceholderFormatter.format(displayName + "$e has obtained " + this.dropItem.__getDisplayName() + ChatColor.RESET + " $e!");
 
-        this.location.getWorld().getPlayers().forEach(_player -> {
-            _player.sendMessage(message);
-        });
+        this.location.getWorld().getPlayers().forEach(_player -> _player.sendMessage(message));
 
         this.setRemoved(RemovalReason.b); // DISCARDED
         this.tick.cancel();

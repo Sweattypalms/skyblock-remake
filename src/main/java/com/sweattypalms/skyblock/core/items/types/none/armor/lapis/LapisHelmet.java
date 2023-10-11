@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class LapisHelmet extends SkyblockItem implements IHasAbility, IHeadHelmet {
     public static final String ID = "lapis_helmet";
-    private static Map<Stats, Double> stats = new HashMap<>(Map.of(
+    private static final Map<Stats, Double> stats = new HashMap<>(Map.of(
             Stats.DEFENSE, 25d
     ));
     public LapisHelmet() {

@@ -31,7 +31,6 @@ public class FireballAbility implements IDragonAbility {
         tickCount = 0;
     }
 
-    private int maxFireballs = 10;
     @Override
     public void tick() {
         tickCount++;
@@ -56,6 +55,7 @@ public class FireballAbility implements IDragonAbility {
             return;
         }
 
+        int maxFireballs = 10;
         if (tickCount > maxFireballs * 20) { // 7 seconds after start (20 ticks/sec * 7)
             stop();
             return;

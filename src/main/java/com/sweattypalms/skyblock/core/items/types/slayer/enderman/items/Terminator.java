@@ -32,8 +32,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Terminator extends SkyblockItem implements IHasAbility, IShortBow {
-
-    private static Map<Stats, Double> stats = new HashMap<>(Map.of(
+    private static final Map<Stats, Double> stats = new HashMap<>(Map.of(
             Stats.DAMAGE, 310d,
             Stats.STRENGTH, 50d,
             Stats.CRIT_DAMAGE, 250d
@@ -218,12 +217,9 @@ public class Terminator extends SkyblockItem implements IHasAbility, IShortBow {
             BonusManager bonusManager = skyblockPlayer.getBonusManager();
             List<Bonus> stack = bonusManager.getBonuses().getOrDefault("terminator.salvation", List.of());
 
-
             if (stack.size() < 3) return;
 
-            bonusManager.getBonuses("terminator.salvation").forEach(bonus -> {
-                bonus.setExpiryTime(0);
-            });
+            bonusManager.getBonuses("terminator.salvation").forEach(bonus -> bonus.setExpiryTime(0));
             bonusManager.cleanupExpiredBonuses();
 
             ArmorStand armorstand = createInvisibleArmorStand(skyblockPlayer.getPlayer());
@@ -268,12 +264,11 @@ public class Terminator extends SkyblockItem implements IHasAbility, IShortBow {
 
         private void damageNearbyEntities(Player p, ItemStack activatorItem, ArmorStand armorstand, ArrayList<LivingEntity> cleansedEntities) {
             armorstand.getNearbyEntities(2, 1, 2).forEach(ent_ -> {
-                if (!(ent_ instanceof LivingEntity ent) && !(ent_ instanceof EnderDragonPart enderDragonPart)) return;
+                if (!(ent_ instanceof LivingEntity ent) && !(ent_ instanceof EnderDragonPart)) return;
 
                 LivingEntity ent = ent_ instanceof EnderDragonPart ? ((EnderDragonPart) ent_).getParent() : (LivingEntity) ent_;
 
                 if (ent == p) return;
-
 
                 if (cleansedEntities.contains(ent)) return;
 

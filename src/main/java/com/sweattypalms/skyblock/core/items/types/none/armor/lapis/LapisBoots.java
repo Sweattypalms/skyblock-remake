@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class LapisBoots extends SkyblockItem implements IHasAbility, IDyedArmor {
     public static final String ID = "lapis_boots";
-    private static Map<Stats, Double> stats = new HashMap<>(Map.of(
+    private static final Map<Stats, Double> stats = new HashMap<>(Map.of(
             Stats.HEALTH, 20d
     ));
     public LapisBoots() {

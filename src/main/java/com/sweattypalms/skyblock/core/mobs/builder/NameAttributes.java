@@ -14,7 +14,7 @@ public enum NameAttributes {
     SHOW_LEVEL(new IAttribute.BooleanAttribute()),
     ;
 
-    private IAttribute<?> attribute;
+    private final IAttribute<?> attribute;
 
     NameAttributes(IAttribute<?> attribute) {
         this.attribute = attribute;

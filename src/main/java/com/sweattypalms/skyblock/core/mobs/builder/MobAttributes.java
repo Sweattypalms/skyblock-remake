@@ -3,7 +3,6 @@ package com.sweattypalms.skyblock.core.mobs.builder;
 import lombok.Getter;
 
 import java.util.HashMap;
-import java.util.Map;
 
 @Getter
 public enum MobAttributes {
@@ -22,7 +21,7 @@ public enum MobAttributes {
     ;
 
 
-    private IAttribute<?> attribute;
+    private final IAttribute<?> attribute;
 
     MobAttributes(IAttribute<?> attribute) {
         this.attribute = attribute;

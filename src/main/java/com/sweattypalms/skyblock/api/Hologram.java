@@ -1,11 +1,8 @@
 package com.sweattypalms.skyblock.api;
 
-import com.sweattypalms.skyblock.core.mobs.builder.ISkyblockMob;
 import com.sweattypalms.skyblock.core.mobs.builder.SkyblockMob;
-import net.minecraft.world.entity.EntityLiving;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.decoration.EntityArmorStand;
-import net.minecraft.world.level.World;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
 import org.bukkit.entity.LivingEntity;
@@ -45,7 +42,6 @@ public class Hologram extends EntityArmorStand {
         this.textToDisplay = textToDisplay;
     }
 
-
     public void start() {
         Location location = this.staticLocation == null ? this.superEntity.getEntityInstance().getLocation() : this.staticLocation;
         this.start(location);
@@ -62,7 +58,6 @@ public class Hologram extends EntityArmorStand {
     }
 
     private void init(LivingEntity entity) {
-
         entity.setCustomNameVisible(true);
         entity.setAI(false);
         entity.setCustomName(this.textToDisplay);
@@ -71,13 +66,12 @@ public class Hologram extends EntityArmorStand {
         entity.setInvulnerable(true);
     }
 
-
     @Override
     public void tick() {
         super.tick();
         if (superEntity == null) return;
 
-        if(superEntity.getEntityInstance() == null) {
+        if (superEntity.getEntityInstance() == null) {
             this.killEntity();
             return;
         }

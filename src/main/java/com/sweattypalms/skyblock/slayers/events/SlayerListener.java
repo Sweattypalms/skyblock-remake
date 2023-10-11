@@ -7,16 +7,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 public class SlayerListener implements Listener {
-
     @EventHandler
     public void onSlayerStartEvent(SlayerStartEvent event) {
-
-
-        if(event.getSkyblockPlayer().getSlayerManager().getActiveSlayer() != null) {
+        if (event.getSkyblockPlayer().getSlayerManager().getActiveSlayer() != null) {
             event.setCancelled(true);
 
             event.getSkyblockPlayer().sendMessage(" $c$lYou already have an active slayer quest!");
-
             return;
         }
 

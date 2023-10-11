@@ -107,7 +107,6 @@ public abstract class RevenantHorror extends EntityZombie implements ISkyblockMo
 
     public abstract void setStats();
 
-
     @Override
     public long getStartTime() {
         return this.startTime;

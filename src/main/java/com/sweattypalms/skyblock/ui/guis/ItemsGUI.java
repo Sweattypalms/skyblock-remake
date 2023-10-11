@@ -26,7 +26,6 @@ public class ItemsGUI extends BaseGUI {
                 p.sendMessage("You clicked the " + item.__getDisplayName() + "!");
                 p.getInventory().addItem(item.toItemStack());
             }));
-
         }
     }
 

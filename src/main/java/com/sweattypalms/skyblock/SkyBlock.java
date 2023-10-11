@@ -1,6 +1,5 @@
 package com.sweattypalms.skyblock;
 
-import com.sweattypalms.skyblock.commands.CommandListener;
 import com.sweattypalms.skyblock.commands.CommandRegistry;
 import com.sweattypalms.skyblock.core.items.ItemManager;
 import com.sweattypalms.skyblock.core.items.builder.reforges.ReforgeManager;
@@ -14,36 +13,27 @@ import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.reflections.Reflections;
-import org.reflections.scanners.Scanners;
-import org.reflections.util.ClasspathHelper;
-import org.reflections.util.ConfigurationBuilder;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.List;
 import java.util.Set;
 
 import static com.sweattypalms.skyblock.core.items.builder.reforges.ReforgeManager.REFORGES_LIST;
 
 public final class SkyBlock extends JavaPlugin {
 
+    @Getter
     private static SkyBlock instance;
 
     public boolean debug = true;
-
-    public static SkyBlock getInstance() {
-        return instance;
-    }
 
     @Override
     public void onEnable() {
         instance = this;
         long start = System.currentTimeMillis();
-
 
         // Init the plugin asynchronously to speed up
         Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
@@ -101,7 +91,6 @@ public final class SkyBlock extends JavaPlugin {
         System.out.println(ChatColor.GREEN + "Successfully registered " + listenerClasses.size() + " listeners.");
     }
 
-    @SuppressWarnings("ConstantConditions")
     public void registerCommands() {
         System.out.println("Registering commands...");
         CommandRegistry commandRegistry = new CommandRegistry();
@@ -146,7 +135,6 @@ public final class SkyBlock extends JavaPlugin {
 
     @Override
     public void onDisable() {
-
+        System.out.println(ChatColor.RED + "Skyblock has been disabled!");
     }
-
 }

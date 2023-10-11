@@ -44,13 +44,13 @@ public class DragonManager {
             new Point(-2, -1)
     );
     public static Map<Location, Material> temp_save_backup = new HashMap<>();
-    private static World endWorld; // TODO: mplement better systemi
+    private static World endWorld; // TODO: implement better system
     private static DragonManager instance;
     private final Map<Block, UUID> altarBlocks = new HashMap<>();
 
     private int summoningEyes = 0;
     private SkyblockMob dragon;
-    private Map<UUID, Double> playerDamage = new HashMap<>();
+    private final Map<UUID, Double> playerDamage = new HashMap<>();
     public double getPlayerDamage(UUID playerUUID){
         return this.playerDamage.getOrDefault(playerUUID, 0d);
     }
@@ -58,8 +58,6 @@ public class DragonManager {
         double before = this.playerDamage.getOrDefault(playerUUID, 0.0);
         this.playerDamage.put(playerUUID, before + damage);
     }
-
-
 
     public DragonManager() {
         endWorld = Bukkit.getWorld("skyblock_end");
@@ -163,7 +161,6 @@ public class DragonManager {
     }
 
     private void summonDragon() {
-
         assert endWorld != null;
 
 //        -8, 34, -8
@@ -184,7 +181,6 @@ public class DragonManager {
                 break;
             }
             int finalY = y;
-
 
             sequence.add(new SequenceAction(() -> {
                 for (int x = START_LOCATION.getBlockX(); x <= END_LOCATION.getBlockX(); x++) {
@@ -233,9 +229,7 @@ public class DragonManager {
             tnt.setFuseTicks(0); // Explode immediately.
             tnt.setYield(0f); // No block damage.
             tnt.setIsIncendiary(false); // No fire.
-
         }, 5));
-
 
         sequence.add(new SequenceAction(
                 () -> {
@@ -281,13 +275,12 @@ public class DragonManager {
                 return false;
             }
         }
-
         return true;
     }
 
     public void onEnderDragonDeath() {
         this.summoningEyes = 0;
-        this.dragon.deSpawn();
+        this.dragon.despawn();
         this.dragon = null;
         this.altarBlocks.keySet().forEach(block -> {
             EndPortalFrame endPortalFrame = (EndPortalFrame) block.getBlockData();
@@ -296,15 +289,12 @@ public class DragonManager {
         });
         this.altarBlocks.clear();
 
-        temp_save_backup.forEach((loc, type) -> {
-            loc.getBlock().setType(type);
-        });
+        temp_save_backup.forEach((loc, type) -> loc.getBlock().setType(type));
     }
 
     private Location pointToLocation(Point point) {
         return new Location(endWorld, point.getX(), 30, point.getZ());
     }
-
 
     public boolean isDragonActive() {
         return dragon != null;

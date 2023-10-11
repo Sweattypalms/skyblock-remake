@@ -4,8 +4,8 @@ import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
 import com.sweattypalms.skyblock.slayers.ISlayerMob;
 import lombok.Getter;
 
+@Getter
 public class SlayerFailEvent extends SlayerEvent {
-    @Getter
     private final SlayerFailReason reason;
 
     public SlayerFailEvent(ISlayerMob slayerMob, SkyblockPlayer skyblockPlayer, SlayerFailReason reason) {
@@ -29,6 +29,5 @@ public class SlayerFailEvent extends SlayerEvent {
         public String toString() {
             return this.reason;
         }
-
     }
 }

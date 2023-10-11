@@ -1,12 +1,9 @@
 package com.sweattypalms.skyblock.core.events.listeners;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.vehicle.VehicleCreateEvent;
 
 public class PlListener implements Listener {
@@ -26,5 +23,4 @@ public class PlListener implements Listener {
             loc.getWorld().spawnEntity(loc, EntityType.PRIMED_TNT);
         }
     }
-
 }

@@ -1,10 +1,12 @@
 package com.sweattypalms.skyblock.core.player.sub;
 
+import lombok.Getter;
+
+@Getter
 public class Bonus {
     private final Stats stat;
     private final double value;
     private long expiryTime;
-
     public Bonus(Stats stat, double value, long durationMillis) {
         this.stat = stat;
         this.value = value;
@@ -20,17 +22,5 @@ public class Bonus {
     }
     public boolean isExpired() {
         return System.currentTimeMillis() > this.expiryTime;
-    }
-
-    public Stats getStat() {
-        return stat;
-    }
-
-    public double getValue() {
-        return value;
-    }
-
-    public long getExpiryTime() {
-        return expiryTime;
     }
 }

@@ -4,6 +4,6 @@ import com.sweattypalms.skyblock.core.items.builder.SkyblockItem;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
 
 public interface IDragonLoot {
-    public SkyblockItem getDropItem();
-    public SkyblockPlayer getDropOwner();
+    SkyblockItem getDropItem();
+    SkyblockPlayer getDropOwner();
 }

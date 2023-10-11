@@ -17,7 +17,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
-import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import java.util.List;
@@ -38,11 +37,11 @@ public abstract class EnderDragon extends EntityEnderDragon implements ISkyblock
     private DragonStage currentStage;
 
     @Getter
-    private Random random = new Random();
+    private final Random random = new Random();
 
     @Setter
     private IDragonAbility ability = null;
-    private List<IDragonAbility> abilities = List.of(
+    private final List<IDragonAbility> abilities = List.of(
             new FireballAbility(this),
             new RushAbility(this)
     );

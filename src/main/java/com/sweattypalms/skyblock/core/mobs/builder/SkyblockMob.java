@@ -24,11 +24,9 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.lang.reflect.Constructor;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.function.Function;
 
 public class SkyblockMob {
 
@@ -37,14 +35,12 @@ public class SkyblockMob {
     private final Class<? extends ISkyblockMob> nmsClass;
     private final Queue<ArmorStand> damageIndicators = new ConcurrentLinkedQueue<>();
 
-
     private final Map<MobAttributes, Object> attributes = MobAttributes.getDefault();
     private final Map<NameAttributes, Object> nameAttributes = NameAttributes.getDefault();
 
     @Getter
     @Setter
     private MobLoot mobLoot;
-
 
     @Getter
     @Setter
@@ -112,7 +108,7 @@ public class SkyblockMob {
             @Override
             public void run() {
                 if (entityInstance == null || entityInstance.isDead() || entityInstance.getHealth() < 1) {
-                    capture.deSpawn();
+                    capture.despawn();
                     cancel();
                     return;
                 }
@@ -163,7 +159,7 @@ public class SkyblockMob {
             entityInstance.setCustomName(customName);
     }
 
-    public void deSpawn() {
+    public void despawn() {
         if (entityInstance == null) return;
         if (!entityInstance.isDead()) {
             entityInstance.setHealth(0);
@@ -215,9 +211,7 @@ public class SkyblockMob {
 
         assert spawnLocation.getWorld() != null;
 
-        ArmorStand as = spawnLocation.getWorld().spawn(spawnLocation, ArmorStand.class, armorStand -> {
-            configureArmorStand(armorStand, damage, showCritEffect);
-        });
+        ArmorStand as = spawnLocation.getWorld().spawn(spawnLocation, ArmorStand.class, armorStand -> configureArmorStand(armorStand, damage, showCritEffect));
         int maxAmount = 1;
         if (damageIndicators.size() >= maxAmount) {
             ArmorStand oldest = damageIndicators.poll();

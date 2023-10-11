@@ -6,12 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MobLoot {
-    private List<SkyblockItem> getConfirmedDrops = new ArrayList<>();
+    private final List<SkyblockItem> getConfirmedDrops = new ArrayList<>();
 
-    private List<MobLootItem> getPotentialDrops = new ArrayList<>();
+    private final List<MobLootItem> getPotentialDrops = new ArrayList<>();
 
-    public MobLoot() {
-    }
+    public MobLoot() {}
 
     public MobLoot addConfirmedDrop(SkyblockItem skyblockItem) {
         getConfirmedDrops.add(skyblockItem);

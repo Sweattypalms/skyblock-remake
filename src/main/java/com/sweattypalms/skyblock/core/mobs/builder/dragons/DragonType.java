@@ -8,5 +8,4 @@ public enum DragonType {
     OLD,
     PROTECTOR,
     YOUNG,
-    ;
 }

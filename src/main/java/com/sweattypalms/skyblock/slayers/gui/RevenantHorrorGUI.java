@@ -1,6 +1,5 @@
 package com.sweattypalms.skyblock.slayers.gui;
 
-import com.sweattypalms.skyblock.core.mobs.builder.MobManager;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
 import com.sweattypalms.skyblock.slayers.Slayer;
 import com.sweattypalms.skyblock.slayers.SlayerType;
@@ -33,7 +32,6 @@ public class RevenantHorrorGUI extends BaseGUI {
         this.setNextItem(getTier1(player));
     }
 
-
     public ClickableItem getTier1(Player player){
         SlayerTierClickableItem item = new SlayerTierClickableItem.Builder()
                 .withName("Revenant Horror")
@@ -55,5 +53,4 @@ public class RevenantHorrorGUI extends BaseGUI {
 
         return item.forPlayer(player);
     }
-
 }

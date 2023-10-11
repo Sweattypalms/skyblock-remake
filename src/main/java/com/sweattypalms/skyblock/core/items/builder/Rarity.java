@@ -2,6 +2,7 @@ package com.sweattypalms.skyblock.core.items.builder;
 
 import lombok.Getter;
 
+@Getter
 public enum Rarity {
     COMMON("§f"),
     UNCOMMON("§a"),
@@ -13,7 +14,6 @@ public enum Rarity {
     SPECIAL("§c"),
     VERY_SPECIAL("§c");
 
-    @Getter
     private final String color;
 
     Rarity(String color) {
@@ -22,8 +22,9 @@ public enum Rarity {
 
     public Rarity getUpgraded(){
         int current = this.ordinal();
-        if(current == Rarity.values().length - 1)
+        if (current == Rarity.values().length - 1)
             return Rarity.values()[current];
+
         return Rarity.values()[current + 1];
     }
 }

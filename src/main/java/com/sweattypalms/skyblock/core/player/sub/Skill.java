@@ -13,7 +13,6 @@ public record Skill(SkillType skillType, int level, double xp) {
         RUNECRAFTING,
         SOCIAL,
         TAMING,
-        ;
     }
 
 

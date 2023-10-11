@@ -45,11 +45,10 @@ public class SkyblockPlayer {
     @Getter @Setter
     private Regions lastKnownRegion = null;
 
-
     /**
      * This is used to get last use time of abilities
      */
-    private Map<String, Long> cooldowns = new HashMap<>();
+    private final Map<String, Long> cooldowns = new HashMap<>();
 
     public SkyblockPlayer(Player player) {
         this.player = player;
@@ -90,18 +89,19 @@ public class SkyblockPlayer {
 
         this.statsManager.initHealth();
     }
+
     private int tickCount = 0;
     private void tick() {
         if (!this.player.isOnline()) {
             SkyblockPlayer.players.remove(this.player.getUniqueId());
             this.tickRunnable.cancel();
         }
-        if(this.player.isDead()){
+        if (this.player.isDead()){
             return;
         }
         this.tickCount++;
 
-        if(this.tickCount % 20 != 0) return;
+        if (this.tickCount % 20 != 0) return;
 
         this.bonusManager.cleanupExpiredBonuses();
         this.statsManager.tick();
@@ -109,7 +109,6 @@ public class SkyblockPlayer {
 
         this.scoreboardManager.updateScoreboard();
         RegionManager.updatePlayerRegion(this);
-
     }
 
     /**
@@ -118,7 +117,7 @@ public class SkyblockPlayer {
      * @param damage Damage to deal (With reduction)
      */
     public void damage(double damage) {
-        if(this.player.getGameMode() != GameMode.SURVIVAL)
+        if (this.player.getGameMode() != GameMode.SURVIVAL)
             return;
         this.player.setHealth(
                 Math.max(
@@ -149,5 +148,4 @@ public class SkyblockPlayer {
     public void setLastUseTime(String key, long time){
         this.cooldowns.put(key, time);
     }
-
 }

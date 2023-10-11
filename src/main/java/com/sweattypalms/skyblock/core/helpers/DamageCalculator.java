@@ -13,7 +13,6 @@ import org.bukkit.inventory.ItemStack;
 
 public class DamageCalculator {
 
-
     public static double calculateNormalDamage(SkyblockPlayerDamageEntityEvent event) {
         SkyblockPlayer skyblockPlayer = event.getSkyblockPlayer();
         SkyblockMob skyblockMob = event.getSkyblockMob();
@@ -35,7 +34,7 @@ public class DamageCalculator {
 
         event.setCrit(crit);
 
-        if(event.isForcedCrit()){
+        if (event.isForcedCrit()){
             event.setCrit(true);
             crit = true;
         }
@@ -55,7 +54,7 @@ public class DamageCalculator {
             baseDamage = -4; // => So that the damage becomes kind of melee. gets multiplied by 1
         }
 
-        if(!crit) critDamage = 0;
+        if (!crit) critDamage = 0;
 
         double finalDamage = (5 + baseDamage)
                 * (1 + (strength / 100))
@@ -66,13 +65,13 @@ public class DamageCalculator {
     }
 
     public static double calculateAbilityDamage(SkyblockPlayerDamageEntityEvent event) {
-        if(event.getDamageType() == SkyblockPlayerDamageEntityEvent.DamageType.ABILITY && event.getAbilityItem() == null){
+        if (event.getDamageType() == SkyblockPlayerDamageEntityEvent.DamageType.ABILITY && event.getAbilityItem() == null){
             throw new IllegalArgumentException("Ability must have an ability activator");
         }
 
-        if(!(event.getAbility() instanceof IHasAbilityDamage abilityActivator)){
+        if (!(event.getAbility() instanceof IHasAbilityDamage abilityActivator)){
             return calculateNormalDamage(event);
-        };
+        }
 
         SkyblockPlayer skyblockPlayer = event.getSkyblockPlayer();
 

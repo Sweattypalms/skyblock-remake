@@ -1,16 +1,9 @@
 package com.sweattypalms.skyblock.slayers.zombie;
 
-import com.sweattypalms.skyblock.SkyBlock;
-import com.sweattypalms.skyblock.api.Hologram;
 import com.sweattypalms.skyblock.core.items.builder.SkyblockItem;
-import com.sweattypalms.skyblock.core.mobs.builder.NameAttributes;
 import com.sweattypalms.skyblock.core.mobs.builder.SkyblockMob;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
 import com.sweattypalms.skyblock.slayers.SlayerDrop;
-import com.sweattypalms.skyblock.slayers.SlayerTimer;
-import net.minecraft.world.entity.EntityLiving;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 
 import java.util.List;
@@ -29,7 +22,6 @@ public class RevenantHorrorTierI extends RevenantHorror {
                 .setMaxHealth(500)
                 .setDamage(15)
                 .setCustomName("$c☠ $fRevenant Horror");
-
     }
 
     @Override
@@ -51,5 +43,4 @@ public class RevenantHorrorTierI extends RevenantHorror {
     public boolean requirementsMet(SkyblockPlayer skyblockPlayer) {
         return true;
     }
-
 }

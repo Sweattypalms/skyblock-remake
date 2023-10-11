@@ -1,5 +1,8 @@
 package com.sweattypalms.skyblock.api;
 
+import lombok.Getter;
+
+@Getter
 public class Point {
     int x;
     int z;
@@ -8,13 +11,4 @@ public class Point {
         this.x = x;
         this.z = z;
     }
-
-    public int getX() {
-        return x;
-    }
-
-    public int getZ() {
-        return z;
-    }
-
 }

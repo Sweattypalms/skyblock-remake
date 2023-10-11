@@ -19,23 +19,17 @@ import com.sweattypalms.skyblock.core.player.sub.Stats;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.event.Event;
-import org.bukkit.inventory.ItemStack;
 
-import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 public class MaddoxBatphone extends SkyblockItem implements IHeadHelmet, IHasAbility {
 
     public static final String ID = "maddox_batphone";
-    private static HashMap<Stats, Double> stats = new HashMap<>();
-
+    private static final HashMap<Stats, Double> stats = new HashMap<>();
     public MaddoxBatphone() {
         super(
                 "maddox_batphone",
@@ -60,7 +54,7 @@ public class MaddoxBatphone extends SkyblockItem implements IHeadHelmet, IHasAbi
 
     public class Whassup implements ITriggerable, ICooldown {
 
-        private static Random random = new Random();
+        private static final Random random = new Random();
 
         @Override
         public String getName() {
@@ -107,15 +101,11 @@ public class MaddoxBatphone extends SkyblockItem implements IHeadHelmet, IHasAbi
             if (lastUse + cooldown > System.currentTimeMillis()) {
                 player.getSlayerManager().addFailedBatphoneAttempt();
 
-                if(player.getSlayerManager().getFailedBatphoneAttempts() >= 3) {
-                    sequence.add(new SequenceAction(() -> {
-                        player.sendMessage("$c✆ HEY IT'S NOT PICKING UP STOP TRYING!");
-                    }, 0));
-                }else{
+                if (player.getSlayerManager().getFailedBatphoneAttempts() >= 3) {
+                    sequence.add(new SequenceAction(() -> player.sendMessage("$c✆ HEY IT'S NOT PICKING UP STOP TRYING!"), 0));
+                } else{
                     String selectedMessage = possibleMessages[random.nextInt(possibleMessages.length)];
-                    sequence.add(new SequenceAction(() -> {
-                        player.sendMessage("$c" + selectedMessage);
-                    }, 0));
+                    sequence.add(new SequenceAction(() -> player.sendMessage("$c" + selectedMessage), 0));
                 }
                 sequence.start();
                 return;

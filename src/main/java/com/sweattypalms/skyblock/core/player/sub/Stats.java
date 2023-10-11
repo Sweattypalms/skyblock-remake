@@ -4,6 +4,7 @@ import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 
+@Getter
 public enum Stats {
     DAMAGE(ChatColor.RED + "❁", "Damage", 0, false, ChatColor.RED),
     STRENGTH(ChatColor.RED + "❁", "Strength", 0, false, ChatColor.RED),
@@ -30,17 +31,11 @@ public enum Stats {
 
     CUSTOM("?", "Custom", 0, false, ChatColor.WHITE, true) // => For bonuses variable management.
     ;
-    @Getter
     private final String symbol;
-    @Getter
     private final String name;
-    @Getter
     private final double baseValue;
-    @Getter
     private final boolean isPercentage;
-    @Getter
     private final String itemBuilderColor;
-    @Getter
     private boolean privateField = false;
 
     <T> Stats(String symbol, String name, double baseValue, boolean isPercentage, T itemBuilderColor) {

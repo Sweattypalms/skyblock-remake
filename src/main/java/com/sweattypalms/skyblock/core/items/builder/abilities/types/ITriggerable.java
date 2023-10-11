@@ -7,5 +7,4 @@ import org.bukkit.event.Event;
 public interface ITriggerable extends Ability {
     TriggerType getTriggerType();
     boolean trigger(Event event);
-
 }

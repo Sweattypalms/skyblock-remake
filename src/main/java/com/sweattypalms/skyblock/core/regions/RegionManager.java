@@ -1,15 +1,11 @@
 package com.sweattypalms.skyblock.core.regions;
 
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import javax.swing.plaf.synth.Region;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.List;
 
 public class RegionManager {
     public static Regions getCurrentRegion(int x, int z, String world) {

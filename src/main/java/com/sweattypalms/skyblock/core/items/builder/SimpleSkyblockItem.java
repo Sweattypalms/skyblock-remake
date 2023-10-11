@@ -3,6 +3,7 @@ package com.sweattypalms.skyblock.core.items.builder;
 import com.sweattypalms.skyblock.core.items.builder.abilities.Ability;
 import com.sweattypalms.skyblock.core.items.builder.abilities.IHasAbility;
 import com.sweattypalms.skyblock.core.player.sub.Stats;
+import lombok.Getter;
 import org.bukkit.Material;
 
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.Map;
 
 import static com.sweattypalms.skyblock.core.items.ItemManager.ITEMS_LIST;
 
+@Getter
 public class SimpleSkyblockItem extends SkyblockItem implements IHasAbility {
     private final List<Ability> abilities;
     public SimpleSkyblockItem(Builder<?> builder) {
@@ -24,9 +26,6 @@ public class SimpleSkyblockItem extends SkyblockItem implements IHasAbility {
         );
         this.abilities = builder.abilities == null ? List.of() : builder.abilities;
         ITEMS_LIST.put(this.getId(), this);
-    }
-    public List<Ability> getAbilities() {
-        return this.abilities;
     }
 
     public SkyblockItem addAbility(Ability ability) {

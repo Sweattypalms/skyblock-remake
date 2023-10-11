@@ -15,12 +15,10 @@ import java.util.List;
 public class RushAbility implements IDragonAbility{
 
     private final EnderDragon dragon;
-    private int tickCount = 0;
 
     public RushAbility(EnderDragon dragon) {
         this.dragon = dragon;
     }
-
 
     Player target = null;
     @Override
@@ -38,12 +36,12 @@ public class RushAbility implements IDragonAbility{
     @Override
     public void stop() {
         dragon.setAbility(null);
-        tickCount = 0;
+        int tickCount = 0;
     }
 
     @Override
     public void tick() {
-        if(this.target == null){
+        if (this.target == null){
             throw new NullPointerException("Target not found??? cancelling ability");
         }
 
@@ -66,7 +64,7 @@ public class RushAbility implements IDragonAbility{
         Vector currentDragonPosition = this.dragon.getBukkitEntity().getLocation().toVector();
 
         dragon.setCurrentStage(new DragonStage(List.of(currentDragonPosition, endPosition), 0.02));
-dragon.setT(0.0);
+        dragon.setT(0.0);
         dragon.setMoving(true);
         dragon.setAbility(null);
         rushing = false;

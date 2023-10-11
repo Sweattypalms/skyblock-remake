@@ -14,7 +14,7 @@ public class GraveyardZombie extends EntityZombie implements ISkyblockMob, IRegi
 
     public static final String ID = "graveyard_zombie";
 
-    private SkyblockMob skyblockMob;
+    private final SkyblockMob skyblockMob;
 
     public GraveyardZombie(Location location, SkyblockMob skyblockMob) {
         super(EntityTypes.be, ((CraftWorld) location.getWorld()).getHandle());

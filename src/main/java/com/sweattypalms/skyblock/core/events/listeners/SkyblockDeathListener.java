@@ -16,16 +16,16 @@ public class SkyblockDeathListener implements Listener {
      */
     @EventHandler
     public void skyblockDeathListener(SkyblockDeathEvent event){
-        if(event.getDeadEntity() instanceof Player player){
+        if (event.getDeadEntity() instanceof Player player){
             player.sendMessage("You died!");
             return;
         }
         SkyblockMob skyblockMob = SkyblockMob.getSkyblockMob(event.getDeadEntity());
 
-        if(skyblockMob == null) return;
+        if (skyblockMob == null) return;
 
-        if(event.getDamager() != null){
-            // Play ting sound
+        if (event.getDamager() != null){
+            // Play ding sound
             Location location = event.getDeadEntity().getLocation();
             assert location.getWorld() != null;
             location.getWorld().playSound(location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 1);
