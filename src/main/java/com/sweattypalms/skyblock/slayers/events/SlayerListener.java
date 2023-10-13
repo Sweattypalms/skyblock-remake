@@ -1,7 +1,15 @@
 package com.sweattypalms.skyblock.slayers.events;
 
+import com.sweattypalms.skyblock.core.events.def.SkyblockDeathEvent;
+import com.sweattypalms.skyblock.core.events.def.SkyblockXpEvent;
 import com.sweattypalms.skyblock.core.helpers.PlaceholderFormatter;
+import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
+import com.sweattypalms.skyblock.core.player.sub.SlayerManager;
+import com.sweattypalms.skyblock.slayers.Slayer;
+import net.minecraft.world.entity.EntityLiving;
 import org.bukkit.Sound;
+import org.bukkit.craftbukkit.v1_17_R1.entity.CraftLivingEntity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -46,4 +54,42 @@ public class SlayerListener implements Listener {
         Player player = event.getSkyblockPlayer().getPlayer();
         player.sendMessage(finalMessage);
     }
+
+    @EventHandler
+    public void onXpGain(SkyblockXpEvent event) {
+        if (!(event.getReason() instanceof SkyblockDeathEvent deathEvent)) return;
+
+        SkyblockPlayer skyblockPlayer = event.getSkyblockPlayer();
+        LivingEntity deadEntity = deathEvent.getDeadEntity();
+
+        SlayerManager slayerManager = skyblockPlayer.getSlayerManager();
+
+        if (slayerManager.getActiveSlayer() == null) return;
+
+        Slayer activeSlayer = slayerManager.getActiveSlayer();
+
+        if (!activeSlayer.slayerType().validEntity(deadEntity.getType())) return;
+
+        double xpToGain = event.getXp();
+
+        slayerManager.addGatheredXp((int) xpToGain);
+    }
+
+    @EventHandler
+    public void onSlayerDeath(SkyblockDeathEvent event) {
+        if (!(event.getDamager() instanceof Player player)) return;
+        SkyblockPlayer skyblockPlayer = SkyblockPlayer.getSkyblockPlayer(player);
+        SlayerManager slayerManager = skyblockPlayer.getSlayerManager();
+        EntityLiving entityLiving = ((CraftLivingEntity) event.getDeadEntity()).getHandle();
+
+        if (entityLiving != slayerManager.getBoss()) return;
+
+        System.out.println("Boss died");
+
+        slayerManager.finishSlayer();
+
+        String message = " $a$lSLAYER QUEST COMPLETED!";
+        skyblockPlayer.sendMessage(message);
+    }
+
 }

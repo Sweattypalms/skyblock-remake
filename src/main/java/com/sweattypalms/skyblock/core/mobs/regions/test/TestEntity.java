@@ -27,6 +27,7 @@ public class TestEntity extends EntityZombie implements ISkyblockMob {
                 .setCustomName("$cFlorida man")
                 .setLevel(999)
 //                .setLoot(new MobLoot().addConfirmedDrop(SkyblockItem.get()))
+                .setAttribute(MobAttributes.COMBAT_XP, 50d);
                 ;
         skyblockMob.setAttribute(MobAttributes.AI_ENABLED, false);
     }

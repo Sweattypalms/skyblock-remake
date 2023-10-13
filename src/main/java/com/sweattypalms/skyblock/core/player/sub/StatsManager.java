@@ -135,6 +135,9 @@ public class StatsManager {
         }
 
         healthCorrection(oldMaxHealth, oldCurrentHealth);
+        double max = 500;
+        double speed = Math.min(stats.get(Stats.SPEED), max);
+        this.player.getPlayer().setWalkSpeed((float) (speed / max));
     }
 
 

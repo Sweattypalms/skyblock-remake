@@ -3,10 +3,10 @@ package com.sweattypalms.skyblock.core.events.listeners;
 import com.sweattypalms.skyblock.SkyBlock;
 import com.sweattypalms.skyblock.api.sequence.Sequence;
 import com.sweattypalms.skyblock.api.sequence.SequenceAction;
-import com.sweattypalms.skyblock.core.events.SkyblockDeathEvent;
-import com.sweattypalms.skyblock.core.events.SkyblockInteractEvent;
-import com.sweattypalms.skyblock.core.events.SkyblockMobDamagePlayerEvent;
-import com.sweattypalms.skyblock.core.events.SkyblockPlayerDamageEntityEvent;
+import com.sweattypalms.skyblock.core.events.def.SkyblockDeathEvent;
+import com.sweattypalms.skyblock.core.events.def.SkyblockInteractEvent;
+import com.sweattypalms.skyblock.core.events.def.SkyblockMobDamagePlayerEvent;
+import com.sweattypalms.skyblock.core.events.def.SkyblockPlayerDamageEntityEvent;
 import com.sweattypalms.skyblock.core.helpers.PlaceholderFormatter;
 import com.sweattypalms.skyblock.core.items.builder.SkyblockItem;
 import com.sweattypalms.skyblock.core.items.builder.SkyblockItemType;
@@ -36,6 +36,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPickupArrowEvent;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 public class UtilityListener implements Listener {
 
@@ -47,6 +48,7 @@ public class UtilityListener implements Listener {
         if (SkyblockPlayer.getSkyblockPlayer(event.getPlayer()) != null) return;
         new SkyblockPlayer(event.getPlayer());
     }
+
 
     @EventHandler(priority = EventPriority.LOW)
     public void interactEventForwarder(PlayerInteractEvent event) {
@@ -87,7 +89,7 @@ public class UtilityListener implements Listener {
      *
      * @param event EntityDeathEvent
      */
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOW)
     public void onDeathBukkit(EntityDeathEvent event) {
         LivingEntity livingEntity = event.getEntity();
         event.setDroppedExp(0);
@@ -101,6 +103,13 @@ public class UtilityListener implements Listener {
         EntityLiving entityLiving = ((CraftLivingEntity) event.getEntity()).getHandle();
         if (!(entityLiving instanceof ISkyblockMob skyblockMob)) return;
 
+        SkyblockDeathEvent _event = getSkyblockDeathEvent(livingEntity);
+
+        SkyBlock.getInstance().getServer().getPluginManager().callEvent(_event);
+    }
+
+    @NotNull
+    private static SkyblockDeathEvent getSkyblockDeathEvent(LivingEntity livingEntity) {
         SkyblockDeathEvent.DeathCause reason;
         EntityDamageEvent lastDamageCause = livingEntity.getLastDamageCause();
         if (lastDamageCause == null) {
@@ -114,8 +123,7 @@ public class UtilityListener implements Listener {
         } else {
             _event = new SkyblockDeathEvent(livingEntity, reason);
         }
-
-        SkyBlock.getInstance().getServer().getPluginManager().callEvent(_event);
+        return _event;
     }
 
     @EventHandler
@@ -126,7 +134,6 @@ public class UtilityListener implements Listener {
         event.setDroppedExp(0);
         new Sequence().add(
                 new SequenceAction(() -> {
-
                     event.getEntity().spigot().respawn();
                     event.getEntity().updateInventory();
                 }, 1)
@@ -168,7 +175,7 @@ public class UtilityListener implements Listener {
         }
 
         EntityLiving entityLiving = ((CraftLivingEntity) shooter).getHandle();
-        if (entityLiving instanceof ISkyblockMob && event.getHitEntity() instanceof Player player) {
+        if (entityLiving instanceof ISkyblockMob skyblockMob && event.getHitEntity() instanceof Player player) {
             event.setCancelled(true);
             SkyblockMobDamagePlayerEvent skyblockMobDamagePlayerEvent = new SkyblockMobDamagePlayerEvent(
                     player,
@@ -179,7 +186,7 @@ public class UtilityListener implements Listener {
         }
 
         LivingEntity hitEntity = event.getHitEntity() instanceof EnderDragonPart ? ((EnderDragonPart) event.getHitEntity()).getParent() : (LivingEntity) event.getHitEntity();
-        if (shooter instanceof Player player && ((CraftLivingEntity) hitEntity).getHandle() instanceof ISkyblockMob) {
+        if (shooter instanceof Player player && ((CraftLivingEntity) hitEntity).getHandle() instanceof ISkyblockMob skyblockMob) {
             SkyblockPlayerDamageEntityEvent skyblockPlayerDamageEntityEvent = new SkyblockPlayerDamageEntityEvent(
                     hitEntity,
                     player,
@@ -190,6 +197,8 @@ public class UtilityListener implements Listener {
         }
 
         event.setCancelled(true);
+
+
     }
 
     @EventHandler
@@ -219,6 +228,8 @@ public class UtilityListener implements Listener {
 
         event.setCancelled(true);
     }
+
+
 
     /* -------------------- WORLD MANAGEMENT -------------------- */
 
@@ -255,7 +266,7 @@ public class UtilityListener implements Listener {
     public void enderDragonDamage(SkyblockPlayerDamageEntityEvent event){
         if(event.getSkyblockMob() == null) return;
         if(event.getSkyblockMob().getEntityInstance() == null) return;
-        if(!(((CraftLivingEntity) event.getSkyblockMob().getEntityInstance()).getHandle() instanceof IEndDragon)) return;
+        if(!(((CraftLivingEntity) event.getSkyblockMob().getEntityInstance()).getHandle() instanceof IEndDragon enderDragon)) return;
 
         DragonManager.getInstance().addPlayerDamage(event.getPlayer().getUniqueId(), event.getDamage());
     }

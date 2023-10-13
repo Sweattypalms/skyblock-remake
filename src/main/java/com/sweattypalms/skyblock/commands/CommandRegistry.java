@@ -123,13 +123,12 @@ public class CommandRegistry {
         try {
             container.commandMethod.invoke(container.instance, player, args);
             return true;
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException ignored) {
             // If first failed, try to get a commandMethod with args of (Player player)
             try {
                 container.commandMethod.invoke(container.instance, player);
                 return true;
-            } catch (Exception ignored) {
+            } catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException _i) {
             }
         }
 

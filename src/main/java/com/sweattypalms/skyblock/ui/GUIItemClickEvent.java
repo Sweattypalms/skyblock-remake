@@ -1,6 +1,6 @@
 package com.sweattypalms.skyblock.ui;
 
-import com.sweattypalms.skyblock.core.events.SkyblockPlayerEvent;
+import com.sweattypalms.skyblock.core.events.def.SkyblockPlayerEvent;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
 import lombok.Getter;
 import org.bukkit.event.Cancellable;

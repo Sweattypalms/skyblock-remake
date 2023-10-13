@@ -12,7 +12,6 @@ public class GUIRouter {
     public static void openGUI(Player player, BaseGUI gui) {
         closeCurrentGUI(player);  // Close any currently open GUI
         gui.open(player);
-        String title = gui.getTitle();
         guiHistory.computeIfAbsent(player, k -> new Stack<>()).push(gui);
     }
 

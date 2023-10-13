@@ -1,7 +1,7 @@
 package com.sweattypalms.skyblock.core.events.listeners;
 
-import com.sweattypalms.skyblock.core.events.SkyblockMobDamagePlayerEvent;
-import com.sweattypalms.skyblock.core.events.SkyblockPlayerDamageEntityEvent;
+import com.sweattypalms.skyblock.core.events.def.SkyblockMobDamagePlayerEvent;
+import com.sweattypalms.skyblock.core.events.def.SkyblockPlayerDamageEntityEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;

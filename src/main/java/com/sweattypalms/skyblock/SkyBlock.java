@@ -23,10 +23,15 @@ import java.util.Set;
 
 import static com.sweattypalms.skyblock.core.items.builder.reforges.ReforgeManager.REFORGES_LIST;
 
+
+// TODO: Work on skills + loot.
 public final class SkyBlock extends JavaPlugin {
 
-    @Getter
     private static SkyBlock instance;
+
+    public static SkyBlock getInstance() {
+        return instance;
+    }
 
     public boolean debug = true;
 

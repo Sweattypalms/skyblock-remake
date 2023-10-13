@@ -6,10 +6,12 @@ import com.sweattypalms.skyblock.core.items.builder.SkyblockItem;
 import com.sweattypalms.skyblock.core.items.builder.SkyblockItemType;
 import com.sweattypalms.skyblock.core.items.types.slayer.zombie.items.BeheadedHorror;
 import com.sweattypalms.skyblock.core.mobs.builder.ISkyblockMob;
+import com.sweattypalms.skyblock.core.mobs.builder.MobAttributes;
 import com.sweattypalms.skyblock.core.mobs.builder.NameAttributes;
 import com.sweattypalms.skyblock.core.mobs.builder.SkyblockMob;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
 import com.sweattypalms.skyblock.slayers.ISlayerMob;
+import com.sweattypalms.skyblock.slayers.Slayer;
 import com.sweattypalms.skyblock.slayers.SlayerTimer;
 import com.sweattypalms.skyblock.slayers.events.SlayerFailEvent;
 import net.minecraft.world.entity.EntityLiving;
@@ -38,7 +40,8 @@ public abstract class RevenantHorror extends EntityZombie implements ISkyblockMo
 
         this.getSkyblockMob()
                 .setNameAttribute(NameAttributes.FORMATTED, true)
-                .setNameAttribute(NameAttributes.SHOW_LEVEL, false);
+                .setNameAttribute(NameAttributes.SHOW_LEVEL, false)
+                .setAttribute(MobAttributes.SPEED, 200);
 
         this.slayerTimer = new SlayerTimer(this.skyblockMob);
         this.startTime = System.currentTimeMillis();
@@ -61,7 +64,6 @@ public abstract class RevenantHorror extends EntityZombie implements ISkyblockMo
     }
 
 
-    int maxTime = 15; // => 4 minutes
     long ticks = 0;
     @Override
     public void tick() {
@@ -72,7 +74,7 @@ public abstract class RevenantHorror extends EntityZombie implements ISkyblockMo
             return;
 
         if (ticks % 20 == 0) {
-            long timeLeft = maxTime - (System.currentTimeMillis() - getStartTime()) / 1000;
+            long timeLeft = Slayer.MAX_TIME - (System.currentTimeMillis() - getStartTime()) / 1000;
             if (timeLeft <= 0) {
                 Bukkit.getScheduler().runTask(SkyBlock.getInstance(), () -> {
                     if(valid()) {

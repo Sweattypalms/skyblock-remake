@@ -1,8 +1,8 @@
 package com.sweattypalms.skyblock.core.events.listeners;
 
 import com.sweattypalms.skyblock.SkyBlock;
-import com.sweattypalms.skyblock.core.events.SkyblockMobDamagePlayerEvent;
-import com.sweattypalms.skyblock.core.events.SkyblockPlayerDamageEntityEvent;
+import com.sweattypalms.skyblock.core.events.def.SkyblockMobDamagePlayerEvent;
+import com.sweattypalms.skyblock.core.events.def.SkyblockPlayerDamageEntityEvent;
 import com.sweattypalms.skyblock.core.helpers.DamageCalculator;
 import com.sweattypalms.skyblock.core.items.builder.SkyblockItem;
 import com.sweattypalms.skyblock.core.items.builder.abilities.IHasAbility;

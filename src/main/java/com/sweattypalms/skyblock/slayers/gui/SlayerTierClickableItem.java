@@ -47,9 +47,12 @@ public class SlayerTierClickableItem {
     public ClickableItem forPlayer(Player player) {
         ItemStack item = new ItemStack(this.material);
         ItemMeta meta = item.getItemMeta();
+        assert meta != null;
+
         int tier = this.difficulty.ordinal() + 1;
 
-        String displayName = String.format("$a%s %s", this.name, tier);
+        String romanTier = PlaceholderFormatter.toRomanNumeral(tier);
+        String displayName = String.format("$a%s %s", this.name, romanTier);
         meta.setDisplayName(PlaceholderFormatter.format(displayName));
 
         List<String> lore = new ArrayList<>();

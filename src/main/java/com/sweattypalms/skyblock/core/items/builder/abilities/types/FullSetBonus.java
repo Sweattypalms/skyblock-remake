@@ -1,6 +1,6 @@
 package com.sweattypalms.skyblock.core.items.builder.abilities.types;
 
-import com.sweattypalms.skyblock.core.events.SkyblockPlayerEvent;
+import com.sweattypalms.skyblock.core.events.def.SkyblockPlayerEvent;
 import com.sweattypalms.skyblock.core.items.builder.SkyblockItem;
 import com.sweattypalms.skyblock.core.items.builder.abilities.Ability;
 import com.sweattypalms.skyblock.core.items.builder.abilities.IHasAbility;

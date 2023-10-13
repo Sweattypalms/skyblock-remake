@@ -1,7 +1,7 @@
 package com.sweattypalms.skyblock.core.items.builder.abilities;
 
-import com.sweattypalms.skyblock.core.events.SkyblockInteractEvent;
-import com.sweattypalms.skyblock.core.events.SkyblockPlayerDamageEntityEvent;
+import com.sweattypalms.skyblock.core.events.def.SkyblockInteractEvent;
+import com.sweattypalms.skyblock.core.events.def.SkyblockPlayerDamageEntityEvent;
 import com.sweattypalms.skyblock.core.items.builder.SkyblockItem;
 import com.sweattypalms.skyblock.core.items.builder.abilities.types.*;
 import com.sweattypalms.skyblock.core.items.builder.item.IShortBow;

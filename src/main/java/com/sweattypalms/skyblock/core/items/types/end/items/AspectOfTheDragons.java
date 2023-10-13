@@ -1,7 +1,7 @@
 package com.sweattypalms.skyblock.core.items.types.end.items;
 
-import com.sweattypalms.skyblock.core.events.SkyblockInteractEvent;
-import com.sweattypalms.skyblock.core.events.SkyblockPlayerDamageEntityEvent;
+import com.sweattypalms.skyblock.core.events.def.SkyblockInteractEvent;
+import com.sweattypalms.skyblock.core.events.def.SkyblockPlayerDamageEntityEvent;
 import com.sweattypalms.skyblock.core.helpers.MathHelper;
 import com.sweattypalms.skyblock.core.items.builder.Rarity;
 import com.sweattypalms.skyblock.core.items.builder.SkyblockItem;
@@ -19,6 +19,7 @@ import com.sweattypalms.skyblock.core.player.sub.Stats;
 import net.minecraft.world.entity.EntityLiving;
 import org.bukkit.*;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftLivingEntity;
+import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -76,7 +77,6 @@ public class AspectOfTheDragons extends SkyblockItem implements IHasAbility {
 
             SkyblockPlayer skyblockPlayer = skyblockInteractEvent.getSkyblockPlayer();
             Player player = skyblockPlayer.getPlayer();
-            player.sendMessage(ChatColor.RED + "This ability is in the works.");
             MathHelper.spiralParticles(player, 0.1, 1.5, Particle.FLAME);
             player.playSound(player.getLocation(), Sound.ENTITY_ENDER_DRAGON_GROWL, 10, 1);
 
@@ -117,9 +117,9 @@ public class AspectOfTheDragons extends SkyblockItem implements IHasAbility {
 
                 Bukkit.getPluginManager().callEvent(skyblockPlayerDamageEntityEvent);
 
-                skyblockPlayer.getPlayer().sendMessage(
-                        ChatColor.RED + "You dealt " + ChatColor.GOLD + skyblockPlayerDamageEntityEvent.getDamage() + ChatColor.RED + " damage to " + ChatColor.GOLD + skyblockPlayerDamageEntityEvent.getEntity().getName()
-                );
+//                skyblockPlayer.getPlayer().sendMessage(
+//                        ChatColor.RED + "You dealt " + ChatColor.GOLD + skyblockPlayerDamageEntityEvent.getDamage() + ChatColor.RED + " damage to " + ChatColor.GOLD + skyblockPlayerDamageEntityEvent.getEntity().getName()
+//                );
             }
         }
 

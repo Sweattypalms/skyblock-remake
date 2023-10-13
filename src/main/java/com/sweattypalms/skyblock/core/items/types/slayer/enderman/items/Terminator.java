@@ -1,8 +1,8 @@
 package com.sweattypalms.skyblock.core.items.types.slayer.enderman.items;
 
 import com.sweattypalms.skyblock.SkyBlock;
-import com.sweattypalms.skyblock.core.events.SkyblockInteractEvent;
-import com.sweattypalms.skyblock.core.events.SkyblockPlayerDamageEntityEvent;
+import com.sweattypalms.skyblock.core.events.def.SkyblockInteractEvent;
+import com.sweattypalms.skyblock.core.events.def.SkyblockPlayerDamageEntityEvent;
 import com.sweattypalms.skyblock.core.items.builder.Rarity;
 import com.sweattypalms.skyblock.core.items.builder.SkyblockItem;
 import com.sweattypalms.skyblock.core.items.builder.SkyblockItemType;

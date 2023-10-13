@@ -1,6 +1,6 @@
 package com.sweattypalms.skyblock.core.helpers;
 
-import com.sweattypalms.skyblock.core.events.SkyblockPlayerDamageEntityEvent;
+import com.sweattypalms.skyblock.core.events.def.SkyblockPlayerDamageEntityEvent;
 import com.sweattypalms.skyblock.core.items.builder.abilities.types.IHasAbilityDamage;
 import com.sweattypalms.skyblock.core.items.builder.item.IShortBow;
 import com.sweattypalms.skyblock.core.mobs.builder.MobAttributes;

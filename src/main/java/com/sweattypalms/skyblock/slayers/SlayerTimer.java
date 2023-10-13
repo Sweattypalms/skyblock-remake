@@ -1,6 +1,7 @@
 package com.sweattypalms.skyblock.slayers;
 
 import com.sweattypalms.skyblock.api.Hologram;
+import com.sweattypalms.skyblock.core.helpers.PlaceholderFormatter;
 import com.sweattypalms.skyblock.core.mobs.builder.SkyblockMob;
 import org.bukkit.ChatColor;
 
@@ -36,6 +37,7 @@ public class SlayerTimer {
     }
 
     public void updateTimer(long timeLeft) {
-        hologram.updateName(ChatColor.RED + String.format("%02d:%02d", timeLeft / 60, timeLeft % 60));
+        String time = PlaceholderFormatter.formatTime(timeLeft);
+        hologram.updateName(ChatColor.RED + time);
     }
 }

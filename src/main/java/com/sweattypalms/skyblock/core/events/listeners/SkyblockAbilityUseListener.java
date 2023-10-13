@@ -1,6 +1,6 @@
 package com.sweattypalms.skyblock.core.events.listeners;
 
-import com.sweattypalms.skyblock.core.events.SkyblockAbilityUseEvent;
+import com.sweattypalms.skyblock.core.events.def.SkyblockAbilityUseEvent;
 import com.sweattypalms.skyblock.core.helpers.PlaceholderFormatter;
 import com.sweattypalms.skyblock.core.items.builder.abilities.types.IUsageCost;
 import com.sweattypalms.skyblock.core.player.sub.StatsManager;

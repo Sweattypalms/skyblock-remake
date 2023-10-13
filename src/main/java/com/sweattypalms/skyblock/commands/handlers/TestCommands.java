@@ -2,7 +2,13 @@ package com.sweattypalms.skyblock.commands.handlers;
 
 import com.sweattypalms.skyblock.commands.Command;
 import com.sweattypalms.skyblock.commands.TabCompleter;
+import com.sweattypalms.skyblock.core.helpers.BukkitWrapper;
+import net.minecraft.network.protocol.game.PacketPlayOutAnimation;
+import net.minecraft.network.protocol.game.PacketPlayOutEntityStatus;
+import net.minecraft.server.level.EntityPlayer;
+import net.minecraft.world.entity.EntityLiving;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -1396,6 +1402,24 @@ public class TestCommands {
 
     @Command(name = "breakpoint", description = "Used for debugging")
     public void breakpointCommand(Player player) {
-        player.sendMessage(ChatColor.RED + "You sussy baka");
+        LivingEntity luckyEntity = player.getNearbyEntities(5, 5, 5).stream()
+                .filter(entity -> entity instanceof LivingEntity)
+                .map(entity -> (LivingEntity) entity)
+                .findFirst()
+                .orElse(null);
+
+        if (luckyEntity == null) {
+            player.sendMessage("No entity found");
+            return;
+        }
+
+        EntityLiving entityLiving = BukkitWrapper.getHandle(luckyEntity);
+
+        EntityPlayer entityPlayer = BukkitWrapper.getHandle(player);
+
+        // show swinging animation
+        entityPlayer.b.a.sendPacket(new PacketPlayOutAnimation(entityLiving, 1));
+
+
     }
 }

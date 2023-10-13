@@ -1,7 +1,7 @@
 package com.sweattypalms.skyblock.core.mobs.builder;
 
 import com.sweattypalms.skyblock.SkyBlock;
-import com.sweattypalms.skyblock.core.events.SkyblockPlayerDamageEntityEvent;
+import com.sweattypalms.skyblock.core.events.def.SkyblockPlayerDamageEntityEvent;
 import com.sweattypalms.skyblock.core.helpers.PlaceholderFormatter;
 import com.sweattypalms.skyblock.core.items.builder.abilities.types.IHasAbilityDamage;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
@@ -37,22 +37,15 @@ public class SkyblockMob {
 
     private final Map<MobAttributes, Object> attributes = MobAttributes.getDefault();
     private final Map<NameAttributes, Object> nameAttributes = NameAttributes.getDefault();
-
+    Runnable onSpawn;
     @Getter
     @Setter
     private MobLoot mobLoot;
-
     @Getter
     @Setter
     private LivingEntity entityInstance;
     @Getter
     private SkyblockPlayer lastDamager;
-
-    public void onSpawn(Runnable onSpawn) {
-        this.onSpawn = onSpawn;
-    }
-
-    Runnable onSpawn;
 
     public SkyblockMob(String id, Class<? extends ISkyblockMob> nmsClass) {
         this.id = id;
@@ -65,6 +58,10 @@ public class SkyblockMob {
             return skyblockMob.getSkyblockMob();
         }
         return null;
+    }
+
+    public void onSpawn(Runnable onSpawn) {
+        this.onSpawn = onSpawn;
     }
 
     public void spawn(Location location) {
@@ -183,6 +180,19 @@ public class SkyblockMob {
 
         this.lastDamager = skyblockPlayer;
 
+        if (entityInstance == null) return;
+
+        entityInstance.setLastDamageCause(new EntityDamageEvent(entityInstance, EntityDamageEvent.DamageCause.ENTITY_ATTACK, 0.1));
+
+        // To set the last damager
+        ((CraftLivingEntity) entityInstance).getHandle().bc = ((CraftPlayer) event.getPlayer()).getHandle();
+
+        this.refreshName();
+        boolean showCritEffect = event.isCrit();
+        if (event.getDamageType() == SkyblockPlayerDamageEntityEvent.DamageType.ABILITY && event.getAbility() instanceof IHasAbilityDamage)
+            showCritEffect = false;
+        showDamageIndicator(damage, showCritEffect);
+
         double newHealth = entityInstance.getHealth() - damage;
         if (newHealth <= 0) {
             // This will kill the entity, triggering the EntityDeathEvent. which is forwards to the SkyblockDeathEvent.
@@ -191,15 +201,6 @@ public class SkyblockMob {
             entityInstance.setHealth(newHealth);
             showDamageEffect(skyblockPlayer);
         }
-
-        if (entityInstance == null) return;
-
-        entityInstance.setLastDamageCause(new EntityDamageEvent(entityInstance, EntityDamageEvent.DamageCause.ENTITY_ATTACK, 0.1));
-        this.refreshName();
-        boolean showCritEffect = event.isCrit();
-        if (event.getDamageType() == SkyblockPlayerDamageEntityEvent.DamageType.ABILITY && event.getAbility() instanceof IHasAbilityDamage)
-            showCritEffect = false;
-        showDamageIndicator(damage, showCritEffect);
     }
 
     public void showDamageIndicator(double damage, boolean showCritEffect) {
@@ -338,12 +339,13 @@ public class SkyblockMob {
         return this;
     }
 
-    public <T> void setAttribute(MobAttributes key, T value) {
+    public <T> SkyblockMob setAttribute(MobAttributes key, T value) {
         if (key.getAttribute().getType().isInstance(value)) {
             attributes.put(key, value);
         } else {
             throw new IllegalArgumentException("Value type doesn't match the expected type for the attribute.");
         }
+        return this;
     }
 
     @SuppressWarnings("unchecked")

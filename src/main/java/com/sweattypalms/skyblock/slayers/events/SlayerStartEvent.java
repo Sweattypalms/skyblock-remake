@@ -1,6 +1,6 @@
 package com.sweattypalms.skyblock.slayers.events;
 
-import com.sweattypalms.skyblock.core.events.SkyblockPlayerEvent;
+import com.sweattypalms.skyblock.core.events.def.SkyblockPlayerEvent;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
 import com.sweattypalms.skyblock.slayers.Slayer;
 import lombok.Getter;

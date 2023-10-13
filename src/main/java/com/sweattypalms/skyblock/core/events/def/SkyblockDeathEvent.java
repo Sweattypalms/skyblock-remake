@@ -1,4 +1,4 @@
-package com.sweattypalms.skyblock.core.events;
+package com.sweattypalms.skyblock.core.events.def;
 
 import lombok.Getter;
 import org.bukkit.entity.LivingEntity;
@@ -7,13 +7,14 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityDamageEvent;
 
+import javax.annotation.Nullable;
+
+@Getter
 public class SkyblockDeathEvent extends Event {
     private static final HandlerList HANDLERS = new HandlerList();
-    @Getter
     private final LivingEntity deadEntity;
-    @Getter
-    private LivingEntity damager;
-    @Getter
+    @Nullable
+    private final LivingEntity damager;
     private final DeathCause cause;
 
     public SkyblockDeathEvent(LivingEntity damager, LivingEntity deadEntity) {
@@ -23,6 +24,7 @@ public class SkyblockDeathEvent extends Event {
     }
 
     public SkyblockDeathEvent(LivingEntity deadEntity, DeathCause cause) {
+        this.damager = null;
         this.deadEntity = deadEntity;
         this.cause = cause;
     }

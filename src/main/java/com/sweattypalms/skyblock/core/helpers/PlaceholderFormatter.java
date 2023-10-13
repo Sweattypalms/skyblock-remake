@@ -69,4 +69,30 @@ public class PlaceholderFormatter {
 
         return formattedValue + units[unitIndex];
     }
+
+    /**
+     * Formats a time in seconds to a string in the format "mm:ss"
+     * ex) xxx -> "02:03"
+     * @param time time in seconds
+     * @return formatted time string
+     */
+    public static String formatTime(long time) {
+        long minutes = time / 60;
+        long seconds = time % 60;
+        return String.format("%02d:%02d", minutes, seconds);
+    }
+
+    public static String toRomanNumeral(int num) {
+        if (num <= 0 || num > 3999) {
+            throw new IllegalArgumentException("Number out of range for Roman numerals");
+        }
+
+        String[] M = {"", "M", "MM", "MMM"};
+        String[] C = {"", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"};
+        String[] X = {"", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"};
+        String[] I = {"", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"};
+
+        return M[num / 1000] + C[(num % 1000) / 100] + X[(num % 100) / 10] + I[num % 10];
+    }
+
 }

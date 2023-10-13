@@ -1,7 +1,7 @@
 package com.sweattypalms.skyblock.core.events.listeners;
 
-import com.sweattypalms.skyblock.core.events.SkyblockAbilityUseEvent;
-import com.sweattypalms.skyblock.core.events.SkyblockInteractEvent;
+import com.sweattypalms.skyblock.core.events.def.SkyblockAbilityUseEvent;
+import com.sweattypalms.skyblock.core.events.def.SkyblockInteractEvent;
 import com.sweattypalms.skyblock.core.items.builder.SkyblockItem;
 import com.sweattypalms.skyblock.core.items.builder.abilities.IHasAbility;
 import com.sweattypalms.skyblock.core.items.builder.abilities.types.ITriggerable;

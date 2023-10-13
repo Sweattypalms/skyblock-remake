@@ -14,134 +14,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-//public class ScoreboardManager {
-//    private final static org.bukkit.scoreboard.ScoreboardManager bukkitScoreboardManager = Bukkit.getScoreboardManager();
-//    private final SkyblockPlayer player;
-//    Scoreboard bukkitScoreboard;
-//    Objective bukkitObjective;
-//    private int score = 13;
-//
-//    private final Map<String, String> scoreCache = new HashMap<>();
-//
-//    public ScoreboardManager(SkyblockPlayer player) {
-//        this.player = player;
-//
-//        assert bukkitScoreboardManager != null;
-//
-//        this.bukkitScoreboard = bukkitScoreboardManager.getNewScoreboard();
-//        this.bukkitObjective = bukkitScoreboard.registerNewObjective("sb", "dummy", "§6§lSKYBLOCK");
-//        this.bukkitObjective.setDisplaySlot(org.bukkit.scoreboard.DisplaySlot.SIDEBAR);
-//
-//        createBoard();
-//        this.player.getPlayer().setScoreboard(bukkitScoreboard);
-//    }
-//
-//    private void createBoard() {
-//        String formattedDate = getDateTime();
-//        String instance = getInstance();
-//
-//        setScore(" $7" + formattedDate + " " + instance, score--);
-//
-//        setScore(" $1", score--);
-//
-//        setScore(getSkyblockSeasonDate(), score--);
-//
-//        setScore(getSkyblockTime(), score--);
-//
-//        setScore(getRegion(), score--);
-//
-//        setScore(" $2", score--);
-//
-//        setCurrency();
-//
-//        setScore(" $3", score--);
-//
-//        setActiveActivity();
-//
-//        setScore(" $4", score--);
-//
-//        setScore(" $6◆ $cmc.sweattypalms.com $6◆", score--);
-//    }
-//
-//    public void updateScoreboard() {
-//        this.score = 13;
-//        createBoard();
-//    }
-//
-//    private void setCurrency() {
-//        double placeholderCoins = 1_879_000_000.0;
-//        double placeholderBits = 257_000.0;
-//
-//        String coins = PlaceholderFormatter.formatDecimalCSV(placeholderCoins);
-//        String bits = PlaceholderFormatter.formatDecimalCSV(placeholderBits);
-//
-//
-//        setScore(" $fPurse: $6" + coins, score--);
-//        setScore(" $fBits: $b" + bits, score--);
-//    }
-//
-//    private void setActiveActivity() {
-//        DragonManager dragonManager = DragonManager.getInstance();
-//        if (dragonManager.isDragonActive()) {
-//            double currentHealth = dragonManager.getActiveDragon().getEntityInstance().getHealth();
-//            String formattedHealth = PlaceholderFormatter.formatDecimalCSV(currentHealth);
-//            String message = "$fDragon Health: $a" + formattedHealth + Stats.HEALTH.getSymbol();
-//            setScore(message, score--);
-//
-//            double playerDamage = dragonManager.getActiveDragon().getMaxHealth() - currentHealth;
-//            String formattedDamage = PlaceholderFormatter.formatDecimalCSV(playerDamage);
-//            message = "$fYour Damage: $c" + formattedDamage;
-//            setScore(message, score--);
-//
-//            return;
-//        }
-//
-//        setScore(" $fObjective", score--);
-//        setScore(" $eGet good :)", score--);
-//    }
-//
-//    private void setScore(String score, int value) {
-////        bukkitObjective.getScore(PlaceholderFormatter.format(score)).setScore(value);
-//        String formattedScore = PlaceholderFormatter.format(score);
-//
-//        if (!scoreCache.getOrDefault(score, "").equals(formattedScore)) {
-//            for (String entry : bukkitScoreboard.getEntries()) {
-//                if (bukkitObjective.getScore(entry).getScore() == value) {
-//                    bukkitScoreboard.resetScores(entry);
-//                }
-//            }
-//
-//            bukkitObjective.getScore(formattedScore).setScore(value);
-//
-//            scoreCache.put(score, formattedScore);
-//        }
-//    }
-//
-//    /* -------------------- GETTERS -------------------- */
-//
-//    private String getDateTime() {
-//        return LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy"));
-//    }
-//
-//    private String getInstance() {
-//        return "$8instance_0";
-//    }
-//
-//    private String getSkyblockSeasonDate() {
-//        return " $fEarly Summer $e31st";
-//    }
-//
-//    private String getSkyblockTime() {
-//        return " $e☀ $7" + "12:00pm";
-//    }
-//
-//    private String getRegion() {
-//        return " $7⏣ " + "$5Dragon's Nest";
-//    }
-//
-//}
-
-
 public class ScoreboardManager {
 
     private final SkyblockPlayer player;
@@ -206,8 +78,10 @@ public class ScoreboardManager {
 
         section.put("spacing4", " $4");
 
-        if (player.getSlayerManager().getActiveSlayer() != null) {
-            Slayer activeSlayer = player.getSlayerManager().getActiveSlayer();
+        SlayerManager slayerManager = player.getSlayerManager();
+
+        if (slayerManager.getActiveSlayer() != null) {
+            Slayer activeSlayer = slayerManager.getActiveSlayer();
             section.put("slayer_quest", "$fSlayer Quest");
             StringBuilder slayerType = new StringBuilder(activeSlayer.slayerType().toString());
             String[] slayerTypeSplit = slayerType.toString().split("_");
@@ -216,9 +90,15 @@ public class ScoreboardManager {
                 slayerType.append(PlaceholderFormatter.capitalize(s)).append(" ");
             }
 
-            section.put("quest_name", "$5" + slayerType + activeSlayer.level());
-            section.put("slayer_xp", "$7(" + player.getSlayerManager().getGatheredXp() + "/$c" + activeSlayer.xpRequiredToSpawn() + "$7) Combat XP");
+            String romanLvl = PlaceholderFormatter.toRomanNumeral(activeSlayer.level());
 
+            if(slayerManager.getBoss() == null) {
+                section.put("quest_name", "$5" + slayerType + romanLvl);
+                section.put("slayer_xp", "$7($e" + slayerManager.getGatheredXp() + "/$c" + activeSlayer.xpRequiredToSpawn() + "$7) Combat XP");
+            }else {
+                section.put("slayer_boss", "$c" + slayerType + romanLvl);
+                section.put("slay_the_boss", "$eSlay the boss!");
+            }
             return section;
         }
 
@@ -241,7 +121,7 @@ public class ScoreboardManager {
 
     private Map<String, String> footerSection() {
         Map<String, String> section = new LinkedHashMap<>();
-        section.put("spacing3", " $3");
+        section.put("spacing3", " $3$l");
         section.put("footer", " $6◆ $cmc.sweattypalms.com $6◆");
         return section;
     }

@@ -1,4 +1,4 @@
-package com.sweattypalms.skyblock.core.events;
+package com.sweattypalms.skyblock.core.events.def;
 
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
 import org.bukkit.event.Event;

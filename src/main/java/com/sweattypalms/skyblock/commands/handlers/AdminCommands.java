@@ -23,6 +23,7 @@ import org.bukkit.craftbukkit.v1_17_R1.entity.CraftZombie;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class AdminCommands {
@@ -41,7 +42,7 @@ public class AdminCommands {
         player.sendMessage(ChatColor.RED + "Successfully spawned: " + skyblockMob.getNameAttribute(NameAttributes.CUSTOM_NAME));
     }
 
-    @Command(name = "item", description = "Item command", op = true)
+    @Command(name = "sitem", description = "Item command", op = true)
     public void itemCommand(Player player, String[] args) {
         if (args.length == 0) {
             ItemsGUI gui = new ItemsGUI();
@@ -77,7 +78,7 @@ public class AdminCommands {
         }
     }
 
-    @TabCompleter(command = "item")
+    @TabCompleter(command = "sitem")
     public List<String> itemTabCompleter(Player player, String[] args) {
         // Smart tab completer to only serve the correct part :)
         if (args.length > 1) {
@@ -113,6 +114,20 @@ public class AdminCommands {
 
         SkyblockPlayer skyblockPlayer = SkyblockPlayer.getSkyblockPlayer(player);
         skyblockPlayer.getStatsManager().setBaseStat(stat, value);
+    }
+
+    @TabCompleter(command = "stat")
+    public List<String> statTabCompleter(Player player, String[] args) {
+        if (args.length > 1) {
+            return List.of();
+        }
+
+        if (args.length == 0) {
+            return Arrays.stream(Stats.values()).map(Enum::name).toList();
+        }
+
+        String id = args[0].toUpperCase();
+        return Arrays.stream(Stats.values()).map(Enum::name).filter(s -> s.contains(id)).toList();
     }
 
 
@@ -230,4 +245,6 @@ public class AdminCommands {
         player.sendMessage(ChatColor.YELLOW + "Reloading Skyblock...");
         player.performCommand("pm reload skyblock");
     }
+
+
 }
