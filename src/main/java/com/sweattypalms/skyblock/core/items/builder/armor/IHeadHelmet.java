@@ -2,6 +2,7 @@ package com.sweattypalms.skyblock.core.items.builder.armor;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import com.sweattypalms.skyblock.core.helpers.MozangStuff;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -18,24 +19,8 @@ public interface IHeadHelmet {
      * @return the head generated through the texture value
      */
     default ItemStack getHeadItemStack() {
-        String texture = getTexture();
-        UUID uuid = UUID.randomUUID();
-        GameProfile gameProfile = new GameProfile(uuid, null);
-        gameProfile.getProperties().put("textures", new Property("textures", texture));
-        ItemStack item = new ItemStack(Material.PLAYER_HEAD, 1);
-        SkullMeta skullMeta = (SkullMeta) item.getItemMeta();
-        Field profileField = null;
-        try {
-            profileField = skullMeta.getClass().getDeclaredField("profile");
-            profileField.setAccessible(true);
-            profileField.set(skullMeta, gameProfile);
-        } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException exception) {
-            exception.printStackTrace();
-        }
-        skullMeta.setUnbreakable(true);
-        Arrays.stream(ItemFlag.values()).toList().forEach(skullMeta::addItemFlags);
-        item.setItemMeta(skullMeta);
-        return item;
+        return MozangStuff.getHeadItemStack(getTexture());
     }
+
 
 }

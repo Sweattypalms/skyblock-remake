@@ -18,10 +18,10 @@ public class Hologram extends EntityArmorStand {
     String textToDisplay;
     HologramType type;
 
-    public Hologram(String textToDisplay, Location location, double yOffset) {
+    public Hologram(String textToDisplay, Location location) {
         super(EntityTypes.c, ((CraftWorld) location.getWorld()).getHandle());
         this.staticLocation = location;
-        this.yOffset = yOffset;
+        this.yOffset = 0;
         this.type = HologramType.STATIC;
         this.textToDisplay = textToDisplay;
     }

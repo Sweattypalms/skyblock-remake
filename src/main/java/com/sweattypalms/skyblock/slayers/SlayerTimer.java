@@ -3,7 +3,9 @@ package com.sweattypalms.skyblock.slayers;
 import com.sweattypalms.skyblock.api.Hologram;
 import com.sweattypalms.skyblock.core.helpers.PlaceholderFormatter;
 import com.sweattypalms.skyblock.core.mobs.builder.SkyblockMob;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 
 public class SlayerTimer {
     private final SkyblockMob host;
@@ -24,6 +26,9 @@ public class SlayerTimer {
                         this.host,
                         0.2
                 );
+
+
+
                 hologram.start();
             });
         } else {

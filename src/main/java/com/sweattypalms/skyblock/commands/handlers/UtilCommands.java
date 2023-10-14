@@ -1,8 +1,12 @@
 package com.sweattypalms.skyblock.commands.handlers;
 
 import com.sweattypalms.skyblock.commands.Command;
+import com.sweattypalms.skyblock.commands.TabCompleter;
+import joptsimple.internal.Strings;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
+
+import java.util.List;
 
 public class UtilCommands {
 
@@ -30,4 +34,5 @@ public class UtilCommands {
         player.updateInventory();
         player.sendMessage(ChatColor.RED + "Your inventory has been updated!");
     }
+
 }

@@ -1417,9 +1417,6 @@ public class TestCommands {
 
         EntityPlayer entityPlayer = BukkitWrapper.getHandle(player);
 
-        // show swinging animation
         entityPlayer.b.a.sendPacket(new PacketPlayOutAnimation(entityLiving, 1));
-
-
     }
 }

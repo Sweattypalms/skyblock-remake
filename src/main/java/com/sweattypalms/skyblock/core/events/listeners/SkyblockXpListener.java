@@ -13,4 +13,6 @@ public class SkyblockXpListener implements Listener {
         SkillManager skillManager = event.getSkyblockPlayer().getSkillManager();
         skillManager.updateSkill(event.getSkillType(), event.getXp());
     }
+
+
 }

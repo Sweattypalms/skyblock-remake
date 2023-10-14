@@ -26,4 +26,5 @@ public class BukkitWrapper {
     public static <T> T getHandle(Entity entity) {
         return (T) ((CraftEntity) entity).getHandle();
     }
+
 }
