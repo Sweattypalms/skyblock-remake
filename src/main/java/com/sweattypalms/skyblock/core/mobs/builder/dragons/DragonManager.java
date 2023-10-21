@@ -28,7 +28,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import java.text.DecimalFormat;
 import java.util.*;
 
 /**
@@ -347,6 +346,13 @@ public class DragonManager {
     public void dragonDownMessage(Player killer) {
         Map<UUID, Double> damage = MozangStuff.sortByValue(this.playerDamage);
         List<UUID> damagers = new ArrayList<>(damage.keySet());
+        String green = PlaceholderFormatter.format("$a");
+        String yellow = PlaceholderFormatter.format("$e");
+        String gold = PlaceholderFormatter.format("$6");
+        String bold = PlaceholderFormatter.format("$l");
+        String gray = PlaceholderFormatter.format("$7");
+        String red = PlaceholderFormatter.format("$c");
+        String light_purple = PlaceholderFormatter.format("$d");
         for (Player p : Bukkit.getOnlinePlayers()) {
             String damage1 = (PlaceholderFormatter.formatDecimalCSV(damage.get(damagers.get(0))));
             String yourDamage;
@@ -355,32 +361,31 @@ public class DragonManager {
             } catch (IllegalArgumentException ignored) {
                 yourDamage = "0";
             }
-
-            p.sendMessage(ChatColor.GREEN + "----------------------------------------------------");
-            p.sendMessage(ChatColor.GOLD + "                   " + ChatColor.BOLD + ChatColor.stripColor(dragon.getNameAttribute(NameAttributes.CUSTOM_NAME).toString().toUpperCase()) + " DOWN!");
+            p.sendMessage(green + "----------------------------------------------------");
+            p.sendMessage(gold + "                   " + bold + (dragon.getNameAttribute(NameAttributes.CUSTOM_NAME).toString().toUpperCase()) + " DOWN!");
             p.sendMessage("");
-            p.sendMessage(ChatColor.GREEN + "                " + killer.getName() + ChatColor.GRAY + " dealt the final blow.");
+            p.sendMessage(green + "                " + killer.getName() + gray + " dealt the final blow.");
             p.sendMessage("");
-            p.sendMessage(ChatColor.YELLOW + "          " + ChatColor.BOLD + "1st Damager" + ChatColor.GRAY + " - " + Bukkit.getOfflinePlayer(damagers.get(0)).getName() + ChatColor.GRAY + " - " + ChatColor.YELLOW + damage1);
+            p.sendMessage(yellow + "          " + bold + "1st Damager" + gray + " - " + Bukkit.getOfflinePlayer(damagers.get(0)).getName() + gray + " - " + yellow + damage1);
             if (damagers.size() < 3) {
                 if (damagers.size() == 2) {
                     String damage2 = (PlaceholderFormatter.formatDecimalCSV(damage.get(damagers.get(1))));
-                    p.sendMessage(ChatColor.GOLD + "          " + ChatColor.BOLD + "2nd Damager" + ChatColor.GRAY + " - " + Bukkit.getOfflinePlayer(damagers.get(1)).getName() + ChatColor.GRAY + " - " + ChatColor.YELLOW + damage2);
+                    p.sendMessage(gold + "          " + bold + "2nd Damager" + gray + " - " + Bukkit.getOfflinePlayer(damagers.get(1)).getName() + gray + " - " + yellow + damage2);
                 } else {
-                    p.sendMessage(ChatColor.GOLD + "          " + ChatColor.BOLD + "2nd Damager" + ChatColor.GRAY + " - N/A" + ChatColor.GRAY);
+                    p.sendMessage(gold + "          " + bold + "2nd Damager" + gray + " - N/A" + gray);
                 }
-                p.sendMessage(ChatColor.RED + "          " + ChatColor.BOLD + "3rd Damager" + ChatColor.GRAY + " - N/A");
+                p.sendMessage(red + "          " + bold + "3rd Damager" + gray + " - N/A");
             } else {
                 String damage2 = (PlaceholderFormatter.formatDecimalCSV(damage.get(damagers.get(1))));
                 String damage3 = (PlaceholderFormatter.formatDecimalCSV(damage.get(damagers.get(2))));
-                p.sendMessage(ChatColor.GOLD + "          " + ChatColor.BOLD + "2nd Damager" + ChatColor.GRAY + " - " + Bukkit.getOfflinePlayer(damagers.get(1)).getName() + ChatColor.GRAY + " - " + ChatColor.YELLOW + damage2);
-                p.sendMessage(ChatColor.RED + "          " + ChatColor.BOLD + "3rd Damager" + ChatColor.GRAY + " - " + Bukkit.getOfflinePlayer(damagers.get(2)).getName() + ChatColor.GRAY + " - " + ChatColor.YELLOW + damage3);
+                p.sendMessage(gold + "          " + bold + "2nd Damager" + gray + " - " + Bukkit.getOfflinePlayer(damagers.get(1)).getName() + gray + " - " + yellow+ damage2);
+                p.sendMessage(red + "          " + bold + "3rd Damager" + gray + " - " + Bukkit.getOfflinePlayer(damagers.get(2)).getName() + gray + " - " + yellow + damage3);
             }
             p.sendMessage("");
-            p.sendMessage(ChatColor.YELLOW + "          Your Damage: " + ChatColor.GREEN + yourDamage + ChatColor.GRAY + " (Position #" + (damagers.indexOf(p) + 1) + ")");
-            p.sendMessage(ChatColor.YELLOW + "             Runecrafting Experience: " + ChatColor.LIGHT_PURPLE + "0" + ChatColor.RED + " (Not Yet Coded)");
+            p.sendMessage(yellow + "          Your Damage: " + gray + yourDamage + gray + " (Position #" + (damagers.indexOf(p.getUniqueId()) + 1) + ")");
+            p.sendMessage(yellow + "             Runecrafting Experience: " + light_purple + "0" + red + " (Not Yet Coded)");
             p.sendMessage("");
-            p.sendMessage(ChatColor.GREEN + "----------------------------------------------------");
+            p.sendMessage(green + "----------------------------------------------------");
         }
     }
 
