@@ -4,6 +4,7 @@ import com.sweattypalms.skyblock.SkyBlock;
 import com.sweattypalms.skyblock.api.Point;
 import com.sweattypalms.skyblock.api.sequence.Sequence;
 import com.sweattypalms.skyblock.api.sequence.SequenceAction;
+import com.sweattypalms.skyblock.core.helpers.MozangStuff;
 import com.sweattypalms.skyblock.core.helpers.PDCHelper;
 import com.sweattypalms.skyblock.core.helpers.PlaceholderFormatter;
 import com.sweattypalms.skyblock.core.items.ItemManager;
@@ -11,6 +12,7 @@ import com.sweattypalms.skyblock.core.items.types.end.items.RemnantOfTheEye;
 import com.sweattypalms.skyblock.core.items.types.end.items.SummoningEye;
 import com.sweattypalms.skyblock.core.items.types.end.items.UsedSummoningEye;
 import com.sweattypalms.skyblock.core.mobs.builder.MobManager;
+import com.sweattypalms.skyblock.core.mobs.builder.NameAttributes;
 import com.sweattypalms.skyblock.core.mobs.builder.SkyblockMob;
 import com.sweattypalms.skyblock.core.mobs.regions.end.dragons.StrongDragon;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
@@ -26,6 +28,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
+import java.text.DecimalFormat;
 import java.util.*;
 
 /**
@@ -139,7 +142,7 @@ public class DragonManager {
                 _player.updateInventory();
                 _player.sendMessage("removed " + removed[0] + " eyes");
             });
-            
+
             this.startEyeAnimation();
         }
     }
@@ -328,6 +331,7 @@ public class DragonManager {
 
     public void onEnderDragonDeath() {
         this.summoningEyes = 0;
+        this.dragonDownMessage(this.dragon.getEntityInstance().getKiller());
         this.dragon.despawn();
         this.dragon = null;
         this.altarBlocks.keySet().forEach(block -> {
@@ -338,6 +342,46 @@ public class DragonManager {
         this.altarBlocks.clear();
 
         temp_save_backup.forEach((loc, type) -> loc.getBlock().setType(type));
+    }
+
+    public void dragonDownMessage(Player killer) {
+        Map<UUID, Double> damage = MozangStuff.sortByValue(this.playerDamage);
+        List<UUID> damagers = new ArrayList<>(damage.keySet());
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            String damage1 = (PlaceholderFormatter.formatDecimalCSV(damage.get(damagers.get(0))));
+            String yourDamage;
+            try {
+                yourDamage = (PlaceholderFormatter.formatDecimalCSV(damage.get(p.getUniqueId())));
+            } catch (IllegalArgumentException ignored) {
+                yourDamage = "0";
+            }
+
+            p.sendMessage(ChatColor.GREEN + "----------------------------------------------------");
+            p.sendMessage(ChatColor.GOLD + "                   " + ChatColor.BOLD + ChatColor.stripColor(dragon.getNameAttribute(NameAttributes.CUSTOM_NAME).toString().toUpperCase()) + " DOWN!");
+            p.sendMessage("");
+            p.sendMessage(ChatColor.GREEN + "                " + killer.getName() + ChatColor.GRAY + " dealt the final blow.");
+            p.sendMessage("");
+            p.sendMessage(ChatColor.YELLOW + "          " + ChatColor.BOLD + "1st Damager" + ChatColor.GRAY + " - " + Bukkit.getOfflinePlayer(damagers.get(0)).getName() + ChatColor.GRAY + " - " + ChatColor.YELLOW + damage1);
+            if (damagers.size() < 3) {
+                if (damagers.size() == 2) {
+                    String damage2 = (PlaceholderFormatter.formatDecimalCSV(damage.get(damagers.get(1))));
+                    p.sendMessage(ChatColor.GOLD + "          " + ChatColor.BOLD + "2nd Damager" + ChatColor.GRAY + " - " + Bukkit.getOfflinePlayer(damagers.get(1)).getName() + ChatColor.GRAY + " - " + ChatColor.YELLOW + damage2);
+                } else {
+                    p.sendMessage(ChatColor.GOLD + "          " + ChatColor.BOLD + "2nd Damager" + ChatColor.GRAY + " - N/A" + ChatColor.GRAY);
+                }
+                p.sendMessage(ChatColor.RED + "          " + ChatColor.BOLD + "3rd Damager" + ChatColor.GRAY + " - N/A");
+            } else {
+                String damage2 = (PlaceholderFormatter.formatDecimalCSV(damage.get(damagers.get(1))));
+                String damage3 = (PlaceholderFormatter.formatDecimalCSV(damage.get(damagers.get(2))));
+                p.sendMessage(ChatColor.GOLD + "          " + ChatColor.BOLD + "2nd Damager" + ChatColor.GRAY + " - " + Bukkit.getOfflinePlayer(damagers.get(1)).getName() + ChatColor.GRAY + " - " + ChatColor.YELLOW + damage2);
+                p.sendMessage(ChatColor.RED + "          " + ChatColor.BOLD + "3rd Damager" + ChatColor.GRAY + " - " + Bukkit.getOfflinePlayer(damagers.get(2)).getName() + ChatColor.GRAY + " - " + ChatColor.YELLOW + damage3);
+            }
+            p.sendMessage("");
+            p.sendMessage(ChatColor.YELLOW + "          Your Damage: " + ChatColor.GREEN + yourDamage + ChatColor.GRAY + " (Position #" + (damagers.indexOf(p) + 1) + ")");
+            p.sendMessage(ChatColor.YELLOW + "             Runecrafting Experience: " + ChatColor.LIGHT_PURPLE + "0" + ChatColor.RED + " (Not Yet Coded)");
+            p.sendMessage("");
+            p.sendMessage(ChatColor.GREEN + "----------------------------------------------------");
+        }
     }
 
     private Location pointToLocation(Point point) {
