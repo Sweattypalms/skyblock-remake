@@ -11,8 +11,8 @@ import com.sweattypalms.skyblock.core.items.builder.abilities.types.PassiveAbili
 import com.sweattypalms.skyblock.core.items.builder.armor.IDyedArmor;
 import com.sweattypalms.skyblock.core.items.types.end.items.AspectOfTheDragons;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
-import com.sweattypalms.skyblock.core.player.sub.Stats;
-import com.sweattypalms.skyblock.core.player.sub.StatsManager;
+import com.sweattypalms.skyblock.core.player.sub.stats.Stats;
+import com.sweattypalms.skyblock.core.player.sub.stats.StatsManager;
 import org.bukkit.Material;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;

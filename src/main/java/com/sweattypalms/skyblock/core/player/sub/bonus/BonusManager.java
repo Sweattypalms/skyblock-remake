@@ -1,4 +1,4 @@
-package com.sweattypalms.skyblock.core.player.sub;
+package com.sweattypalms.skyblock.core.player.sub.bonus;
 
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
 import lombok.Getter;

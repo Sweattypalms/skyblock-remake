@@ -1,7 +1,7 @@
 package com.sweattypalms.skyblock.core.events.def;
 
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
-import com.sweattypalms.skyblock.core.player.sub.Skill;
+import com.sweattypalms.skyblock.core.player.sub.skillz.Skill;
 import lombok.Getter;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;

@@ -2,7 +2,7 @@ package com.sweattypalms.skyblock.core.items.builder.reforges;
 
 import com.sweattypalms.skyblock.core.items.builder.Rarity;
 import com.sweattypalms.skyblock.core.items.builder.SkyblockItemType;
-import com.sweattypalms.skyblock.core.player.sub.Stats;
+import com.sweattypalms.skyblock.core.player.sub.stats.Stats;
 
 import java.util.Map;
 import java.util.Set;

@@ -14,7 +14,7 @@ import com.sweattypalms.skyblock.core.items.builder.item.IShortBow;
 import com.sweattypalms.skyblock.core.items.builder.reforges.IAdvancedReforge;
 import com.sweattypalms.skyblock.core.items.builder.reforges.Reforge;
 import com.sweattypalms.skyblock.core.items.builder.reforges.ReforgeManager;
-import com.sweattypalms.skyblock.core.player.sub.Stats;
+import com.sweattypalms.skyblock.core.player.sub.stats.Stats;
 import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;

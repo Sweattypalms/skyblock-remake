@@ -11,7 +11,7 @@ import com.sweattypalms.skyblock.core.items.builder.abilities.types.FullSetBonus
 import com.sweattypalms.skyblock.core.items.builder.abilities.types.ITriggerable;
 import com.sweattypalms.skyblock.core.mobs.builder.MobAttributes;
 import com.sweattypalms.skyblock.core.mobs.builder.SkyblockMob;
-import com.sweattypalms.skyblock.core.player.sub.Stats;
+import com.sweattypalms.skyblock.core.player.sub.stats.Stats;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.event.EventHandler;

@@ -288,6 +288,7 @@ public class DragonManager {
             block.setBlockData(endPortalFrame);
         });
         this.altarBlocks.clear();
+        this.playerDamage.clear();
 
         temp_save_backup.forEach((loc, type) -> loc.getBlock().setType(type));
     }

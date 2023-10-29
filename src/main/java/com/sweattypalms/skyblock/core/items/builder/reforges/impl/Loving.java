@@ -5,7 +5,7 @@ import com.sweattypalms.skyblock.core.items.builder.Rarity;
 import com.sweattypalms.skyblock.core.items.builder.SkyblockItemType;
 import com.sweattypalms.skyblock.core.items.builder.reforges.IAdvancedReforge;
 import com.sweattypalms.skyblock.core.items.builder.reforges.Reforge;
-import com.sweattypalms.skyblock.core.player.sub.Stats;
+import com.sweattypalms.skyblock.core.player.sub.stats.Stats;
 
 import java.util.List;
 import java.util.Map;
@@ -64,7 +64,7 @@ public class Loving implements Reforge, IAdvancedReforge {
 
     @Override
     public String getName() {
-        return "Ancient";
+        return "Loving";
     }
 
     @Override

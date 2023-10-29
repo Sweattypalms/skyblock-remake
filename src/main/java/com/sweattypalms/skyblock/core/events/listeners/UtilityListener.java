@@ -18,7 +18,7 @@ import com.sweattypalms.skyblock.core.mobs.builder.dragons.DragonManager;
 import com.sweattypalms.skyblock.core.mobs.builder.dragons.IEndDragon;
 import com.sweattypalms.skyblock.core.mobs.builder.dragons.loot.IDragonLoot;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
-import com.sweattypalms.skyblock.core.player.sub.Stats;
+import com.sweattypalms.skyblock.core.player.sub.stats.Stats;
 import net.minecraft.world.entity.EntityLiving;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -236,20 +236,20 @@ public class UtilityListener implements Listener {
     @EventHandler
     public void placeBlock(EntityPlaceEvent event) {
         if (!(event.getEntity() instanceof Player player)) return;
-        if (player.isOp()) return;
+//        if (player.isOp()) return;
         event.setCancelled(true);
     }
 
     @EventHandler
     public void breakBlock(BlockBreakEvent event) {
-        if (event.getPlayer().isOp()) return;
+//        if (event.getPlayer().isOp()) return;
         event.setCancelled(true);
     }
 
     @EventHandler
     public void onPhysicalInteract(PlayerInteractEvent event) {
         if (event.getClickedBlock() == null) return;
-        if (event.getPlayer().isOp()) return;
+//        if (event.getPlayer().isOp()) return;
         event.setCancelled(true);
     }
 

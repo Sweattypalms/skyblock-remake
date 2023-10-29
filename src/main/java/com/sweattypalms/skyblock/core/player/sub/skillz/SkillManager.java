@@ -1,4 +1,4 @@
-package com.sweattypalms.skyblock.core.player.sub;
+package com.sweattypalms.skyblock.core.player.sub.skillz;
 
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
 
@@ -6,7 +6,7 @@ import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.sweattypalms.skyblock.core.player.sub.Skill.SkillType;
+import com.sweattypalms.skyblock.core.player.sub.skillz.Skill.SkillType;
 
 public class SkillManager {
 

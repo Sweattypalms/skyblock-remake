@@ -1,6 +1,7 @@
 package com.sweattypalms.skyblock.core.player.sub;
 
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
+import com.sweattypalms.skyblock.core.player.sub.stats.Stats;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;

@@ -1,6 +1,7 @@
 package com.sweattypalms.skyblock.commands.handlers;
 
 import com.sweattypalms.skyblock.commands.Command;
+import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
 import com.sweattypalms.skyblock.slayers.gui.SlayerSelectorGUI;
 import com.sweattypalms.skyblock.ui.GUIRouter;
 import org.bukkit.Bukkit;
@@ -22,5 +23,46 @@ public class PlayerCommands {
         World world = Bukkit.getWorld("skyblock_hub");
         assert world != null;
         player.teleport(world.getSpawnLocation());
+    }
+
+    @Command(name = "warp" , description = "Warp command")
+    public void warpCommand(Player player, String[] args) {
+        SkyblockPlayer skyblockPlayer = SkyblockPlayer.getSkyblockPlayer(player);
+        if (args.length == 0) {
+            skyblockPlayer.sendMessage("$cUsage: /warp <island>");
+            return;
+        }
+
+        String islandName = args[0].toLowerCase();
+
+        switch (islandName) {
+            case "hub" -> teleportToIsland(player, "hub");
+            case "end" -> teleportToIsland(player, "end");
+            default ->  {
+                skyblockPlayer.sendMessage("$cThat island does not exist!");
+                return;
+            }
+        }
+
+        skyblockPlayer.sendMessage(String.format("$aSending to server mini%s", islandName.hashCode()));
+        skyblockPlayer.sendMessage("$8pretend it's an actual server");
+    }
+
+    private void teleportToIsland(Player player, String islandName) {
+        World world = Bukkit.getWorld("skyblock_" + islandName);
+
+        if (world == null) {
+            SkyblockPlayer skyblockPlayer = SkyblockPlayer.getSkyblockPlayer(player);
+            skyblockPlayer.sendMessage("$cThat island does not exist!");
+
+            if(player.isOp()) {
+                skyblockPlayer.sendMessage("$cThis is supposed to be an island.\nIt's possible that the world is not loaded or doesn't exist.");
+            }
+
+            return;
+        }
+
+        Location location = world.getSpawnLocation();
+        player.teleport(location);
     }
 }

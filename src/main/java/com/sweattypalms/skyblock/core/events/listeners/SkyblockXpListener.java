@@ -1,7 +1,7 @@
 package com.sweattypalms.skyblock.core.events.listeners;
 
 import com.sweattypalms.skyblock.core.events.def.SkyblockXpEvent;
-import com.sweattypalms.skyblock.core.player.sub.SkillManager;
+import com.sweattypalms.skyblock.core.player.sub.skillz.SkillManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;

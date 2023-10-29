@@ -1,5 +1,6 @@
-package com.sweattypalms.skyblock.core.player.sub;
+package com.sweattypalms.skyblock.core.player.sub.bonus;
 
+import com.sweattypalms.skyblock.core.player.sub.stats.Stats;
 import lombok.Getter;
 
 @Getter

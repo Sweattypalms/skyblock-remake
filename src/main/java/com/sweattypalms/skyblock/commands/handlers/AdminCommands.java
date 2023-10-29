@@ -3,6 +3,7 @@ package com.sweattypalms.skyblock.commands.handlers;
 import com.sweattypalms.skyblock.commands.Command;
 import com.sweattypalms.skyblock.commands.TabCompleter;
 import com.sweattypalms.skyblock.core.helpers.PDCHelper;
+import com.sweattypalms.skyblock.core.helpers.PlaceholderFormatter;
 import com.sweattypalms.skyblock.core.items.ItemManager;
 import com.sweattypalms.skyblock.core.items.builder.SkyblockItem;
 import com.sweattypalms.skyblock.core.items.builder.reforges.Reforge;
@@ -13,9 +14,11 @@ import com.sweattypalms.skyblock.core.mobs.builder.NameAttributes;
 import com.sweattypalms.skyblock.core.mobs.builder.SkyblockMob;
 import com.sweattypalms.skyblock.core.mobs.builder.dragons.loot.DragonDropItemEntity;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
-import com.sweattypalms.skyblock.core.player.sub.Stats;
+import com.sweattypalms.skyblock.core.player.sub.stats.Stats;
+import com.sweattypalms.skyblock.core.player.sub.stats.StatsManager;
 import com.sweattypalms.skyblock.slayers.ISlayerMob;
 import com.sweattypalms.skyblock.ui.guis.ItemsGUI;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -167,10 +170,38 @@ public class AdminCommands {
 
         SkyblockItem skyblockItem = SkyblockItem.fromItemStack(item);
 
+        boolean canReforge = reforge.getReforgeableItemTypes().contains(skyblockItem.getItemType());
+        boolean shouldForce = args.length == 2 && args[1].equalsIgnoreCase("force");
+
+        if (!canReforge && !shouldForce) {
+            player.sendMessage(ChatColor.RED + "This item cannot be reforged with " + reforge.getName() + "!");
+            player.sendMessage(ChatColor.RED + "If you want to force reforge, do /reforge <reforge> force");
+            return;
+        }
+
         PDCHelper.setString(item, "reforge", reforge.getName().toLowerCase());
         ItemStack updatedItemStack = SkyblockItem.updateItemStack(item);
         player.getInventory().setItemInMainHand(updatedItemStack);
 
+        player.sendMessage(ChatColor.GREEN + "Successfully reforged item!");
+    }
+
+    @TabCompleter(command = "reforge")
+    public List<String> reforgeTabCompleter(Player player, String[] args) {
+
+        if (args.length == 2) {
+            return List.of("force");
+        }
+        if (args.length > 1) {
+            return List.of();
+        }
+
+        if (args.length == 0) {
+            return ReforgeManager.REFORGES_LIST.keySet().stream().toList();
+        }
+
+        String id = args[0].toLowerCase();
+        return ReforgeManager.REFORGES_LIST.keySet().stream().filter(s -> s.startsWith(id)).toList();
     }
 
     @Command(name = "dragloot", description = "Drag loot command", op = true)
@@ -195,9 +226,9 @@ public class AdminCommands {
 
         SkyblockMob skyblockMob = getAndSpawnMob(id, player);
 
-        if(skyblockMob == null) return;
+        if (skyblockMob == null) return;
 
-        ISlayerMob slayerMob = (ISlayerMob) ((CraftZombie)skyblockMob.getEntityInstance()).getHandle();
+        ISlayerMob slayerMob = (ISlayerMob) ((CraftZombie) skyblockMob.getEntityInstance()).getHandle();
         slayerMob.setOwnerPlayer(SkyblockPlayer.getSkyblockPlayer(player));
 
         player.sendMessage(ChatColor.RED + "Successfully spawned: " + skyblockMob.getNameAttribute(NameAttributes.CUSTOM_NAME));
@@ -243,8 +274,82 @@ public class AdminCommands {
     @Command(name = "sbrl", description = "Skyblock reload command", op = true)
     public void sbrlCommand(Player player, String[] args) {
         player.sendMessage(ChatColor.YELLOW + "Reloading Skyblock...");
+
+        if (!Bukkit.getPluginManager().isPluginEnabled("PluginManager")) {
+            player.sendMessage(ChatColor.RED + "PluginManager is not available!");
+            return;
+        }
+
+
         player.performCommand("pm reload skyblock");
     }
 
+    @Command(name = "powerup", description = "Give yourself lots of stats", op = true)
+    public void powerupCommand(Player player, String[] args) {
+        SkyblockPlayer skyblockPlayer = SkyblockPlayer.getSkyblockPlayer(player);
+        StatsManager m = skyblockPlayer.getStatsManager();
+        m.setBaseStat(Stats.HEALTH, 100_000);
+        m.setBaseStat(Stats.STRENGTH, 10_000);
+        m.setBaseStat(Stats.DEFENSE, 1_000);
+        m.setBaseStat(Stats.SPEED, 500);
+        m.setBaseStat(Stats.CRIT_CHANCE, 1000);
+        m.setBaseStat(Stats.CRIT_DAMAGE, 1000);
+        m.setBaseStat(Stats.INTELLIGENCE, 1_000_000);
+        m.setBaseStat(Stats.MANA_REGEN, 1_000_000);
 
+        skyblockPlayer.sendMessage(" $c$lYou have been powered up!");
+    }
+
+    @Command(name = "heal", description = "Give yourself complete healing", op = true)
+    public void healCommand(Player player, String[] args) {
+        SkyblockPlayer skyblockPlayer = SkyblockPlayer.getSkyblockPlayer(player);
+        double maxHealth = skyblockPlayer.getStatsManager().getMaxStats().get(Stats.HEALTH);
+
+        double healedFor = maxHealth - player.getHealth();
+
+        String healedForStr = PlaceholderFormatter.formatDecimalCSV(healedFor);
+
+        skyblockPlayer.sendMessage(" $a$lYou have been healed for " + healedForStr + " health!");
+
+        player.setHealth(maxHealth);
+    }
+
+    @Command(name = "currency", description = "Give yourself money / bits", op = true)
+    public void currencyCommand(Player player, String[] args) {
+        SkyblockPlayer skyblockPlayer = SkyblockPlayer.getSkyblockPlayer(player);
+
+        if (args.length == 0) {
+            skyblockPlayer.sendMessage("$c$lUsage: /currency <coins|bits|bank> <amount>");
+        }
+
+        byte type;
+
+        switch (args[0].toLowerCase()) {
+            case "coins" -> type = 0;
+            case "bits" -> type = 1;
+            case "bank" -> type = 2;
+            default -> {
+                skyblockPlayer.sendMessage("$c$lInvalid currency type!");
+                return;
+            }
+        }
+
+        double amount;
+
+        try {
+            amount = Double.parseDouble(args[1]);
+        } catch (NumberFormatException e) {
+            skyblockPlayer.sendMessage("$c$lInvalid number or amount!");
+            return;
+        }
+
+
+        switch (type) {
+            case 0 -> skyblockPlayer.getCurrencyManager().addPurseBalance(amount);
+            case 1 -> skyblockPlayer.getCurrencyManager().addBits(amount);
+            case 2 -> skyblockPlayer.getCurrencyManager().addBankBalance(amount);
+        }
+
+        skyblockPlayer.sendMessage("$a$lYou have been given " + PlaceholderFormatter.formatDecimalCSV(amount) + " " + args[0].toLowerCase() + "!");
+    }
 }

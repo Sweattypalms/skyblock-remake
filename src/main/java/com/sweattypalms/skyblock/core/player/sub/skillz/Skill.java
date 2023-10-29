@@ -1,4 +1,4 @@
-package com.sweattypalms.skyblock.core.player.sub;
+package com.sweattypalms.skyblock.core.player.sub.skillz;
 
 import lombok.Getter;
 import lombok.Setter;

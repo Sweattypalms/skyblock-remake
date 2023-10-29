@@ -8,8 +8,8 @@ import com.sweattypalms.skyblock.core.items.builder.abilities.Ability;
 import com.sweattypalms.skyblock.core.items.builder.abilities.AbilityManager;
 import com.sweattypalms.skyblock.core.items.builder.abilities.IHasAbility;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
-import com.sweattypalms.skyblock.core.player.sub.Bonus;
-import com.sweattypalms.skyblock.core.player.sub.Stats;
+import com.sweattypalms.skyblock.core.player.sub.bonus.Bonus;
+import com.sweattypalms.skyblock.core.player.sub.stats.Stats;
 import org.bukkit.Material;
 import org.bukkit.event.Event;
 

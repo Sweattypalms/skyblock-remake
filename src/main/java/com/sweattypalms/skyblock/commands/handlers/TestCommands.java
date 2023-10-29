@@ -1,13 +1,16 @@
 package com.sweattypalms.skyblock.commands.handlers;
 
+import com.sweattypalms.skyblock.api.sequence.Sequence;
+import com.sweattypalms.skyblock.api.sequence.SequenceAction;
 import com.sweattypalms.skyblock.commands.Command;
 import com.sweattypalms.skyblock.commands.TabCompleter;
 import com.sweattypalms.skyblock.core.helpers.BukkitWrapper;
-import net.minecraft.network.protocol.game.PacketPlayOutAnimation;
-import net.minecraft.network.protocol.game.PacketPlayOutEntityStatus;
+import com.sweattypalms.skyblock.core.mobs.builder.MobManager;
+import com.sweattypalms.skyblock.core.mobs.builder.SkyblockMob;
+import com.sweattypalms.skyblock.slayers.zombie.RevenantHorrorTierI;
+import net.minecraft.network.NetworkManager;
 import net.minecraft.server.level.EntityPlayer;
-import net.minecraft.world.entity.EntityLiving;
-import org.bukkit.ChatColor;
+import org.bukkit.*;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
@@ -26,7 +29,7 @@ public class TestCommands {
         return switch (args.length) {
             case 1 -> List.of("first");
             case 2 -> List.of("second");
-            case 3 ->  List.of("third");
+            case 3 -> List.of("third");
             default -> List.of();
         };
     }
@@ -1402,21 +1405,8 @@ public class TestCommands {
 
     @Command(name = "breakpoint", description = "Used for debugging")
     public void breakpointCommand(Player player) {
-        LivingEntity luckyEntity = player.getNearbyEntities(5, 5, 5).stream()
-                .filter(entity -> entity instanceof LivingEntity)
-                .map(entity -> (LivingEntity) entity)
-                .findFirst()
-                .orElse(null);
 
-        if (luckyEntity == null) {
-            player.sendMessage("No entity found");
-            return;
-        }
-
-        EntityLiving entityLiving = BukkitWrapper.getHandle(luckyEntity);
-
-        EntityPlayer entityPlayer = BukkitWrapper.getHandle(player);
-
-        entityPlayer.b.a.sendPacket(new PacketPlayOutAnimation(entityLiving, 1));
     }
+
+
 }

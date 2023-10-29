@@ -1,4 +1,4 @@
-package com.sweattypalms.skyblock.core.player.sub;
+package com.sweattypalms.skyblock.core.player.sub.stats;
 
 import com.sweattypalms.skyblock.core.helpers.PDCHelper;
 import com.sweattypalms.skyblock.core.items.builder.Rarity;
@@ -10,6 +10,7 @@ import com.sweattypalms.skyblock.core.items.builder.abilities.types.PassiveAbili
 import com.sweattypalms.skyblock.core.items.builder.reforges.Reforge;
 import com.sweattypalms.skyblock.core.items.builder.reforges.ReforgeManager;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
+import com.sweattypalms.skyblock.core.player.sub.bonus.Bonus;
 import lombok.Getter;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;

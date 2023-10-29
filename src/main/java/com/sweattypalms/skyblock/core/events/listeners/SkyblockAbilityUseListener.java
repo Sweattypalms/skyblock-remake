@@ -3,7 +3,7 @@ package com.sweattypalms.skyblock.core.events.listeners;
 import com.sweattypalms.skyblock.core.events.def.SkyblockAbilityUseEvent;
 import com.sweattypalms.skyblock.core.helpers.PlaceholderFormatter;
 import com.sweattypalms.skyblock.core.items.builder.abilities.types.IUsageCost;
-import com.sweattypalms.skyblock.core.player.sub.StatsManager;
+import com.sweattypalms.skyblock.core.player.sub.stats.StatsManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 

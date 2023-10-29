@@ -15,7 +15,7 @@ import com.sweattypalms.skyblock.core.items.builder.abilities.types.ICooldown;
 import com.sweattypalms.skyblock.core.items.builder.abilities.types.ITriggerable;
 import com.sweattypalms.skyblock.core.items.builder.armor.IHeadHelmet;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
-import com.sweattypalms.skyblock.core.player.sub.Stats;
+import com.sweattypalms.skyblock.core.player.sub.stats.Stats;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;

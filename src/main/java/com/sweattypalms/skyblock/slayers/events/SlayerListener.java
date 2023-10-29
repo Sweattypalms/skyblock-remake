@@ -15,6 +15,25 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 public class SlayerListener implements Listener {
+
+    private static String getSlayerLevelMessage(SlayerManager slayerManager) {
+        Slayer activeSlayer = slayerManager.getActiveSlayer();
+        String completedSlayer = activeSlayer.slayerType().getAlternateName();
+
+        /* TODO: Implement Slayer Levels */
+        int playerCurrentLevel = 1;
+        int nextLevelIn = 100_000;
+
+        String nextLevelInStr = PlaceholderFormatter.formatDecimalCSV(nextLevelIn);
+
+        return String.format(
+                "  $e%s LVL %s $5 - $7Next LVL in $d%s XP$7!",
+                completedSlayer,
+                playerCurrentLevel,
+                nextLevelInStr
+        );
+    }
+
     @EventHandler
     public void onSlayerStartEvent(SlayerStartEvent event) {
         if (event.getSkyblockPlayer().getSlayerManager().getActiveSlayer() != null) {
@@ -41,7 +60,6 @@ public class SlayerListener implements Listener {
 
         event.getSkyblockPlayer().getSlayerManager().setActiveSlayer(event.getSlayer());
     }
-
 
     @EventHandler
     public void onSlayerFailEvent(SlayerFailEvent event) {
@@ -72,7 +90,7 @@ public class SlayerListener implements Listener {
 
         double xpToGain = event.getXp();
 
-        slayerManager.addGatheredXp((int) xpToGain);
+        slayerManager.addGatheredXp((int) xpToGain, deadEntity);
     }
 
     @EventHandler
@@ -84,12 +102,15 @@ public class SlayerListener implements Listener {
 
         if (entityLiving != slayerManager.getBoss()) return;
 
-        System.out.println("Boss died");
+        String message = " $a$lSLAYER QUEST COMPLETE!";
+
+        String slayerLevelMessage = getSlayerLevelMessage(slayerManager);
+
+        String finalMessage = message + "\n" + slayerLevelMessage;
+
+        skyblockPlayer.sendMessage(finalMessage);
 
         slayerManager.finishSlayer();
-
-        String message = " $a$lSLAYER QUEST COMPLETED!";
-        skyblockPlayer.sendMessage(message);
     }
 
 }
