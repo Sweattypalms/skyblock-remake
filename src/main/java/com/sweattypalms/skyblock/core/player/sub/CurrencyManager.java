@@ -1,19 +1,20 @@
 package com.sweattypalms.skyblock.core.player.sub;
 
+import com.sweattypalms.skyblock.core.player.PlayerManager;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter @Setter
-public class CurrencyManager {
-
-    private final SkyblockPlayer player;
+@Getter
+@Setter
+public class CurrencyManager extends PlayerManager {
 
     private double bankBalance;
     private double purseBalance;
     private double bits;
+
     public CurrencyManager(SkyblockPlayer player) {
-        this.player = player;
+        super(player);
     }
 
     public void addBankBalance(double amount) {

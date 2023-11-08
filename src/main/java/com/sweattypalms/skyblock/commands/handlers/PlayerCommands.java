@@ -5,6 +5,7 @@ import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
 import com.sweattypalms.skyblock.slayers.gui.SlayerSelectorGUI;
 import com.sweattypalms.skyblock.ui.GUIRouter;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -64,5 +65,15 @@ public class PlayerCommands {
 
         Location location = world.getSpawnLocation();
         player.teleport(location);
+    }
+
+    @Command(name="credits", description="Credits command")
+    public void creditsCommand(Player player) {
+        SkyblockPlayer skyblockPlayer = SkyblockPlayer.getSkyblockPlayer(player);
+        String obfus = "§c§l§kU";
+
+        String sweattypalms = obfus + "§c§l Sweattypalms " + obfus;
+
+        skyblockPlayer.sendMessage("$aThis server was made by " + sweattypalms + "$a.");
     }
 }

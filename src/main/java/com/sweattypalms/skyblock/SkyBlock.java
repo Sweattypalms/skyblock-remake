@@ -1,6 +1,7 @@
 package com.sweattypalms.skyblock;
 
 import com.sweattypalms.skyblock.commands.CommandRegistry;
+import com.sweattypalms.skyblock.core.enchants.EnchantManager;
 import com.sweattypalms.skyblock.core.items.ItemManager;
 import com.sweattypalms.skyblock.core.items.builder.reforges.ReforgeManager;
 import com.sweattypalms.skyblock.core.mobs.builder.MobManager;
@@ -8,10 +9,12 @@ import com.sweattypalms.skyblock.core.mobs.builder.dragons.DragonManager;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
 import com.sweattypalms.skyblock.core.world.WorldManager;
 import lombok.Getter;
+import net.minecraft.server.MinecraftServer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.craftbukkit.v1_17_R1.CraftServer;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.reflections.Reflections;
@@ -40,6 +43,8 @@ public final class SkyBlock extends JavaPlugin {
         instance = this;
         long start = System.currentTimeMillis();
 
+        this.registerServer();
+
         // Init the plugin asynchronously to speed up
         Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
             registerCommands();
@@ -53,7 +58,6 @@ public final class SkyBlock extends JavaPlugin {
 
         drawAscii();
 
-        this.registerServer();
         Bukkit.getOnlinePlayers().forEach(SkyblockPlayer::newPlayer);
     }
 
@@ -75,7 +79,11 @@ public final class SkyBlock extends JavaPlugin {
 
         System.out.println("Registering reforges...");
         ReforgeManager.init();
-        System.out.println(ChatColor.GREEN + "Successfully loaded " + REFORGES_LIST.size() + " reforges.");
+        System.out.println(ChatColor.GREEN + "Successfully loaded " + ReforgeManager.REFORGES_LIST.size() + " reforges.");
+
+        System.out.println("Registering enchantments...");
+         EnchantManager.init();
+        System.out.println(ChatColor.GREEN + "Successfully loaded " + EnchantManager.ENCHANTMENTS.size() + " enchantments.");
     }
 
     public void registerListeners() {

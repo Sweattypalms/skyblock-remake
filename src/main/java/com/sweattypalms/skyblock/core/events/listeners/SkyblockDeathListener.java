@@ -1,5 +1,6 @@
 package com.sweattypalms.skyblock.core.events.listeners;
 
+import com.sweattypalms.skyblock.core.enchants.EnchantManager;
 import com.sweattypalms.skyblock.core.events.def.SkyblockDeathEvent;
 import com.sweattypalms.skyblock.core.events.def.SkyblockXpEvent;
 import com.sweattypalms.skyblock.core.mobs.builder.ISkyblockMob;
@@ -65,5 +66,14 @@ public class SkyblockDeathListener implements Listener {
         SkyblockPlayer skyblockPlayer = SkyblockPlayer.getSkyblockPlayer(player);
         SkyblockXpEvent skyblockXpEvent = new SkyblockXpEvent(xpToGain, Skill.SkillType.COMBAT, skyblockPlayer, event);
         Bukkit.getPluginManager().callEvent(skyblockXpEvent);
+    }
+
+    @EventHandler
+    public void skyblockDeath4Enchant(SkyblockDeathEvent event) {
+        if(!(event.getDamager() instanceof Player player)) {
+            return;
+        }
+
+        EnchantManager.run(player, event);
     }
 }

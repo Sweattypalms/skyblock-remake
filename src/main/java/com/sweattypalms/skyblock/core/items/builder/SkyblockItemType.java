@@ -4,6 +4,8 @@ import lombok.Getter;
 import org.bukkit.inventory.EquipmentSlot;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.List;
 
 @Getter
 public enum SkyblockItemType {
@@ -27,5 +29,13 @@ public enum SkyblockItemType {
     }
     SkyblockItemType() {
         this.slot = EquipmentSlot.HAND;
+    }
+
+    public static List<SkyblockItemType> getHandheld() {
+        return Arrays.stream(SkyblockItemType.values()).filter(type -> type.getSlot() == EquipmentSlot.HAND).toList();
+    }
+
+    public static List<SkyblockItemType> getArmor() {
+        return Arrays.stream(SkyblockItemType.values()).filter(type -> type.getSlot() != EquipmentSlot.HAND && type.getSlot() != null).toList();
     }
 }

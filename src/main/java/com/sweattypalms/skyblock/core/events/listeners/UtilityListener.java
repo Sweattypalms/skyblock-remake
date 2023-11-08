@@ -3,6 +3,8 @@ package com.sweattypalms.skyblock.core.events.listeners;
 import com.sweattypalms.skyblock.SkyBlock;
 import com.sweattypalms.skyblock.api.sequence.Sequence;
 import com.sweattypalms.skyblock.api.sequence.SequenceAction;
+import com.sweattypalms.skyblock.commands.handlers.PlayerCommands;
+import com.sweattypalms.skyblock.core.enchants.EnchantManager;
 import com.sweattypalms.skyblock.core.events.def.SkyblockDeathEvent;
 import com.sweattypalms.skyblock.core.events.def.SkyblockInteractEvent;
 import com.sweattypalms.skyblock.core.events.def.SkyblockMobDamagePlayerEvent;
@@ -19,9 +21,17 @@ import com.sweattypalms.skyblock.core.mobs.builder.dragons.IEndDragon;
 import com.sweattypalms.skyblock.core.mobs.builder.dragons.loot.IDragonLoot;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
 import com.sweattypalms.skyblock.core.player.sub.stats.Stats;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.chat.hover.content.Content;
+import net.md_5.bungee.api.chat.hover.content.Text;
+import net.minecraft.network.chat.ChatComponentText;
 import net.minecraft.world.entity.EntityLiving;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftEnderDragonPart;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftItem;
@@ -40,15 +50,58 @@ import org.jetbrains.annotations.NotNull;
 
 public class UtilityListener implements Listener {
 
+    @NotNull
+    private static SkyblockDeathEvent getSkyblockDeathEvent(LivingEntity livingEntity) {
+        SkyblockDeathEvent.DeathCause reason;
+        EntityDamageEvent lastDamageCause = livingEntity.getLastDamageCause();
+        if (lastDamageCause == null) {
+            reason = SkyblockDeathEvent.DeathCause.OTHER;
+        } else {
+            reason = SkyblockDeathEvent.DeathCause.getCause(lastDamageCause.getCause());
+        }
+        SkyblockDeathEvent _event;
+        if (reason == SkyblockDeathEvent.DeathCause.ENTITY) {
+            _event = new SkyblockDeathEvent(livingEntity.getKiller(), livingEntity);
+        } else {
+            _event = new SkyblockDeathEvent(livingEntity, reason);
+        }
+        return _event;
+    }
+
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         String message = "$eWelcome to $cSkyblock$e!";
         message = PlaceholderFormatter.format(message);
         event.getPlayer().sendMessage(message);
+
+        TextComponent discord = new TextComponent("§9§l[Discord] ");
+        discord.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://discord.com/invite/Ew4u4TRbQ6"));
+        discord.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("§9Click to join my discord!")));
+
+        TextComponent github = new TextComponent("§0§l[Github] ");
+        github.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://github.com/Sweattypalms/skyblock-remake"));
+        github.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("§9Click to view my github!")));
+
+        TextComponent youtube = new TextComponent("§c§l[Youtube] ");
+        youtube.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://www.youtube.com/@Sweattypalms"));
+        youtube.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("§9Click to view my youtube! (Make sure to subscribe!)")));
+
+        TextComponent credits = new TextComponent("§a§l[Credits] ");
+        credits.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/credits"));
+        credits.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("§9Click to view the credits!")));
+
+        TextComponent infoMessage = new TextComponent("§eJoin my discord for updates, sneak peaks, and more!");
+
+        event.getPlayer().spigot().sendMessage(infoMessage);
+
+        event.getPlayer().spigot().sendMessage(discord, github, youtube, credits);
+
+
+        event.setJoinMessage(null);
+
         if (SkyblockPlayer.getSkyblockPlayer(event.getPlayer()) != null) return;
         new SkyblockPlayer(event.getPlayer());
     }
-
 
     @EventHandler(priority = EventPriority.LOW)
     public void interactEventForwarder(PlayerInteractEvent event) {
@@ -62,6 +115,7 @@ public class UtilityListener implements Listener {
         if (event.getClickedBlock() != null) {
             skyblockInteractEvent.setInteractedBlock(event.getClickedBlock());
         }
+
 
         SkyBlock.getInstance().getServer().getPluginManager().callEvent(skyblockInteractEvent);
 
@@ -106,24 +160,6 @@ public class UtilityListener implements Listener {
         SkyblockDeathEvent _event = getSkyblockDeathEvent(livingEntity);
 
         SkyBlock.getInstance().getServer().getPluginManager().callEvent(_event);
-    }
-
-    @NotNull
-    private static SkyblockDeathEvent getSkyblockDeathEvent(LivingEntity livingEntity) {
-        SkyblockDeathEvent.DeathCause reason;
-        EntityDamageEvent lastDamageCause = livingEntity.getLastDamageCause();
-        if (lastDamageCause == null) {
-            reason = SkyblockDeathEvent.DeathCause.OTHER;
-        } else {
-            reason = SkyblockDeathEvent.DeathCause.getCause(lastDamageCause.getCause());
-        }
-        SkyblockDeathEvent _event;
-        if (reason == SkyblockDeathEvent.DeathCause.ENTITY) {
-            _event = new SkyblockDeathEvent(livingEntity.getKiller(), livingEntity);
-        } else {
-            _event = new SkyblockDeathEvent(livingEntity, reason);
-        }
-        return _event;
     }
 
     @EventHandler
@@ -236,20 +272,21 @@ public class UtilityListener implements Listener {
     @EventHandler
     public void placeBlock(EntityPlaceEvent event) {
         if (!(event.getEntity() instanceof Player player)) return;
-//        if (player.isOp()) return;
+        if (player.isOp() && player.getGameMode() == GameMode.CREATIVE) return;
         event.setCancelled(true);
     }
 
     @EventHandler
     public void breakBlock(BlockBreakEvent event) {
-//        if (event.getPlayer().isOp()) return;
+        if (event.getPlayer().isOp() && event.getPlayer().getGameMode() == GameMode.CREATIVE) return;
         event.setCancelled(true);
+        EnchantManager.run(event.getPlayer(), event);
     }
 
     @EventHandler
     public void onPhysicalInteract(PlayerInteractEvent event) {
         if (event.getClickedBlock() == null) return;
-//        if (event.getPlayer().isOp()) return;
+        if (event.getPlayer().isOp() && event.getPlayer().getGameMode() == GameMode.CREATIVE) return;
         event.setCancelled(true);
     }
 
@@ -263,10 +300,11 @@ public class UtilityListener implements Listener {
     }
 
     @EventHandler
-    public void enderDragonDamage(SkyblockPlayerDamageEntityEvent event){
-        if(event.getSkyblockMob() == null) return;
-        if(event.getSkyblockMob().getEntityInstance() == null) return;
-        if(!(((CraftLivingEntity) event.getSkyblockMob().getEntityInstance()).getHandle() instanceof IEndDragon enderDragon)) return;
+    public void enderDragonDamage(SkyblockPlayerDamageEntityEvent event) {
+        if (event.getSkyblockMob() == null) return;
+        if (event.getSkyblockMob().getEntityInstance() == null) return;
+        if (!(((CraftLivingEntity) event.getSkyblockMob().getEntityInstance()).getHandle() instanceof IEndDragon enderDragon))
+            return;
 
         DragonManager.getInstance().addPlayerDamage(event.getPlayer().getUniqueId(), event.getDamage());
     }

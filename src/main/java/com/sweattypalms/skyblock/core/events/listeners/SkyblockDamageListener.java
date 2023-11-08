@@ -1,6 +1,7 @@
 package com.sweattypalms.skyblock.core.events.listeners;
 
 import com.sweattypalms.skyblock.SkyBlock;
+import com.sweattypalms.skyblock.core.enchants.EnchantManager;
 import com.sweattypalms.skyblock.core.events.def.SkyblockMobDamagePlayerEvent;
 import com.sweattypalms.skyblock.core.events.def.SkyblockPlayerDamageEntityEvent;
 import com.sweattypalms.skyblock.core.helpers.DamageCalculator;
@@ -8,7 +9,7 @@ import com.sweattypalms.skyblock.core.items.builder.SkyblockItem;
 import com.sweattypalms.skyblock.core.items.builder.abilities.IHasAbility;
 import com.sweattypalms.skyblock.core.items.builder.abilities.types.DamageAbility;
 import com.sweattypalms.skyblock.core.items.builder.abilities.types.FullSetBonus;
-import com.sweattypalms.skyblock.core.items.builder.abilities.types.ITriggerable;
+import com.sweattypalms.skyblock.core.items.builder.abilities.types.ITriggerableAbility;
 import com.sweattypalms.skyblock.core.mobs.builder.MobAttributes;
 import com.sweattypalms.skyblock.core.mobs.builder.SkyblockMob;
 import com.sweattypalms.skyblock.core.player.sub.stats.Stats;
@@ -31,11 +32,13 @@ public class SkyblockDamageListener implements Listener {
         if (event.isCancelled()) return;
         if (event.getSkyblockMob() == null) return;
 
+        EnchantManager.run(event.getPlayer(), event);
+
         // Item Abilities (Item in hand)
         SkyblockItem item = event.getSkyblockPlayer().getInventoryManager().getSkyblockItemInHand();
         if (item instanceof IHasAbility iHasAbility) {
             iHasAbility.getAbilities().forEach(ability -> {
-                if (!(ability instanceof ITriggerable triggerable)) return;
+                if (!(ability instanceof ITriggerableAbility triggerable)) return;
                 boolean isDamageAbility = ability instanceof DamageAbility;
                 isDamageAbility = isDamageAbility && ((DamageAbility) ability).preCalc();
 
@@ -82,11 +85,15 @@ public class SkyblockDamageListener implements Listener {
 //                event.getDamage()
 //        );
 
+        event.setPreCalc(false);
+
+        EnchantManager.run(event.getPlayer(), event);
+
         // Item Abilities
         SkyblockItem item = event.getSkyblockPlayer().getInventoryManager().getSkyblockItemInHand();
         if (item instanceof IHasAbility iHasAbility) {
             iHasAbility.getAbilities().forEach(ability -> {
-                if (!(ability instanceof ITriggerable triggerable)) return;
+                if (!(ability instanceof ITriggerableAbility triggerable)) return;
                 boolean isDamageAbility = ability instanceof DamageAbility;
                 isDamageAbility = isDamageAbility && !((DamageAbility) ability).preCalc();
 

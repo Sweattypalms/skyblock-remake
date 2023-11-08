@@ -7,7 +7,7 @@ import com.sweattypalms.skyblock.core.items.builder.SkyblockItemType;
 import com.sweattypalms.skyblock.core.items.builder.abilities.Ability;
 import com.sweattypalms.skyblock.core.items.builder.abilities.IHasAbility;
 import com.sweattypalms.skyblock.core.items.builder.abilities.TriggerType;
-import com.sweattypalms.skyblock.core.items.builder.abilities.types.ITriggerable;
+import com.sweattypalms.skyblock.core.items.builder.abilities.types.ITriggerableAbility;
 import com.sweattypalms.skyblock.core.items.builder.armor.IHeadHelmet;
 import com.sweattypalms.skyblock.core.mobs.builder.dragons.DragonManager;
 import org.bukkit.Material;
@@ -50,7 +50,7 @@ public class SummoningEye extends SkyblockItem implements IHasAbility, IHeadHelm
         return "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZGFhOGZjOGRlNjQxN2I0OGQ0OGM4MGI0NDNjZjUzMjZlM2Q5ZGE0ZGJlOWIyNWZjZDQ5NTQ5ZDk2MTY4ZmMwIn19fQ==";
     }
 
-    public static class SummoningEyeAbility implements ITriggerable {
+    public static class SummoningEyeAbility implements ITriggerableAbility {
 
         @Override
         public String getName() {

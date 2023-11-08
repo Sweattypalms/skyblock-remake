@@ -108,4 +108,23 @@ public class DamageCalculator {
     public static double calculateDamageReduction(double defense, double damage) {
         return damage * (1 - calculateDamageReduction(defense));
     }
+
+    public static int getShortbowCooldown(SkyblockPlayer skyblockPlayer){
+        double ats = skyblockPlayer.getStatsManager().getMaxStats().get(Stats.BONUS_ATTACK_SPEED);
+        if(ats > 67)
+            return 200;
+        if(ats > 41)
+            return 250;
+        if(ats > 12)
+            return 350;
+
+        return 450;
+    }
+
+    public static String getShortbowCooldownFmt(SkyblockPlayer skyblockPlayer){
+        int attackSpeed = getShortbowCooldown(skyblockPlayer);
+        double seconds = attackSpeed / 1000.0;
+
+        return String.format("%.1fs", seconds);
+    }
 }

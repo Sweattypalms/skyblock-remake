@@ -1,10 +1,15 @@
 package com.sweattypalms.skyblock.core.events.def;
 
 import com.sweattypalms.skyblock.core.items.builder.abilities.Ability;
+import com.sweattypalms.skyblock.core.items.builder.abilities.types.IUsageCost;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
 import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
+
+import javax.annotation.Nullable;
+import java.util.Optional;
 
 public class SkyblockAbilityUseEvent extends SkyblockPlayerEvent implements Cancellable {
 
@@ -13,6 +18,10 @@ public class SkyblockAbilityUseEvent extends SkyblockPlayerEvent implements Canc
     @Getter
     private final Ability ability;
     private boolean cancelled = false;
+
+    @Getter @Setter
+    private double costMultiplier = 1;
+
 
     public SkyblockAbilityUseEvent(SkyblockPlayer skyblockPlayer, Ability ability) {
         this.skyblockPlayer = skyblockPlayer;

@@ -10,7 +10,7 @@ import com.sweattypalms.skyblock.core.items.builder.abilities.Ability;
 import com.sweattypalms.skyblock.core.items.builder.abilities.IHasAbility;
 import com.sweattypalms.skyblock.core.items.builder.abilities.TriggerType;
 import com.sweattypalms.skyblock.core.items.builder.abilities.types.IHasAbilityDamage;
-import com.sweattypalms.skyblock.core.items.builder.abilities.types.ITriggerable;
+import com.sweattypalms.skyblock.core.items.builder.abilities.types.ITriggerableAbility;
 import com.sweattypalms.skyblock.core.items.builder.abilities.types.IUsageCost;
 import com.sweattypalms.skyblock.core.mobs.builder.ISkyblockMob;
 import com.sweattypalms.skyblock.core.mobs.builder.MobAttributes;
@@ -54,7 +54,7 @@ public class AspectOfTheDragons extends SkyblockItem implements IHasAbility {
         );
     }
 
-    public static class DragonRage implements ITriggerable, IUsageCost, IHasAbilityDamage {
+    public static class DragonRage implements ITriggerableAbility, IUsageCost, IHasAbilityDamage {
 
         @Override
         public String getName() {

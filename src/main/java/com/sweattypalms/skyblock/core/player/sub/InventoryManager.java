@@ -7,6 +7,7 @@ import com.sweattypalms.skyblock.core.items.builder.SkyblockItemType;
 import com.sweattypalms.skyblock.core.items.builder.abilities.Ability;
 import com.sweattypalms.skyblock.core.items.builder.abilities.IHasAbility;
 import com.sweattypalms.skyblock.core.items.builder.abilities.types.FullSetBonus;
+import com.sweattypalms.skyblock.core.player.PlayerManager;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -16,20 +17,20 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-public class InventoryManager {
-    private final SkyblockPlayer player;
+public class InventoryManager extends PlayerManager {
+
 
     public InventoryManager(SkyblockPlayer player) {
-        this.player = player;
+        super(player);
     }
 
     public SkyblockItem getSkyblockItemInHand() {
-        ItemStack itemStack = this.player.getPlayer().getInventory().getItemInMainHand();
+        ItemStack itemStack = this.skyblockPlayer.getPlayer().getInventory().getItemInMainHand();
         String id = PDCHelper.getString(itemStack, "id");
         return ItemManager.ITEMS_LIST.get(id);
     }
     public ItemStack getItemInHand() {
-        return this.player.getPlayer().getInventory().getItemInMainHand();
+        return this.skyblockPlayer.getPlayer().getInventory().getItemInMainHand();
     }
 
     public HashMap<SkyblockItemType, ItemStack> getInventoryItems() {
@@ -39,7 +40,7 @@ public class InventoryManager {
             if (skyblockItemType.getSlot() == null) return;
             if (skyblockItemType.getSlot() == EquipmentSlot.HAND && handSlotVisited[0]) return;
             handSlotVisited[0] = true;
-            ItemStack itemStack = this.player.getPlayer().getInventory().getItem(skyblockItemType.getSlot());
+            ItemStack itemStack = this.skyblockPlayer.getPlayer().getInventory().getItem(skyblockItemType.getSlot());
             SkyblockItem skyblockItemFromItemstack = SkyblockItem.fromItemStack(itemStack);
             List<SkyblockItemType> armorTypes = new ArrayList<>(List.of(
                     SkyblockItemType.HELMET,
@@ -60,7 +61,7 @@ public class InventoryManager {
             if (skyblockItemType.getSlot() == null) return;
             if (skyblockItemType.getSlot() == EquipmentSlot.HAND && handSlotVisited[0]) return;
             handSlotVisited[0] = true;
-            ItemStack itemStack = this.player.getPlayer().getInventory().getItem(skyblockItemType.getSlot());
+            ItemStack itemStack = this.skyblockPlayer.getPlayer().getInventory().getItem(skyblockItemType.getSlot());
             SkyblockItem skyblockItem = SkyblockItem.fromItemStack(itemStack);
             if (skyblockItem != null)
                 items.put(skyblockItemType, skyblockItem);
@@ -73,7 +74,7 @@ public class InventoryManager {
             if (skyblockItem instanceof IHasAbility) {
                 for (Ability ability : ((IHasAbility) skyblockItem).getAbilities()) {
                     if (ability instanceof FullSetBonus fullSetBonus) {
-                        if (fullSetBonus.isFullSetEquipped(player)) {
+                        if (fullSetBonus.isFullSetEquipped(skyblockPlayer)) {
                             return fullSetBonus;
                         }
                     }
@@ -84,6 +85,6 @@ public class InventoryManager {
     }
 
     public void addItem(SkyblockItem skyblockItem) {
-        this.player.getPlayer().getInventory().addItem(skyblockItem.toItemStack());
+        this.skyblockPlayer.getPlayer().getInventory().addItem(skyblockItem.toItemStack());
     }
 }

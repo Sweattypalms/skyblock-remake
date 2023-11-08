@@ -7,8 +7,6 @@ import org.bukkit.event.Event;
 public interface PassiveAbility extends Ability {
     void onTick(SkyblockPlayer player);
 
-    @Override
     default void apply(Event event) {
-
     }
 }

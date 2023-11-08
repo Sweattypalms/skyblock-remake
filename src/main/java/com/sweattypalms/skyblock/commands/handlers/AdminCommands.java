@@ -2,6 +2,8 @@ package com.sweattypalms.skyblock.commands.handlers;
 
 import com.sweattypalms.skyblock.commands.Command;
 import com.sweattypalms.skyblock.commands.TabCompleter;
+import com.sweattypalms.skyblock.core.enchants.EnchantManager;
+import com.sweattypalms.skyblock.core.enchants.builder.Enchantment;
 import com.sweattypalms.skyblock.core.helpers.PDCHelper;
 import com.sweattypalms.skyblock.core.helpers.PlaceholderFormatter;
 import com.sweattypalms.skyblock.core.items.ItemManager;
@@ -18,6 +20,7 @@ import com.sweattypalms.skyblock.core.player.sub.stats.Stats;
 import com.sweattypalms.skyblock.core.player.sub.stats.StatsManager;
 import com.sweattypalms.skyblock.slayers.ISlayerMob;
 import com.sweattypalms.skyblock.ui.guis.ItemsGUI;
+import net.minecraft.world.item.Items;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -145,7 +148,7 @@ public class AdminCommands {
         SkyblockItem skyblockItem = SkyblockItem.fromItemStack(item);
 
         PDCHelper.setString(item, "rarity", skyblockItem.getRarity().getUpgraded().name());
-        ItemStack updatedItemStack = SkyblockItem.updateItemStack(item);
+        ItemStack updatedItemStack = SkyblockItem.updateItemStack(SkyblockPlayer.getSkyblockPlayer(player));
         player.getInventory().setItemInMainHand(updatedItemStack);
     }
 
@@ -180,7 +183,7 @@ public class AdminCommands {
         }
 
         PDCHelper.setString(item, "reforge", reforge.getName().toLowerCase());
-        ItemStack updatedItemStack = SkyblockItem.updateItemStack(item);
+        ItemStack updatedItemStack = SkyblockItem.updateItemStack(SkyblockPlayer.getSkyblockPlayer(player));
         player.getInventory().setItemInMainHand(updatedItemStack);
 
         player.sendMessage(ChatColor.GREEN + "Successfully reforged item!");
@@ -351,5 +354,39 @@ public class AdminCommands {
         }
 
         skyblockPlayer.sendMessage("$a$lYou have been given " + PlaceholderFormatter.formatDecimalCSV(amount) + " " + args[0].toLowerCase() + "!");
+    }
+
+    @Command(name = "enchant", description = "Enchant command", op = true)
+    public void enchantCommand(Player player, String[] args) {
+
+        SkyblockPlayer skyblockPlayer = SkyblockPlayer.getSkyblockPlayer(player);
+
+        if (args.length == 0) {
+            player.sendMessage(ChatColor.RED + "Usage: /enchant <id> <optional:level>");
+            return;
+        }
+
+        String id = args[0].toLowerCase();
+        int level = args.length == 2 ? Integer.parseInt(args[1]) : 1;
+
+        try {
+            EnchantManager.getEnchantment(id);
+        } catch (IllegalArgumentException e) {
+            player.sendMessage(ChatColor.RED + e.getMessage());
+            return;
+        }
+
+        ItemStack item = skyblockPlayer.getInventoryManager().getItemInHand();
+
+        if (skyblockPlayer.getInventoryManager().getSkyblockItemInHand() == null) {
+            player.sendMessage(ChatColor.RED + "You must be holding a skyblock item! (not really but plz do :3)");
+            return;
+        }
+
+        EnchantManager.addEnchantment(item, id, level);
+
+        SkyblockItem.updateItemStack(skyblockPlayer);
+
+        player.sendMessage(ChatColor.GREEN + "Successfully enchanted item!");
     }
 }

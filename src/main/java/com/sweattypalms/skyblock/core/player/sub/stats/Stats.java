@@ -8,9 +8,10 @@ import org.bukkit.ChatColor;
 public enum Stats {
     DAMAGE(ChatColor.RED + "❁", "Damage", 0, false, ChatColor.RED),
     STRENGTH(ChatColor.RED + "❁", "Strength", 0, false, ChatColor.RED),
-    CRIT_DAMAGE(ChatColor.BLUE + "☠", "Crit Damage", 0, false, ChatColor.RED),
+    CRIT_DAMAGE(ChatColor.BLUE + "☠", "Crit Damage", 0, true, ChatColor.RED),
     CRIT_CHANCE(ChatColor.BLUE + "☣", "Crit Chance", 0, true, ChatColor.RED),
     FEROCITY(ChatColor.RED + "⫽", "Ferocity", 0, false, ChatColor.RED),
+    BONUS_ATTACK_SPEED(ChatColor.YELLOW + "⚔", "Bonus Attack Speed", 0, false, ChatColor.YELLOW),
 
     /* ---------------------------- */
 

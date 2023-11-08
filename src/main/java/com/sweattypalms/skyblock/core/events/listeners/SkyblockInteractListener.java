@@ -4,7 +4,7 @@ import com.sweattypalms.skyblock.core.events.def.SkyblockAbilityUseEvent;
 import com.sweattypalms.skyblock.core.events.def.SkyblockInteractEvent;
 import com.sweattypalms.skyblock.core.items.builder.SkyblockItem;
 import com.sweattypalms.skyblock.core.items.builder.abilities.IHasAbility;
-import com.sweattypalms.skyblock.core.items.builder.abilities.types.ITriggerable;
+import com.sweattypalms.skyblock.core.items.builder.abilities.types.ITriggerableAbility;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,12 +16,12 @@ public class SkyblockInteractListener implements Listener {
     public void onSkyblockInteract(SkyblockInteractEvent event) {
         List<SkyblockItem> items = event.getSkyblockPlayer().getInventoryManager().getInventorySkyblockItems().values().stream().toList();
         items = items.stream().filter(item -> item instanceof IHasAbility).toList();
-        List<ITriggerable> abilities =
+        List<ITriggerableAbility> abilities =
                 items.stream()
                         .map(item -> (IHasAbility) item)
                         .flatMap(iHasAbility -> iHasAbility.getAbilities().stream())
-                        .filter(ability -> ability instanceof ITriggerable)
-                        .map(ability -> (ITriggerable) ability)
+                        .filter(ability -> ability instanceof ITriggerableAbility)
+                        .map(ability -> (ITriggerableAbility) ability)
                         .toList();
 
         abilities.forEach(ability -> {

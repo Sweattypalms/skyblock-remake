@@ -3,6 +3,8 @@ package com.sweattypalms.skyblock.core.items.types.slayer.enderman.items;
 import com.sweattypalms.skyblock.SkyBlock;
 import com.sweattypalms.skyblock.core.events.def.SkyblockInteractEvent;
 import com.sweattypalms.skyblock.core.events.def.SkyblockPlayerDamageEntityEvent;
+import com.sweattypalms.skyblock.core.events.def.SkyblockProjectileLaunchEvent;
+import com.sweattypalms.skyblock.core.events.def.SkyblockProjectilePrelaunchEvent;
 import com.sweattypalms.skyblock.core.items.builder.Rarity;
 import com.sweattypalms.skyblock.core.items.builder.SkyblockItem;
 import com.sweattypalms.skyblock.core.items.builder.SkyblockItemType;
@@ -11,7 +13,7 @@ import com.sweattypalms.skyblock.core.items.builder.abilities.AbilityManager;
 import com.sweattypalms.skyblock.core.items.builder.abilities.IHasAbility;
 import com.sweattypalms.skyblock.core.items.builder.abilities.TriggerType;
 import com.sweattypalms.skyblock.core.items.builder.abilities.types.DamageAbility;
-import com.sweattypalms.skyblock.core.items.builder.abilities.types.ITriggerable;
+import com.sweattypalms.skyblock.core.items.builder.abilities.types.ITriggerableAbility;
 import com.sweattypalms.skyblock.core.items.builder.abilities.types.IUsageCost;
 import com.sweattypalms.skyblock.core.items.builder.abilities.types.PassiveAbility;
 import com.sweattypalms.skyblock.core.items.builder.item.IShortBow;
@@ -89,6 +91,12 @@ public class Terminator extends SkyblockItem implements IHasAbility, IShortBow {
                 return;
             }
 
+            SkyblockProjectilePrelaunchEvent tryLaunchProjectile = new SkyblockProjectilePrelaunchEvent(skyblockPlayer);
+
+            Bukkit.getPluginManager().callEvent(tryLaunchProjectile);
+
+            if (tryLaunchProjectile.isCancelled()) return;
+
             player.getWorld().spawn(player.getEyeLocation().add(player.getEyeLocation().getDirection().multiply(1.5)), ArmorStand.class, as -> {
                 as.setInvisible(true);
                 as.setInvulnerable(true);
@@ -96,10 +104,20 @@ public class Terminator extends SkyblockItem implements IHasAbility, IShortBow {
                 as.setSmall(true);
                 as.setCollidable(false);
 
+
                 Arrow arrow = as.launchProjectile(Arrow.class);
                 Arrow arrowRight = as.getWorld().spawn(as.getEyeLocation(), Arrow.class);
                 Arrow arrowLeft = as.getWorld().spawn(as.getEyeLocation(), Arrow.class);
 
+                SkyblockProjectileLaunchEvent<Arrow> skyblockProjectileLaunchEvent = new SkyblockProjectileLaunchEvent<>(skyblockPlayer, List.of(arrow, arrowRight, arrowLeft));
+
+                if (skyblockProjectileLaunchEvent.isCancelled()) {
+                    as.remove();
+                    arrow.remove();
+                    arrowRight.remove();
+                    arrowLeft.remove();
+                    return;
+                }
 
                 arrow.setShooter(player);
                 arrowRight.setShooter(player);
@@ -178,10 +196,10 @@ public class Terminator extends SkyblockItem implements IHasAbility, IShortBow {
         }
     }
 
-    public static class TerminatorSalvation implements ITriggerable, IUsageCost {
+    public static class TerminatorSalvation implements ITriggerableAbility, IUsageCost {
         @Override
         public TriggerType getTriggerType() {
-            return TriggerType.RIGHT_CLICK;
+            return TriggerType.LEFT_CLICK;
         }
 
         @Override

@@ -60,9 +60,6 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.2.0</version>
-                <configuration>
-                    <outputDirectory>F:\Desktop_\Coding\Minecraft\Purpur-1.17.1 skyblock-remake\plugins</outputDirectory>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.jetbrains.kotlin</groupId>
@@ -170,7 +167,7 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.2.3</version>
+            <version>1.2.9</version>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>

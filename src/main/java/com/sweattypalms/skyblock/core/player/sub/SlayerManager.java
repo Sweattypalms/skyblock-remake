@@ -4,6 +4,7 @@ import com.sweattypalms.skyblock.api.sequence.Sequence;
 import com.sweattypalms.skyblock.api.sequence.SequenceAction;
 import com.sweattypalms.skyblock.core.mobs.builder.MobManager;
 import com.sweattypalms.skyblock.core.mobs.builder.SkyblockMob;
+import com.sweattypalms.skyblock.core.player.PlayerManager;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
 import com.sweattypalms.skyblock.slayers.ISlayerMob;
 import com.sweattypalms.skyblock.slayers.Slayer;
@@ -18,8 +19,7 @@ import org.bukkit.craftbukkit.v1_17_R1.entity.CraftLivingEntity;
 import org.bukkit.entity.LivingEntity;
 
 @Getter
-public class SlayerManager {
-    private final SkyblockPlayer skyblockPlayer;
+public class SlayerManager extends PlayerManager {
     private Slayer activeSlayer;
     @Setter
     private int gatheredXp;
@@ -33,7 +33,7 @@ public class SlayerManager {
     private EntityLiving boss;
 
     public SlayerManager(SkyblockPlayer skyblockPlayer) {
-        this.skyblockPlayer = skyblockPlayer;
+        super(skyblockPlayer);
     }
 
     public void addGatheredXp(int xp, LivingEntity deadEntity) {

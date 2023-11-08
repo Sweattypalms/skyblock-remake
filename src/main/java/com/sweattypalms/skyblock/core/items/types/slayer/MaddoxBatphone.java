@@ -12,7 +12,7 @@ import com.sweattypalms.skyblock.core.items.builder.abilities.Ability;
 import com.sweattypalms.skyblock.core.items.builder.abilities.IHasAbility;
 import com.sweattypalms.skyblock.core.items.builder.abilities.TriggerType;
 import com.sweattypalms.skyblock.core.items.builder.abilities.types.ICooldown;
-import com.sweattypalms.skyblock.core.items.builder.abilities.types.ITriggerable;
+import com.sweattypalms.skyblock.core.items.builder.abilities.types.ITriggerableAbility;
 import com.sweattypalms.skyblock.core.items.builder.armor.IHeadHelmet;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
 import com.sweattypalms.skyblock.core.player.sub.stats.Stats;
@@ -52,7 +52,7 @@ public class MaddoxBatphone extends SkyblockItem implements IHeadHelmet, IHasAbi
         return List.of(new Whassup());
     }
 
-    public class Whassup implements ITriggerable, ICooldown {
+    public class Whassup implements ITriggerableAbility, ICooldown {
 
         private static final Random random = new Random();
 

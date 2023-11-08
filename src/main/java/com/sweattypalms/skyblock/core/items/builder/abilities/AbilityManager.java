@@ -97,6 +97,7 @@ public class AbilityManager {
             ));
         }
 
+
         @Override
         public void onTick(SkyblockPlayer player) {
             double currentMaxHealth = player.getStatsManager().getMaxStats().get(Stats.HEALTH);
@@ -104,7 +105,7 @@ public class AbilityManager {
         }
     }
 
-    public static abstract class TELEPORT_ABILITY implements ITriggerable, IUsageCost {
+    public static abstract class TELEPORT_ABILITY implements ITriggerableAbility, IUsageCost {
         private final int range;
 
         public TELEPORT_ABILITY(int range) {
@@ -153,7 +154,7 @@ public class AbilityManager {
         }
     }
 
-    public static abstract class SHORT_BOW implements ITriggerable {
+    public static abstract class SHORT_BOW implements ITriggerableAbility {
         @Override
         public boolean nameVisible() {
             return false;

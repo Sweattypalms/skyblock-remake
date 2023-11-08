@@ -32,6 +32,10 @@ public class SkyblockPlayerDamageEntityEvent extends SkyblockPlayerEvent impleme
     @Getter @Setter private boolean isCrit = false;
     @Getter @Setter private boolean isForcedCrit = false;
 
+
+    @Getter @Setter
+    private boolean preCalc = true;
+
     /**
      *
      * @param amount Amount in percent. 80% etc

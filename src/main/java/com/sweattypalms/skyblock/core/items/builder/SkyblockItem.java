@@ -1,12 +1,16 @@
 package com.sweattypalms.skyblock.core.items.builder;
 
+import com.sweattypalms.skyblock.core.enchants.EnchantManager;
+import com.sweattypalms.skyblock.core.enchants.builder.Enchantment;
+import com.sweattypalms.skyblock.core.enchants.builder.UltimateEnchantment;
+import com.sweattypalms.skyblock.core.helpers.DamageCalculator;
 import com.sweattypalms.skyblock.core.helpers.PDCHelper;
 import com.sweattypalms.skyblock.core.helpers.PlaceholderFormatter;
 import com.sweattypalms.skyblock.core.items.ItemManager;
 import com.sweattypalms.skyblock.core.items.builder.abilities.IHasAbility;
 import com.sweattypalms.skyblock.core.items.builder.abilities.TriggerType;
 import com.sweattypalms.skyblock.core.items.builder.abilities.types.FullSetBonus;
-import com.sweattypalms.skyblock.core.items.builder.abilities.types.ITriggerable;
+import com.sweattypalms.skyblock.core.items.builder.abilities.types.ITriggerableAbility;
 import com.sweattypalms.skyblock.core.items.builder.abilities.types.IUsageCost;
 import com.sweattypalms.skyblock.core.items.builder.armor.IDyedArmor;
 import com.sweattypalms.skyblock.core.items.builder.armor.IHeadHelmet;
@@ -14,8 +18,10 @@ import com.sweattypalms.skyblock.core.items.builder.item.IShortBow;
 import com.sweattypalms.skyblock.core.items.builder.reforges.IAdvancedReforge;
 import com.sweattypalms.skyblock.core.items.builder.reforges.Reforge;
 import com.sweattypalms.skyblock.core.items.builder.reforges.ReforgeManager;
+import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
 import com.sweattypalms.skyblock.core.player.sub.stats.Stats;
 import lombok.Getter;
+import net.minecraft.util.Tuple;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -108,10 +114,17 @@ public abstract class SkyblockItem {
     private static void buildStatsPDC(ItemStack item, Map<Stats, Double> stats) {
         stats.forEach((stat, value) -> PDCHelper.setDouble(item, "stat." + stat.name().toLowerCase(), value));
     }
-
+    public static ItemStack updateItemStack(SkyblockPlayer skyblockPlayer) {
+        return updateItemStack(skyblockPlayer, null);
+    }
     @SuppressWarnings("ReplaceAll")
-    public static ItemStack updateItemStack(ItemStack itemStack) {
+    public static ItemStack updateItemStack(SkyblockPlayer skyblockPlayer, @Nullable ItemStack item) {
+        ItemStack itemStack = item == null ? skyblockPlayer.getInventoryManager().getItemInHand() : item;
+
         String id = PDCHelper.getString(itemStack, "id");
+
+        if (id == null) return itemStack;
+
         SkyblockItem skyblockItem = ItemManager.ITEMS_LIST.get(id);
 
         Map<Stats, Double> stats = getStatsFromItemStack(itemStack);
@@ -129,19 +142,33 @@ public abstract class SkyblockItem {
                 buildStatsLore(stats, reforge, rarity)
         );
 
-        if(!lore.isEmpty()) lore.add("§7");
+        if (skyblockItem instanceof IShortBow) {
+            // Shot Cooldown: 0.3s
+            String builder = "$7Shot Cooldown: $a" +
+                    DamageCalculator.getShortbowCooldownFmt(skyblockPlayer);
+
+            lore.add(PlaceholderFormatter.format(builder));
+        }
+
+        if (!lore.isEmpty()) lore.add("§7");
+
+        lore.addAll(buildEnchantmentsLore(itemStack));
+
+        if (!lore.isEmpty()) lore.add("§7");
 
         lore.addAll(skyblockItem.__getStaticLore());
 
         if (skyblockItem.getStaticLore() != null) lore.add("§7");
 
-        if(skyblockItem instanceof IShortBow shortBow){
+        if (skyblockItem instanceof IShortBow shortBow) {
             lore.add(rarity.getColor() + "Shortbow: Instantly shoots!");
             lore.addAll(PlaceholderFormatter.format(shortBow.getShortBowDescription()));
             lore.add("§7");
         }
 
-        lore.addAll(skyblockItem.__getAbilityLore());
+        String ultimateWise = "ultimate_wise";
+        int reduceBy = EnchantManager.getEnchantment(itemStack, ultimateWise).orElse(0) * 10;
+        lore.addAll(skyblockItem.__getAbilityLore(reduceBy));
 
         lore.addAll(ReforgeManager.getReforgeLore(reforge));
 
@@ -161,10 +188,114 @@ public abstract class SkyblockItem {
         return stats;
     }
 
+//    private static List<String> buildEnchantmentsLore(ItemStack item) {
+//        List<String> lore = new ArrayList<>();
+//
+//        int amount = 0;
+//        StringBuilder line = new StringBuilder();
+//
+//        List<Tuple<Enchantment, Integer>> enchantments = EnchantManager.getEnchantments(item);
+//
+//        // order by if enchantment is ultimate or not,
+//        // ultimate will be first
+//        enchantments.sort((o1, o2) -> {
+//            if (o1.a() instanceof UltimateEnchantment) return -1;
+//            if (o2.a() instanceof UltimateEnchantment) return 1;
+//
+//            return 0;
+//        });
+//
+//        boolean showDescription = enchantments.size() < 3;
+//
+//        for (Tuple<Enchantment, Integer> enchantmentTuple : enchantments) {
+//            Enchantment enchantment = enchantmentTuple.a();
+//
+//            String name = enchantment.getName();
+//
+//            if (enchantmentTuple.b() < 1) continue;
+//
+//            String formatted = enchantment instanceof UltimateEnchantment ? "$d$l" : "$9";
+//
+//            String toRomanNumeral;
+//            try {
+//                toRomanNumeral = PlaceholderFormatter.toRomanNumeral(enchantmentTuple.b());
+//            } catch (Exception e) {
+//                toRomanNumeral = ">" + PlaceholderFormatter.toRomanNumeral(3999); // 3999 is the max
+//            }
+//
+//            formatted += name + " " + toRomanNumeral;
+//
+//            if (amount++ % 2 == 0) { // new line
+//                line = new StringBuilder(formatted);
+//
+//            } else  { // add to previous line
+//                line.append(", ").append(formatted);
+//                lore.add(line.toString());
+//                line = new StringBuilder();
+//            }
+//        }
+//
+//        if (!line.isEmpty()) {
+//            lore.add(line.toString());
+//        }
+//
+//        return PlaceholderFormatter.format(lore);
+//    }
+
+    private static List<String> buildEnchantmentsLore(ItemStack item) {
+        List<String> lore = new ArrayList<>();
+
+        List<Tuple<Enchantment, Integer>> enchantments = EnchantManager.getEnchantments(item);
+
+        // Sort by if enchantment is ultimate or not, ultimate will be first
+        enchantments.sort((o1, o2) -> {
+            if (o1.a() instanceof UltimateEnchantment) return -1;
+            if (o2.a() instanceof UltimateEnchantment) return 1;
+            return 0;
+        });
+
+        boolean showDescription = enchantments.size() <= 3;
+        StringBuilder line = new StringBuilder();
+
+        for (Tuple<Enchantment, Integer> enchantmentTuple : enchantments) {
+            Enchantment enchantment = enchantmentTuple.a();
+            int level = enchantmentTuple.b();
+
+            if (level < 1) continue;
+
+            String formatted = (enchantment instanceof UltimateEnchantment ? "$d$l" : "$9") +
+                    enchantment.getName() + " " + PlaceholderFormatter.toRomanNumeral(level);
+
+            if (showDescription) {
+                // Add enchantment name and level
+                lore.add(formatted);
+                // Add description below the enchantment
+                List<String> description = enchantment.getDescription(level);
+                description.forEach(desc -> lore.add("$7" + desc));
+            } else {
+                // If not showing descriptions, format enchantments in pairs
+                if (line.length() == 0) {
+                    line = new StringBuilder(formatted);
+                } else {
+                    line.append(", ").append(formatted);
+                    lore.add(line.toString());
+                    line = new StringBuilder(); // Reset the line after adding to lore
+                }
+            }
+        }
+
+        // If there's a remaining enchantment that hasn't been added to the lore
+        if (line.length() > 0) {
+            lore.add(line.toString());
+        }
+
+        return PlaceholderFormatter.format(lore);
+    }
+
     public ItemStack toItemStack() {
         ItemStack item;
         if (this instanceof IHeadHelmet headHelmet && headHelmet.getTexture() != null) {
-                item = headHelmet.getHeadItemStack();
+            item = headHelmet.getHeadItemStack();
         } else {
             item = new ItemStack(this.material);
         }
@@ -215,7 +346,7 @@ public abstract class SkyblockItem {
 
         if (this.staticLore != null) lore.add("§7");
 
-        if (this instanceof IShortBow shortBow){
+        if (this instanceof IShortBow shortBow) {
             lore.add("§6Shortbow: Instantly shoots!");
             lore.addAll(PlaceholderFormatter.format(shortBow.getShortBowDescription()));
             lore.add("§7");
@@ -240,11 +371,15 @@ public abstract class SkyblockItem {
     }
 
     private List<String> __getAbilityLore() {
+        return __getAbilityLore(0);
+    }
+
+    private List<String> __getAbilityLore(int reduceBy) {
         List<String> lore = new ArrayList<>();
         if (this instanceof IHasAbility iHasAbility) {
             iHasAbility.getAbilities().forEach(ability -> {
                 if (!ability.nameVisible()) return;
-                if (!(ability instanceof ITriggerable triggerable)) return;
+                if (!(ability instanceof ITriggerableAbility triggerable)) return;
                 String abilityName = ability.getName();
                 final String[] triggerType = {""};
                 if (triggerable.getTriggerType() == TriggerType.NONE) {
@@ -263,7 +398,9 @@ public abstract class SkyblockItem {
                         costLine += PlaceholderFormatter.capitalize(_stat.name()).replace("Intelligence", "Mana");
                         costLine += " Cost:";
                         costLine += " $3";
-                        costLine += PlaceholderFormatter.formatDouble(_value);
+                        double newValue = _value * (1 - reduceBy / 100.0);
+                        newValue = Math.max(0, newValue);
+                        costLine += PlaceholderFormatter.formatDouble(newValue);
                         costLine = PlaceholderFormatter.format(costLine);
                         lore.add(costLine);
                     });
@@ -281,14 +418,14 @@ public abstract class SkyblockItem {
      * @return "§l§6Diamond Sword"
      */
     public String __getDisplayName() {
-        return __getDisplayName(false , null);
+        return __getDisplayName(false, null);
     }
 
     private String __getDisplayName(boolean upgraded, @Nullable Reforge reforge) {
         Rarity rarity = this.rarity; // Mutable copy
         if (upgraded) rarity = rarity.getUpgraded();
         String finalName = rarity.getColor();
-        if(reforge != null) finalName += reforge.getName() + " ";
+        if (reforge != null) finalName += reforge.getName() + " ";
         finalName += this.displayName;
         return finalName;
     }

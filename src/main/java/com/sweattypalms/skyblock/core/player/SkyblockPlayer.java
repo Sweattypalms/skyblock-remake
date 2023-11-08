@@ -32,6 +32,7 @@ public class SkyblockPlayer {
     private final StatsManager statsManager;
     private final InventoryManager inventoryManager;
     private final BonusManager bonusManager;
+    private final CooldownManager cooldownManager;
     private final ActionBarManager actionBarManager;
     private final ScoreboardManager scoreboardManager;
     private final SlayerManager slayerManager;
@@ -54,6 +55,7 @@ public class SkyblockPlayer {
         this.statsManager = new StatsManager(this);
         this.inventoryManager = new InventoryManager(this);
         this.bonusManager = new BonusManager(this);
+        this.cooldownManager = new CooldownManager(this);
         this.actionBarManager = new ActionBarManager(this);
         this.slayerManager = new SlayerManager(this);
         this.skillManager = new SkillManager(this);

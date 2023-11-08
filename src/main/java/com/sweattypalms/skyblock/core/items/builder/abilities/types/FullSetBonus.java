@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public interface FullSetBonus extends Ability, ITriggerable {
+public interface FullSetBonus extends Ability, ITriggerableAbility {
     default TriggerType getTriggerType(){
         return TriggerType.NONE;
     }
@@ -48,4 +48,5 @@ public interface FullSetBonus extends Ability, ITriggerable {
         if (!(event instanceof SkyblockPlayerEvent skyblockPlayerEvent)) return false;
         return isFullSetEquipped(skyblockPlayerEvent.getSkyblockPlayer());
     }
+
 }
