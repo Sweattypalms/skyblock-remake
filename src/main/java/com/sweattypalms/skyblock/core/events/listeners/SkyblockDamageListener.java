@@ -103,9 +103,11 @@ public class SkyblockDamageListener implements Listener {
                 }
             });
         }
+
         skyblockMob.damageEntityWithCause(event);
 
-        if(event.getDamageType() == SkyblockPlayerDamageEntityEvent.DamageType.ABILITY) return;
+        if(event.getDamageType() == SkyblockPlayerDamageEntityEvent.DamageType.ABILITY &&
+        !event.isApplyFerocityOnAbility()) return;
 
         /* ------- FEROCITY ------- */
 

@@ -27,14 +27,14 @@ public class DamageCalculator {
             double random = event.getSkyblockPlayer().getRandom().nextDouble() * 100;
             crit = random <= critChance;
         } else if (event.getDamageType() == SkyblockPlayerDamageEntityEvent.DamageType.ARROW) {
-            if(event.getSkyblockPlayer().getStatsManager().getMaxStats().get(Stats.BOW_PULL) < 1){
+            if (event.getSkyblockPlayer().getStatsManager().getMaxStats().get(Stats.BOW_PULL) < 1) {
                 crit = false;
             }
         }
 
         event.setCrit(crit);
 
-        if (event.isForcedCrit()){
+        if (event.isForcedCrit()) {
             event.setCrit(true);
             crit = true;
         }
@@ -50,26 +50,23 @@ public class DamageCalculator {
         double multiplicativeMultiplier = event.getMultiplicativeMultiplier();
 
         ItemStack itemInHand = skyblockPlayer.getInventoryManager().getItemInHand();
-        if(itemInHand != null && itemInHand.getType() == Material.BOW && event.getDamageType() == SkyblockPlayerDamageEntityEvent.DamageType.MELEE){
+        if (itemInHand != null && itemInHand.getType() == Material.BOW && event.getDamageType() == SkyblockPlayerDamageEntityEvent.DamageType.MELEE) {
             baseDamage = -4; // => So that the damage becomes kind of melee. gets multiplied by 1
         }
 
         if (!crit) critDamage = 0;
 
-        double finalDamage = (5 + baseDamage)
-                * (1 + (strength / 100))
-                * (1 + (critDamage / 100))
-                * (1 + (additiveMultiplier / 100))
-                * multiplicativeMultiplier;
+        double finalDamage = (5 + baseDamage) * (1 + (strength / 100)) * (1 + (critDamage / 100)) * (1 + (additiveMultiplier / 100)) * multiplicativeMultiplier;
+
         return finalDamage * (1 - calculateDamageReduction(entityDefense));
     }
 
     public static double calculateAbilityDamage(SkyblockPlayerDamageEntityEvent event) {
-        if (event.getDamageType() == SkyblockPlayerDamageEntityEvent.DamageType.ABILITY && event.getAbilityItem() == null){
+        if (event.getDamageType() == SkyblockPlayerDamageEntityEvent.DamageType.ABILITY && event.getAbilityItem() == null) {
             throw new IllegalArgumentException("Ability must have an ability activator");
         }
 
-        if (!(event.getAbility() instanceof IHasAbilityDamage abilityActivator)){
+        if (!(event.getAbility() instanceof IHasAbilityDamage abilityActivator)) {
             return calculateNormalDamage(event);
         }
 
@@ -92,11 +89,7 @@ public class DamageCalculator {
 
         if (!crit) critDamage = 0;
 
-        double finalDamage = baseAbilityDamage *
-                (1 + (intelligence / 100) * abilityScaling) *
-                (1 + (critDamage / 100)) *
-                (1 + (additiveMultiplier / 100)) *
-                multiplicativeMultiplier;
+        double finalDamage = baseAbilityDamage * (1 + (intelligence / 100) * abilityScaling) * (1 + (critDamage / 100)) * (1 + (additiveMultiplier / 100)) * multiplicativeMultiplier;
 
         return finalDamage * (1 - calculateDamageReduction(entityDefense));
     }
@@ -109,19 +102,16 @@ public class DamageCalculator {
         return damage * (1 - calculateDamageReduction(defense));
     }
 
-    public static int getShortbowCooldown(SkyblockPlayer skyblockPlayer){
+    public static int getShortbowCooldown(SkyblockPlayer skyblockPlayer) {
         double ats = skyblockPlayer.getStatsManager().getMaxStats().get(Stats.BONUS_ATTACK_SPEED);
-        if(ats > 67)
-            return 200;
-        if(ats > 41)
-            return 250;
-        if(ats > 12)
-            return 350;
+        if (ats > 67) return 200;
+        if (ats > 41) return 250;
+        if (ats > 12) return 350;
 
         return 450;
     }
 
-    public static String getShortbowCooldownFmt(SkyblockPlayer skyblockPlayer){
+    public static String getShortbowCooldownFmt(SkyblockPlayer skyblockPlayer) {
         int attackSpeed = getShortbowCooldown(skyblockPlayer);
         double seconds = attackSpeed / 1000.0;
 

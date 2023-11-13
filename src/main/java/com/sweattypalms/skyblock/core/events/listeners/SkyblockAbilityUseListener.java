@@ -16,7 +16,7 @@ public class SkyblockAbilityUseListener implements Listener {
 
         if (!(event.getAbility() instanceof IUsageCost costAbility)) return;
 
-        costAbility.getCost().forEach((stat, value) -> {
+        costAbility.getCost(event.getSkyblockPlayer()).forEach((stat, value) -> {
             value = value * event.getCostMultiplier();
 
             if (event.getSkyblockPlayer().getStatsManager().getLiveStats().get(stat) < value) {

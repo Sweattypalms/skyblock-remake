@@ -4,6 +4,7 @@ import com.sweattypalms.skyblock.commands.Command;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
 import com.sweattypalms.skyblock.slayers.gui.SlayerSelectorGUI;
 import com.sweattypalms.skyblock.ui.GUIRouter;
+import com.sweattypalms.skyblock.ui.guis.BinGUI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -75,5 +76,11 @@ public class PlayerCommands {
         String sweattypalms = obfus + "§c§l Sweattypalms " + obfus;
 
         skyblockPlayer.sendMessage("$aThis server was made by " + sweattypalms + "$a.");
+    }
+
+    @Command(name = "bin", description = "Opens the trash menu")
+    public void binCommand(Player player) {
+        player.sendMessage(ChatColor.RED + "This command is disabled for now!");
+         GUIRouter.openGUI(player, new BinGUI());
     }
 }

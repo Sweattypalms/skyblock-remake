@@ -72,7 +72,7 @@ public class RushAbility implements IDragonAbility{
 
     @Override
     public boolean shouldActivate() {
-        return dragon.getRandom().nextInt(500) == 0; // 1 in 1500 chance or every 75 seconds
+        return dragon.getRandom().nextInt(1500) == 0; // 1 in 1500 chance or every 75 seconds
     }
 }
 

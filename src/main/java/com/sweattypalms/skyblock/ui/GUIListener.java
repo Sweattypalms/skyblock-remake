@@ -12,11 +12,11 @@ public class GUIListener implements Listener {
     public void onInventoryCLick(InventoryClickEvent event) {
         if (event.getClickedInventory() == null) return;
         if (!(event.getClickedInventory().getHolder() instanceof BaseGUI gui)) return;
-        event.setCancelled(true);
 
         ClickableItem item = gui.getItemAt(event.getSlot());
 
         if (item == null) return;
+        event.setCancelled(true);
 
         SkyblockPlayer skyblockPlayer = SkyblockPlayer.getSkyblockPlayer((Player) event.getWhoClicked());
 

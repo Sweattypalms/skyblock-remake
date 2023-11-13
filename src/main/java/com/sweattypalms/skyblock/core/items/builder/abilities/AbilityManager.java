@@ -118,6 +118,8 @@ public class AbilityManager {
             SkyblockPlayer skyblockPlayer = skyblockInteractEvent.getSkyblockPlayer();
             Player player = skyblockPlayer.getPlayer();
 
+            // check if player is looking down, if so, don't teleport.
+
             List<Material> whitelistedMaterials = List.of(
                     Material.AIR,
                     Material.WATER,
@@ -138,6 +140,12 @@ public class AbilityManager {
                     break;
                 }
             }
+
+            start = start.getBlock().getLocation();
+            start = start.add(0.5, 0, 0.5);
+            start.setYaw(player.getLocation().getYaw());
+            start.setPitch(player.getLocation().getPitch());
+
 
             player.teleport(start);
         }

@@ -33,6 +33,7 @@ public class SkyblockPlayerDamageEntityEvent extends SkyblockPlayerEvent impleme
     @Getter @Setter private boolean isForcedCrit = false;
 
 
+
     @Getter @Setter
     private boolean preCalc = true;
 
@@ -61,6 +62,8 @@ public class SkyblockPlayerDamageEntityEvent extends SkyblockPlayerEvent impleme
     private ItemStack abilityItem;
     @Getter @Setter
     private Ability ability;
+    @Getter @Setter
+    private boolean applyFerocityOnAbility = false;
     /* Ability damage  */
 
     public SkyblockPlayerDamageEntityEvent(LivingEntity entity, Player player, DamageType damageType) {

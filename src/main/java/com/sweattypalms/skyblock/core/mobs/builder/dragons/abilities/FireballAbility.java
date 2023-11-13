@@ -55,8 +55,8 @@ public class FireballAbility implements IDragonAbility {
             return;
         }
 
-        int maxFireballs = 10;
-        if (tickCount > maxFireballs * 20) { // 7 seconds after start (20 ticks/sec * 7)
+        int maxFireballs = 15;
+        if (tickCount > maxFireballs * 20) { // 15 seconds after start (20 ticks/sec * {maxFireballs})
             stop();
             return;
         }
@@ -87,6 +87,6 @@ public class FireballAbility implements IDragonAbility {
 
     @Override
     public boolean shouldActivate() {
-        return dragon.getRandom().nextInt(800) == 0; // 1 in 800 chance or 40 seconds
+        return dragon.getRandom().nextInt(600) == 0; // 1 in 600 chance or 30 seconds
     }
 }
