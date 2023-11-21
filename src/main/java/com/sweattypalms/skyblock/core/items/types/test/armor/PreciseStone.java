@@ -26,6 +26,13 @@ public class PreciseStone extends SkyblockItem {
                 SkyblockItemType.NONE
         );
     }
+    
+    //public boolean itemRequirement() {
+        //Skillz miningSkillz = //#.getFunniMiningSkill
+        //double # = miningSkillz.getCurrentLevel();
+        //return # >= 20;
+    //}
+    // Work in progress
 
     @Override
     public String getTexture() {
