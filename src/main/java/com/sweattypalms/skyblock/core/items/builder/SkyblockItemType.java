@@ -11,6 +11,7 @@ import java.util.List;
 public enum SkyblockItemType {
     SWORD,
     BOW,
+    FISHING_ROD,
     HELMET(EquipmentSlot.HEAD),
     CHESTPLATE(EquipmentSlot.CHEST),
     LEGGINGS(EquipmentSlot.LEGS),
