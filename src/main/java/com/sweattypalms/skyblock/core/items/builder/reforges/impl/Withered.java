@@ -58,7 +58,7 @@ public class Withered implements Reforge, IAdvancedReforge {
     @Override
     public List<String> getLore() {
         return PlaceholderFormatter.format(List.of(
-                "$7Grants $a+1 " + Stats.CRIT_DAMAGE.getSymbol() + " Crit Damage",
+                "$7Grants $a+1 " + Stats.STRENGTH.getSymbol() + " Strength",
                 "$7per $cCatacombs $7level."
         ));
     }
