@@ -51,6 +51,7 @@ public class ItemManager {
     private static void initSimpleItems() {
         diamondSword();
         undeadSword();
+        someFishingRod();
     }
     private static void diamondSword(){
         SkyblockItem diamondSword = SimpleSkyblockItem.builder()
@@ -73,6 +74,18 @@ public class ItemManager {
                 .baseRarity(Rarity.COMMON)
                 .itemType(SkyblockItemType.SWORD)
                 .abilities(List.of(AbilityManager.UNDEAD_SWORD_ABILITY))
+                .build();
+    }
+
+        private static void someFishingRod(){
+        SkyblockItem someFishingRod = SimpleSkyblockItem.builder()
+                .id("simple_rod")
+                .displayName("Fishing ROD")
+                .material(Material.ROD)  //idk whats it called in 1.17
+                .staticLore(List.of("$h"))
+                .stats(Map.of(Stats.DAMAGE, -100d, Stats.HEALTH, -150d))
+                .baseRarity(Rarity.COMMON)
+                .itemType(SkyblockItemType.FISHING_ROD)
                 .build();
     }
 
