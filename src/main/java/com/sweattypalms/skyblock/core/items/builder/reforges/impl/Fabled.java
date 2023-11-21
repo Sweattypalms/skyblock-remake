@@ -50,10 +50,7 @@ public class Fabled implements Reforge, IAdvancedReforge {
     @Override
     public Set<SkyblockItemType> getReforgeableItemTypes() {
         return Set.of(
-                SkyblockItemType.HELMET,
-                SkyblockItemType.CHESTPLATE,
-                SkyblockItemType.LEGGINGS,
-                SkyblockItemType.BOOTS
+                SkyblockItemType.SWORD
         );
     }
 
