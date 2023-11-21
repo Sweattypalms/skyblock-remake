@@ -1,3 +1,5 @@
+package com.sweattypalms.skyblock.core.items.builder.reforges.impl;
+
 import com.sweattypalms.skyblock.core.helpers.PlaceholderFormatter;
 import com.sweattypalms.skyblock.core.items.builder.Rarity;
 import com.sweattypalms.skyblock.core.items.builder.SkyblockItemType;
@@ -56,14 +58,14 @@ public class Fabled implements Reforge, IAdvancedReforge {
 
     @Override
     public String getName() {
-        return "Ancient";
+        return "Fabled";
     }
 
     @Override
     public List<String> getLore() {
         return PlaceholderFormatter.format(List.of(
-                "$7Grants $a+1 " + Stats.CRIT_DAMAGE.getSymbol() + " Crit Damage",
-                "$7per $cCatacombs $7level."
+                "$7Critical hits have a chance to deal",
+                "$7up to +15% extra damage."
         ));
     }
 }
