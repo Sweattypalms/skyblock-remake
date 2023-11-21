@@ -103,7 +103,7 @@ public class Renowned implements Reforge, IAdvancedReforge {
     @Override
     public List<String> getLore() {
         return PlaceholderFormatter.format(List.of(
-                "$Increase all stats by 1%" //again calculation isnt a thing pls be patient
+                "$7Increase all stats by 1%" //again calculation isnt a thing pls be patient
         ));
     }
 }
