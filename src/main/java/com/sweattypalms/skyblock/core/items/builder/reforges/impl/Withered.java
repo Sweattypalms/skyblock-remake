@@ -13,22 +13,22 @@ import java.util.Set;
 
 public class Withered implements Reforge, IAdvancedReforge {
     Map<Stats, Double> COMMON = Map.of(
-            Stats.STRENGTH, 60.0,
+            Stats.STRENGTH, 60.0
     );
     Map<Stats, Double> UNCOMMON = Map.of(
-            Stats.STRENGTH, 75.0,
+            Stats.STRENGTH, 75.0
     );
     Map<Stats, Double> RARE = Map.of(
-            Stats.STRENGTH, 90.0,
+            Stats.STRENGTH, 90.0
     );
     Map<Stats, Double> EPIC = Map.of(
-            Stats.STRENGTH, 110.0,
+            Stats.STRENGTH, 110.0
     );
     Map<Stats, Double> LEGENDARY = Map.of(
-            Stats.STRENGTH, 135.0,
+            Stats.STRENGTH, 135.0
     );
     Map<Stats, Double> MYTHIC = Map.of(
-            Stats.STRENGTH, 170.0,
+            Stats.STRENGTH, 170.0
     );
 
     @Override

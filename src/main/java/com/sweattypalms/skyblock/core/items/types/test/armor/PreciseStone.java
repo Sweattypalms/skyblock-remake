@@ -2,6 +2,8 @@ package com.sweattypalms.skyblock.core.items.types.test.armor;
 
 import com.sweattypalms.skyblock.core.items.builder.Rarity;
 import com.sweattypalms.skyblock.core.items.builder.SkyblockItem;
+import com.sweattypalms.skyblock.core.items.builder.SkyblockItemType;
+import com.sweattypalms.skyblock.core.items.builder.armor.IHeadHelmet;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.Event;
@@ -9,7 +11,7 @@ import org.bukkit.event.Event;
 import java.util.HashMap;
 import java.util.List;
 
-public class PreciseStone extends SkyblockItem {
+public class PreciseStone extends SkyblockItem implements IHeadHelmet {
 
     public static final String ID = "test_precisestone";
 

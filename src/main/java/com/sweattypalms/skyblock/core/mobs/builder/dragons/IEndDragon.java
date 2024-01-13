@@ -14,6 +14,19 @@ public interface IEndDragon {
     double getDragonDamage();
     default List<DragonStage> getDragonStages(){
         List<DragonStage> stages = new ArrayList<>();
+
+/*
+        stages.add(new DragonStage(
+                List.of(
+                        new Vector(0, 75, 0),      // Start at middle
+                        new Vector(5, 75, 0),
+                        new Vector(0, 75, 5),
+                        new Vector(0, 75, 0)
+                ),
+                0.005
+        ));
+*/
+
         stages.add(new DragonStage(
                 List.of(
                         new Vector(0, 75, 0),      // Start at middle

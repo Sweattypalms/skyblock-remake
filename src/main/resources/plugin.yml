@@ -1,12 +1,25 @@
-name: Skyblock
+name: '${project.name}'
 version: '${project.version}'
 main: com.sweattypalms.skyblock.SkyBlock
 api-version: '1.17'
-authors: [sweattypalms, devil_gamer_xd]
+authors: [ sweattypalms ]
 description: A Hypixel Skyblock remake plugin
 website: sweattypalms.me
+load: POSTWORLD
+prefix: "Skyblock ->"
+
 depend:
   - Multiverse-Core
 commands:
-  wtf:
-    description: WTF
+  this_plugin_doesnt_use_this:
+    description: This plugin doesn't use this
+    usage: /<command>
+    aliases: [ tpdut ]
+
+permissions:
+  skyblock.admin:
+    description: Allows you to use all Skyblock commands
+    default: true
+  skyblock.user:
+    description: Allows you to use all Skyblock commands
+    default: true
