@@ -255,4 +255,14 @@ public class StatsManager {
 
         return health * (1 + (defense / 100));
     }
+
+    public double getMaxStat(Stats stat) {
+        return this.maxStats.get(stat);
+    }
+    public double getLiveStat(Stats stat) {
+        return this.liveStats.get(stat);
+    }
+    public double getBaseStat(Stats stat) {
+        return this.baseStats.get(stat);
+    }
 }

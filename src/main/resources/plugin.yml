@@ -8,8 +8,11 @@ website: sweattypalms.me
 load: POSTWORLD
 prefix: "Skyblock ->"
 
-depend:
-  - Multiverse-Core
+
+softdepend:
+  - MultiVerse-Core
+
+
 commands:
   this_plugin_doesnt_use_this:
     description: This plugin doesn't use this

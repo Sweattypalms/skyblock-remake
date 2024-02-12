@@ -106,7 +106,7 @@ public class DragonDropItemEntity extends EntityItem implements IDragonLoot {
 
 
         String displayName = this.getDropOwner().getPlayer().getDisplayName();
-        String message = PlaceholderFormatter.format(displayName + "$e has obtained " + this.dropItem.__getDisplayName() + ChatColor.RESET + " $e!");
+        String message = PlaceholderFormatter.format(displayName + "$e has obtained " + this.dropItem.f_getDisplayName() + ChatColor.RESET + " $e!");
 
         this.location.getWorld().getPlayers().forEach(_player -> _player.sendMessage(message));
 

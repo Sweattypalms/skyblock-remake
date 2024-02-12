@@ -107,6 +107,7 @@ public class SkyblockPlayer {
         this.bonusManager.cleanupExpiredBonuses();
         this.statsManager.tick();
         this.actionBarManager.tick();
+        this.inventoryManager.tick();
 
         this.scoreboardManager.updateScoreboard();
         RegionManager.updatePlayerRegion(this);

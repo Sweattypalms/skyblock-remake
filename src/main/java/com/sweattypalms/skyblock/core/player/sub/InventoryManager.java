@@ -7,6 +7,7 @@ import com.sweattypalms.skyblock.core.items.builder.SkyblockItemType;
 import com.sweattypalms.skyblock.core.items.builder.abilities.Ability;
 import com.sweattypalms.skyblock.core.items.builder.abilities.IHasAbility;
 import com.sweattypalms.skyblock.core.items.builder.abilities.types.FullSetBonus;
+import com.sweattypalms.skyblock.core.items.builder.abilities.types.IPersonalizedDescription;
 import com.sweattypalms.skyblock.core.player.PlayerManager;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
 import org.bukkit.inventory.EquipmentSlot;
@@ -24,6 +25,18 @@ public class InventoryManager extends PlayerManager {
         super(player);
     }
 
+    public void tick() {
+        getInventoryItems().forEach((skyblockItemType, itemStack) -> {
+            String id = PDCHelper.getString(itemStack, "id");
+            /** Check if the item is an IPersonalizedDescription */
+            if (!(SkyblockItem.get(id) instanceof IPersonalizedDescription)) {
+                return;
+            }
+
+            SkyblockItem.updateItemStack(this.skyblockPlayer, itemStack);
+        });
+    }
+
     public SkyblockItem getSkyblockItemInHand() {
         ItemStack itemStack = this.skyblockPlayer.getPlayer().getInventory().getItemInMainHand();
         String id = PDCHelper.getString(itemStack, "id");
@@ -33,6 +46,10 @@ public class InventoryManager extends PlayerManager {
         return this.skyblockPlayer.getPlayer().getInventory().getItemInMainHand();
     }
 
+    /**
+     * Get all the items in the players inventory
+     * @return items that are valid skyblock items, but as ItemStacks
+     */
     public HashMap<SkyblockItemType, ItemStack> getInventoryItems() {
         HashMap<SkyblockItemType, ItemStack> items = new HashMap<>();
         final boolean[] handSlotVisited = {false};

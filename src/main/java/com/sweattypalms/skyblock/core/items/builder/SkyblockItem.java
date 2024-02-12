@@ -10,6 +10,7 @@ import com.sweattypalms.skyblock.core.items.ItemManager;
 import com.sweattypalms.skyblock.core.items.builder.abilities.IHasAbility;
 import com.sweattypalms.skyblock.core.items.builder.abilities.TriggerType;
 import com.sweattypalms.skyblock.core.items.builder.abilities.types.FullSetBonus;
+import com.sweattypalms.skyblock.core.items.builder.abilities.types.IPersonalizedDescription;
 import com.sweattypalms.skyblock.core.items.builder.abilities.types.ITriggerableAbility;
 import com.sweattypalms.skyblock.core.items.builder.abilities.types.IUsageCost;
 import com.sweattypalms.skyblock.core.items.builder.armor.IDyedArmor;
@@ -114,9 +115,11 @@ public abstract class SkyblockItem {
     private static void buildStatsPDC(ItemStack item, Map<Stats, Double> stats) {
         stats.forEach((stat, value) -> PDCHelper.setDouble(item, "stat." + stat.name().toLowerCase(), value));
     }
+
     public static ItemStack updateItemStack(SkyblockPlayer skyblockPlayer) {
         return updateItemStack(skyblockPlayer, null);
     }
+
     @SuppressWarnings("ReplaceAll")
     public static ItemStack updateItemStack(SkyblockPlayer skyblockPlayer, @Nullable ItemStack item) {
         ItemStack itemStack = item == null ? skyblockPlayer.getInventoryManager().getItemInHand() : item;
@@ -136,7 +139,7 @@ public abstract class SkyblockItem {
 
         ItemMeta meta = itemStack.getItemMeta();
         assert meta != null;
-        meta.setDisplayName(skyblockItem.__getDisplayName(upgraded, reforge));
+        meta.setDisplayName(skyblockItem.f_getDisplayName(upgraded, reforge));
 
         List<String> lore = new ArrayList<>(
                 buildStatsLore(stats, reforge, rarity)
@@ -152,13 +155,21 @@ public abstract class SkyblockItem {
 
         if (!lore.isEmpty()) lore.add("§7");
 
-        lore.addAll(buildEnchantmentsLore(itemStack));
+        List<String> enchantmentsLore = buildEnchantmentsLore(itemStack);
+        lore.addAll(enchantmentsLore);
 
-        if (!lore.isEmpty()) lore.add("§7");
+        if (!enchantmentsLore.isEmpty()) lore.add("§7");
 
-        lore.addAll(skyblockItem.__getStaticLore());
+        /**
+         * If the item has a personalized description, use that
+         */
+        if (skyblockItem instanceof IPersonalizedDescription personalizedDescription) {
+            lore.addAll(PlaceholderFormatter.format(personalizedDescription.getDescription(skyblockPlayer, itemStack)));
+        } else {
+            lore.addAll(skyblockItem.f_getStaticLore());
+        }
 
-        if (skyblockItem.getStaticLore() != null) lore.add("§7");
+        if (skyblockItem.getStaticLore() != null || skyblockItem instanceof IPersonalizedDescription) lore.add("§7");
 
         if (skyblockItem instanceof IShortBow shortBow) {
             lore.add(rarity.getColor() + "Shortbow: Instantly shoots!");
@@ -168,13 +179,13 @@ public abstract class SkyblockItem {
 
         String ultimateWise = "ultimate_wise";
         int reduceBy = EnchantManager.getEnchantment(itemStack, ultimateWise).orElse(0) * 10;
-        lore.addAll(skyblockItem.__getAbilityLore(reduceBy));
+        lore.addAll(skyblockItem.f_getAbilityLore(reduceBy));
 
         lore.addAll(ReforgeManager.getReforgeLore(reforge));
 
         if (reforge instanceof IAdvancedReforge) lore.add("§7"); // Will automatically check if the reforge isn't null
 
-        lore.addAll(skyblockItem.__getRarityLine(upgraded));
+        lore.addAll(skyblockItem.f_getRarityLine(upgraded));
 
         meta.setLore(lore);
 
@@ -188,7 +199,7 @@ public abstract class SkyblockItem {
         return stats;
     }
 
-//    private static List<String> buildEnchantmentsLore(ItemStack item) {
+/*    private static List<String> buildEnchantmentsLore(ItemStack item) {
 //        List<String> lore = new ArrayList<>();
 //
 //        int amount = 0;
@@ -240,7 +251,7 @@ public abstract class SkyblockItem {
 //        }
 //
 //        return PlaceholderFormatter.format(lore);
-//    }
+}*/
 
     private static List<String> buildEnchantmentsLore(ItemStack item) {
         List<String> lore = new ArrayList<>();
@@ -309,7 +320,7 @@ public abstract class SkyblockItem {
         }
 
         // ------- DISPLAY NAME -------
-        meta.setDisplayName(__getDisplayName());
+        meta.setDisplayName(f_getDisplayName());
         // ------- DISPLAY NAME -------
 
         // ------- LORE -------
@@ -342,7 +353,7 @@ public abstract class SkyblockItem {
         );
         if (!lore.isEmpty()) lore.add("§7");
 
-        lore.addAll(__getStaticLore());
+        lore.addAll(f_getStaticLore());
 
         if (this.staticLore != null) lore.add("§7");
 
@@ -352,9 +363,9 @@ public abstract class SkyblockItem {
             lore.add("§7");
         }
 
-        lore.addAll(__getAbilityLore());
+        lore.addAll(f_getAbilityLore());
 
-        lore.addAll(__getRarityLine());
+        lore.addAll(f_getRarityLine());
 
         return lore;
     }
@@ -364,17 +375,20 @@ public abstract class SkyblockItem {
     }
 
 
-    /* ------------------ GETTERS & SETTERS ------------------ */
+    /*
+    *  ------------------ GETTERS & SETTERS ------------------
+    *  The f stands for formatted
+    */
 
     private void buildStatsPDC(ItemStack item) {
         buildStatsPDC(item, this.stats);
     }
 
-    private List<String> __getAbilityLore() {
-        return __getAbilityLore(0);
+    private List<String> f_getAbilityLore() {
+        return f_getAbilityLore(0);
     }
 
-    private List<String> __getAbilityLore(int reduceBy) {
+    private List<String> f_getAbilityLore(int reduceBy) {
         List<String> lore = new ArrayList<>();
         if (this instanceof IHasAbility iHasAbility) {
             iHasAbility.getAbilities().forEach(ability -> {
@@ -417,11 +431,11 @@ public abstract class SkyblockItem {
      *
      * @return "§l§6Diamond Sword"
      */
-    public String __getDisplayName() {
-        return __getDisplayName(false, null);
+    public String f_getDisplayName() {
+        return f_getDisplayName(false, null);
     }
 
-    private String __getDisplayName(boolean upgraded, @Nullable Reforge reforge) {
+    private String f_getDisplayName(boolean upgraded, @Nullable Reforge reforge) {
         Rarity rarity = this.rarity; // Mutable copy
         if (upgraded) rarity = rarity.getUpgraded();
         String finalName = rarity.getColor();
@@ -430,11 +444,11 @@ public abstract class SkyblockItem {
         return finalName;
     }
 
-    private List<String> __getStaticLore() {
+    private List<String> f_getStaticLore() {
         return this.staticLore == null ? new ArrayList<>() : PlaceholderFormatter.format(this.staticLore);
     }
 
-    public List<String> __getRarityLine(boolean upgraded) {
+    public List<String> f_getRarityLine(boolean upgraded) {
         List<String> lore = new ArrayList<>();
 
         Rarity rarity = this.rarity; // Mutable copy
@@ -457,7 +471,7 @@ public abstract class SkyblockItem {
         return lore;
     }
 
-    private List<String> __getRarityLine() {
-        return __getRarityLine(false);
+    private List<String> f_getRarityLine() {
+        return f_getRarityLine(false);
     }
 }

@@ -23,7 +23,7 @@ public class ItemsGUI extends BaseGUI {
 
         for (SkyblockItem item : sortedItemList) {
             setNextItem(new ClickableItem(item.toItemStack(), (p) -> {
-                p.sendMessage("You clicked the " + item.__getDisplayName() + "!");
+                p.sendMessage("You clicked the " + item.f_getDisplayName() + "!");
                 p.getInventory().addItem(item.toItemStack());
             }));
         }
