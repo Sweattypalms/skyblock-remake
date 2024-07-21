@@ -5,12 +5,13 @@ api-version: '1.17'
 authors: [ sweattypalms ]
 description: A Hypixel Skyblock remake plugin
 website: sweattypalms.me
-load: POSTWORLD
-prefix: "Skyblock ->"
+load: STARTUP
+prefix: "Skyblock"
 
-
-softdepend:
+# For the dragon world, otherwise messes up the loading.
+loadbefore:
   - MultiVerse-Core
+
 
 
 commands:
