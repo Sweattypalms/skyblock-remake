@@ -7,5 +7,9 @@ public abstract class PassiveEnchantment extends Enchantment{
         super(id);
     }
 
+    public PassiveEnchantment(String id, int maxLevel) {
+        super(id, maxLevel);
+    }
+
     public abstract void onTick(SkyblockPlayer player);
 }

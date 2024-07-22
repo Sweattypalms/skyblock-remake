@@ -1,21 +1,33 @@
 package com.sweattypalms.skyblock.core.events.def;
 
+import com.sweattypalms.skyblock.core.items.builder.abilities.Ability;
 import com.sweattypalms.skyblock.core.mobs.builder.SkyblockMob;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
+import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
+import org.bukkit.inventory.ItemStack;
 
 public class SkyblockMobDamagePlayerEvent extends SkyblockPlayerEvent implements Cancellable {
     public static final HandlerList HANDLERS = new HandlerList();
 
-    private final SkyblockPlayer skyblockPlayer;
-    private final SkyblockMob skyblockMob;
+    @Getter private final SkyblockPlayer skyblockPlayer;
+    @Getter private final SkyblockMob skyblockMob;
 
-    private double damage;
+    @Getter @Setter private double damage;
+    @Getter private double additiveMultiplier = 0;
+    @Getter private double multiplicativeMultiplier = 1;
+
+    @Getter @Setter private boolean preCalc = true;
+
+    @Getter @Setter private ItemStack defenseItem;
+    @Getter @Setter private Ability ability;
 
     private boolean cancelled = false;
+
     public SkyblockMobDamagePlayerEvent(SkyblockPlayer skyblockPlayer, SkyblockMob skyblockMob) {
         this.skyblockPlayer = skyblockPlayer;
         this.skyblockMob = skyblockMob;
@@ -31,23 +43,19 @@ public class SkyblockMobDamagePlayerEvent extends SkyblockPlayerEvent implements
         this.skyblockMob = SkyblockMob.getSkyblockMob(livingEntity);
     }
 
-    public SkyblockMob getSkyblockMob() {
-        return skyblockMob;
+    /**
+     * @param amount Amount in percent. 80% etc
+     */
+    public void addAdditiveMultiplierPercent(double amount) {
+        additiveMultiplier += amount;
     }
 
-    @Override
-    public SkyblockPlayer getSkyblockPlayer() {
-        return skyblockPlayer;
+    /**
+     * @param percent Amount in percent. 80% etc
+     */
+    public void addMultiplicativeMultiplierPercent(double percent) {
+        this.multiplicativeMultiplier *= (1 + (percent / 100));
     }
-
-    public double getDamage() {
-        return damage;
-    }
-
-    public void setDamage(double damage) {
-        this.damage = damage;
-    }
-
 
     @Override
     public boolean isCancelled() {
@@ -58,7 +66,6 @@ public class SkyblockMobDamagePlayerEvent extends SkyblockPlayerEvent implements
     public void setCancelled(boolean b) {
         this.cancelled = b;
     }
-
 
     public static HandlerList getHandlerList() {
         return HANDLERS;

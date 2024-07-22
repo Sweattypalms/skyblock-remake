@@ -9,10 +9,7 @@ import com.sweattypalms.skyblock.core.helpers.PlaceholderFormatter;
 import com.sweattypalms.skyblock.core.items.ItemManager;
 import com.sweattypalms.skyblock.core.items.builder.abilities.IHasAbility;
 import com.sweattypalms.skyblock.core.items.builder.abilities.TriggerType;
-import com.sweattypalms.skyblock.core.items.builder.abilities.types.FullSetBonus;
-import com.sweattypalms.skyblock.core.items.builder.abilities.types.IPersonalizedDescription;
-import com.sweattypalms.skyblock.core.items.builder.abilities.types.ITriggerableAbility;
-import com.sweattypalms.skyblock.core.items.builder.abilities.types.IUsageCost;
+import com.sweattypalms.skyblock.core.items.builder.abilities.types.*;
 import com.sweattypalms.skyblock.core.items.builder.armor.IDyedArmor;
 import com.sweattypalms.skyblock.core.items.builder.armor.IHeadHelmet;
 import com.sweattypalms.skyblock.core.items.builder.item.IShortBow;
@@ -418,6 +415,13 @@ public abstract class SkyblockItem {
                         costLine = PlaceholderFormatter.format(costLine);
                         lore.add(costLine);
                     });
+                }
+                if (ability instanceof ICooldown cooldown) {
+                    //FIXME: getCooldown shouldn't exactly need a SkyblockPlayer??????
+                    int cooldownValue = (int) (cooldown.getCooldown(null) / 1000);
+                    String cooldownLine = "$8Cooldown: $a" + cooldownValue + "s";
+                    cooldownLine = PlaceholderFormatter.format(cooldownLine);
+                    lore.add(cooldownLine);
                 }
                 lore.add("§7");
             });

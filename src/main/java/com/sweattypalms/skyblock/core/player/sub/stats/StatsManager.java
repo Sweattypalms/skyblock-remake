@@ -12,6 +12,7 @@ import com.sweattypalms.skyblock.core.items.builder.reforges.ReforgeManager;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
 import com.sweattypalms.skyblock.core.player.sub.bonus.Bonus;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Player;
@@ -127,11 +128,13 @@ public class StatsManager {
         // Apply the bonuses
         for (List<Bonus> bonuses : this.player.getBonusManager().getBonuses().values()) {
             for (Bonus bonus : bonuses) {
-                if (!bonus.isExpired()) {
-                    double value = stats.get(bonus.getStat());
-                    value += bonus.getValue();
-                    stats.put(bonus.getStat(), value);
+                if (bonus.isExpired()) {
+                    continue;
                 }
+
+                double value = stats.get(bonus.getStat());
+                value += bonus.getValue();
+                stats.put(bonus.getStat(), value);
             }
         }
 

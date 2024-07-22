@@ -11,6 +11,8 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.HashMap;
+
 public class DamageCalculator {
 
     public static double calculateNormalDamage(SkyblockPlayerDamageEntityEvent event) {
@@ -39,12 +41,15 @@ public class DamageCalculator {
             crit = true;
         }
 
+        HashMap<Stats, Double> mods = event.getStatModifiers();
+
 
         double entityDefense = skyblockMob.getAttribute(MobAttributes.DEFENSE);
 
-        double baseDamage = PDCHelper.getDouble(item, "stat." + Stats.DAMAGE.name().toLowerCase());
-        double strength = skyblockPlayer.getStatsManager().getMaxStats().get(Stats.STRENGTH);
-        double critDamage = skyblockPlayer.getStatsManager().getMaxStats().get(Stats.CRIT_DAMAGE);
+
+        double baseDamage = PDCHelper.getDouble(item, "stat." + Stats.DAMAGE.name().toLowerCase()) + mods.get(Stats.DAMAGE);
+        double strength = skyblockPlayer.getStatsManager().getMaxStats().get(Stats.STRENGTH) + mods.get(Stats.STRENGTH);
+        double critDamage = skyblockPlayer.getStatsManager().getMaxStats().get(Stats.CRIT_DAMAGE) + mods.get(Stats.CRIT_DAMAGE);
 
         double additiveMultiplier = event.getAdditiveMultiplier();
         double multiplicativeMultiplier = event.getMultiplicativeMultiplier();
@@ -76,13 +81,17 @@ public class DamageCalculator {
 
         event.setCrit(crit);
 
-        double entityDefense = event.getSkyblockMob().getAttribute(MobAttributes.DEFENSE);
+        HashMap<Stats, Double> mods = event.getStatModifiers();
 
-        double baseAbilityDamage = abilityActivator.getBaseAbilityDamage();
+
+        double entityDefense = event.getSkyblockMob().getAttribute(MobAttributes.DEFENSE);
+        entityDefense += mods.get(Stats.DEFENSE);
+
+        double baseAbilityDamage = abilityActivator.getBaseAbilityDamage() + mods.get(Stats.DAMAGE);
         double abilityScaling = abilityActivator.getAbilityScaling();
 
-        double critDamage = skyblockPlayer.getStatsManager().getMaxStats().get(Stats.CRIT_DAMAGE);
-        double intelligence = skyblockPlayer.getStatsManager().getMaxStats().get(Stats.INTELLIGENCE);
+        double critDamage = skyblockPlayer.getStatsManager().getMaxStats().get(Stats.CRIT_DAMAGE) + mods.get(Stats.CRIT_DAMAGE);
+        double intelligence = skyblockPlayer.getStatsManager().getMaxStats().get(Stats.INTELLIGENCE) + mods.get(Stats.INTELLIGENCE);
 
         double additiveMultiplier = event.getAdditiveMultiplier();
         double multiplicativeMultiplier = event.getMultiplicativeMultiplier();

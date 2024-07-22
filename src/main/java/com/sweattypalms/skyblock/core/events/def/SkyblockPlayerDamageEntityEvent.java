@@ -4,6 +4,7 @@ import com.sweattypalms.skyblock.core.items.builder.abilities.Ability;
 import com.sweattypalms.skyblock.core.mobs.builder.ISkyblockMob;
 import com.sweattypalms.skyblock.core.mobs.builder.SkyblockMob;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
+import com.sweattypalms.skyblock.core.player.sub.stats.Stats;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftEntity;
@@ -12,6 +13,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.HashMap;
 
 public class SkyblockPlayerDamageEntityEvent extends SkyblockPlayerEvent implements Cancellable {
     private static final HandlerList HANDLERS = new HandlerList();
@@ -28,6 +31,11 @@ public class SkyblockPlayerDamageEntityEvent extends SkyblockPlayerEvent impleme
     private boolean isCancelled;
     @Getter private double additiveMultiplier = 0;
     @Getter private double multiplicativeMultiplier = 1;
+    @Getter @Setter HashMap<Stats, Double> statModifiers = new HashMap<>(Stats.empty());
+    public void addStatModifier(Stats stat, double amount) {
+        statModifiers.put(stat, amount);
+    }
+
 
     @Getter @Setter private boolean isCrit = false;
     @Getter @Setter private boolean isForcedCrit = false;

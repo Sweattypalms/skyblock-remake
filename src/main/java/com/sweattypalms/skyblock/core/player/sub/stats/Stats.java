@@ -4,6 +4,8 @@ import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 
+import java.util.HashMap;
+
 @Getter
 public enum Stats {
     DAMAGE(ChatColor.RED + "❁", "Damage", 0, false, ChatColor.RED),
@@ -56,5 +58,14 @@ public enum Stats {
 
     static double get(SkyblockPlayer skyblockPlayer, Stats stat) {
         return skyblockPlayer.getStatsManager().getMaxStats().get(stat);
+    }
+
+
+    public static HashMap<Stats, Double> empty() {
+        HashMap<Stats, Double> map = new HashMap<>();
+        for (Stats stat : Stats.values()) {
+            map.put(stat, 0d);
+        }
+        return map;
     }
 }
