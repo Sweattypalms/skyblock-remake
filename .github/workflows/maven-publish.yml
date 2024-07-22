@@ -40,4 +40,4 @@ jobs:
         prerelease: false
         title: "Automatic Release"
         files: |
-          taget/*.jar
+          target/*.jar
