@@ -41,4 +41,3 @@ jobs:
         title: "Automatic Release"
         files: |
           server/plugins/*.jar
-          target/*.jar
