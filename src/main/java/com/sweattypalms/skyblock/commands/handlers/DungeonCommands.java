@@ -3,13 +3,11 @@ package com.sweattypalms.skyblock.commands.handlers;
 import com.sweattypalms.skyblock.commands.Command;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
 import com.sweattypalms.skyblock.dungeons.generator.DungeonGenerator;
-import com.sweattypalms.skyblock.dungeons.generator.DungeonMapRenderer;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
+import com.sweattypalms.skyblock.dungeons.physical.DungeonMap;
+import com.sweattypalms.skyblock.dungeons.physical.DungeonPhysical;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.MapMeta;
-import org.bukkit.map.MapView;
+
 
 import java.util.Random;
 
@@ -23,23 +21,12 @@ public class DungeonCommands {
         DungeonGenerator generator = new DungeonGenerator();
         generator.generate(new Random().nextLong());
 
-        MapView view = Bukkit.createMap(player.getWorld());
-        view.getRenderers().clear();
+        DungeonMap dungeonMap = new DungeonMap(generator);
+        DungeonPhysical dungeonPhysical = new DungeonPhysical(generator);
 
+        World world = player.getWorld();
 
-        view.addRenderer(new DungeonMapRenderer(generator));
-        view.setScale(MapView.Scale.FARTHEST);
-        view.setTrackingPosition(false);
-        view.setCenterX(0);
-        view.setCenterZ(0);
-
-        ItemStack mapItem = new ItemStack(Material.FILLED_MAP);
-        MapMeta mapMeta = (MapMeta) mapItem.getItemMeta();
-        assert mapMeta != null;
-        mapMeta.setMapView(view);
-        mapItem.setItemMeta(mapMeta);
-
-        player.getInventory().addItem(mapItem);
+        player.getInventory().addItem(dungeonMap.getItem(world));
         skyblockPlayer.sendMessage("$aDungeon map generated");
     }
 }

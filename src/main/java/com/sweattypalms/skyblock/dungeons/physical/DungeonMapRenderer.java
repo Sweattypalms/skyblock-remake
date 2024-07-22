@@ -1,5 +1,7 @@
-package com.sweattypalms.skyblock.dungeons.generator;
+package com.sweattypalms.skyblock.dungeons.physical;
 
+import com.sweattypalms.skyblock.dungeons.generator.*;
+import com.sweattypalms.skyblock.dungeons.generator.Point;
 import org.bukkit.entity.Player;
 import org.bukkit.map.MapCanvas;
 import org.bukkit.map.MapPalette;
@@ -66,7 +68,7 @@ public class DungeonMapRenderer extends MapRenderer {
         for (int i = 0; i < GRID_SIZE; i++) {
             for (int j = 0; j < GRID_SIZE; j++) {
                 Room room = dungeonGrid[i][j];
-                Point coords = getPlaceLocation(room.getCoordinates());
+                com.sweattypalms.skyblock.dungeons.generator.Point coords = getPlaceLocation(room.getCoordinates());
                 drawRoom(graphics, room, coords.x(), coords.y());
             }
         }
@@ -97,7 +99,7 @@ public class DungeonMapRenderer extends MapRenderer {
         int maxX = Integer.MIN_VALUE, maxY = Integer.MIN_VALUE;
 
         for (Room room : rooms) {
-            Point coordinates = room.getCoordinates();
+            com.sweattypalms.skyblock.dungeons.generator.Point coordinates = room.getCoordinates();
             if (coordinates.x() < minX) minX = coordinates.x();
             if (coordinates.y() < minY) minY = coordinates.y();
             if (coordinates.x() > maxX) maxX = coordinates.x();
@@ -107,19 +109,19 @@ public class DungeonMapRenderer extends MapRenderer {
         int finalMinX = minX;
         int finalMinY = minY;
         Room startRoom = shapeHandler.getRooms().stream().filter(r -> {
-            Point coordinates = r.getCoordinates();
+            com.sweattypalms.skyblock.dungeons.generator.Point coordinates = r.getCoordinates();
             return (coordinates.x() == finalMinX && coordinates.y() == finalMinY);
         }).findFirst().orElseThrow();
 
         int finalMaxX = maxX;
         int finalMaxY = maxY;
         Room endRoom = shapeHandler.getRooms().stream().filter(r -> {
-            Point coordinates = r.getCoordinates();
+            com.sweattypalms.skyblock.dungeons.generator.Point coordinates = r.getCoordinates();
             return (coordinates.x() == finalMaxX && coordinates.y() == finalMaxY);
         }).findFirst().orElseThrow();
 
-        Point startPlaceCoords = getPlaceLocation(startRoom.getCoordinates());
-        Point endPlaceCoords = getPlaceLocation(endRoom.getCoordinates());
+        com.sweattypalms.skyblock.dungeons.generator.Point startPlaceCoords = getPlaceLocation(startRoom.getCoordinates());
+        com.sweattypalms.skyblock.dungeons.generator.Point endPlaceCoords = getPlaceLocation(endRoom.getCoordinates());
 
         // Calculate the width and height of the bounding box
         int width = endPlaceCoords.x() - startPlaceCoords.x() + CELL_SIZE;
@@ -137,12 +139,12 @@ public class DungeonMapRenderer extends MapRenderer {
             Room roomA = rooms.get(i);
             Room roomB = rooms.get((i + 1) % rooms.size());
 
-            Point a = roomA.getCoordinates(), b = roomB.getCoordinates();
+            com.sweattypalms.skyblock.dungeons.generator.Point a = roomA.getCoordinates(), b = roomB.getCoordinates();
 
             if (a.x() == b.x() || a.y() == b.y()) {
                 // draw a single rectangle with min max
-                Point startPlaceCoords = new Point(Math.min(a.x(), b.x()), Math.min(a.y(), b.y()));
-                Point endPlaceCoords = new Point(Math.max(a.x(), b.x()), Math.max(a.y(), b.y()));
+                com.sweattypalms.skyblock.dungeons.generator.Point startPlaceCoords = new com.sweattypalms.skyblock.dungeons.generator.Point(Math.min(a.x(), b.x()), Math.min(a.y(), b.y()));
+                com.sweattypalms.skyblock.dungeons.generator.Point endPlaceCoords = new com.sweattypalms.skyblock.dungeons.generator.Point(Math.max(a.x(), b.x()), Math.max(a.y(), b.y()));
 
                 startPlaceCoords = getPlaceLocation(startPlaceCoords);
                 endPlaceCoords = getPlaceLocation(endPlaceCoords);
@@ -170,8 +172,8 @@ public class DungeonMapRenderer extends MapRenderer {
     }
 
     private void drawConnection(Graphics2D graphics, Room room1, Room room2, boolean isMainPath) {
-        Point coords1 = room1.getCoordinates();
-        Point coords2 = room2.getCoordinates();
+        com.sweattypalms.skyblock.dungeons.generator.Point coords1 = room1.getCoordinates();
+        com.sweattypalms.skyblock.dungeons.generator.Point coords2 = room2.getCoordinates();
 
         // Use CELL_SIZE and GAP instead of width and spacing for consistency
 //        int CELL_SIZE = width;
@@ -219,7 +221,7 @@ public class DungeonMapRenderer extends MapRenderer {
         );
     }
 
-    private Point getPlaceLocation(Point gridCoordinates) {
+    private com.sweattypalms.skyblock.dungeons.generator.Point getPlaceLocation(com.sweattypalms.skyblock.dungeons.generator.Point gridCoordinates) {
         return new Point(gridCoordinates.y() * (CELL_SIZE + GAP) + PADDING,
                 gridCoordinates.x() * (CELL_SIZE + GAP) + PADDING);
     }

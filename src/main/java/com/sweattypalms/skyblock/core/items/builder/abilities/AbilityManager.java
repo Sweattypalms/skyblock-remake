@@ -56,7 +56,7 @@ public class AbilityManager {
         @Override
         public void apply(Event event) {
             if (!(event instanceof SkyblockPlayerDamageEntityEvent skyblockPlayerDamageEntityEvent)) return;
-            /* Multiplicitive, Makes the weapon deal 2x damage */
+            /* Multiplicative, Makes the weapon deal 2x damage */
             skyblockPlayerDamageEntityEvent.addMultiplicativeMultiplierPercent(100);
         }
     };
