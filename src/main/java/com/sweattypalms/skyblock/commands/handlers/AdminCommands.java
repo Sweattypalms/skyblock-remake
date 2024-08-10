@@ -50,7 +50,6 @@ public class AdminCommands {
 
     @Command(name = "sitem", description = "Item command", op = true)
     public void itemCommand(Player player, String[] args) {
-        player.sendMessage("Here's what you requested: " + Arrays.toString(args));
         if (args.length == 0) {
             String message = ChatColor.YELLOW + "If you want to get an item of a specific id, do:";
             message += "\n" + ChatColor.YELLOW + "/item <id> [optional: amount]";

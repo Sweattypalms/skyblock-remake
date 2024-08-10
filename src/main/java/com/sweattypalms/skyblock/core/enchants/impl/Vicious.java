@@ -25,7 +25,7 @@ public class Vicious extends PassiveEnchantment {
     @Override
     public List<String> getDescription(int level) {
         return List.of(
-                "Grants +$c" + level + Stats.FEROCITY.getSymbol() + " Ferocity"
+                "Grants $c+" + level + Stats.FEROCITY.getSymbol() + " Ferocity"
         );
     }
 
@@ -38,8 +38,6 @@ public class Vicious extends PassiveEnchantment {
     public void onTick(SkyblockPlayer player) {
         ItemStack item = player.getInventoryManager().getItemInHand();
         Bonus bonus = new Bonus(Stats.FEROCITY, getLevel(item, this), 1000);
-
-        Bukkit.broadcastMessage("Vicious bonus: " + bonus.getValue());
 
         player.getBonusManager().setBonus("enchants.vicious", bonus);
     }

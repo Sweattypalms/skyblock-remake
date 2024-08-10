@@ -113,26 +113,19 @@ public class DragonManager {
         player.getPlayer().getInventory().setItemInMainHand(summoningEye);
 
         if (summoningEyes == altarPoints.size()) {
-            altarBlocks.values().forEach(uuid -> {
-                int placedEyes = altarBlocks.values().stream().filter(_uuid -> _uuid.equals(uuid)).mapToInt(_uuid -> 1).sum();
+            altarBlocks.forEach((block, uuid) -> {
                 Player _player = Bukkit.getPlayer(uuid);
-                final int[] removed = {0};
-                int end = 45;
-                for (int slot = 0; slot < end; slot++) {
-                    if (removed[0] >= placedEyes) break;
-                    ItemStack itemStack = _player.getInventory().getItem(slot);
-                    if (itemStack == null) continue;
-                    String id = PDCHelper.getString(itemStack, "id");
-                    if (id == null) continue;
-                    if (id.equals(UsedSummoningEye.ID)) {
-                        ItemStack remnantOfTheEye = ItemManager.getItemStack(RemnantOfTheEye.ID);
-                        player.getPlayer().getInventory().setItem(slot, remnantOfTheEye);
-                        removed[0]++;
+                if (_player != null) {
+                    for (ItemStack item : _player.getInventory().getContents()) {
+                        if (item != null && PDCHelper.getString(item, "id") != null && PDCHelper.getString(item, "id").equals(UsedSummoningEye.ID)) {
+                            ItemStack remnantOfTheEye = ItemManager.getItemStack(RemnantOfTheEye.ID);
+                            _player.getInventory().remove(item);
+                            _player.getInventory().addItem(remnantOfTheEye);
+                            break; // Remove only one eye per player
+                        }
                     }
+                    _player.updateInventory();
                 }
-                assert _player != null;
-                _player.updateInventory();
-                _player.sendMessage("removed " + removed[0] + " eyes");
             });
 
             summonDragon();
@@ -233,7 +226,7 @@ public class DragonManager {
 
         sequence.add(new SequenceAction(
                 () -> {
-                    String summonMessage = String.format("$5⇒ $l%s $5Dragon Spawned!", "Strong");
+                    String summonMessage = String.format("$5⇒ $5c$l%s $5Dragon Spawned!", "Strong");
                     summonMessage = PlaceholderFormatter.format(summonMessage);
                     String finalSummonMessage = summonMessage;
                     endWorld.getPlayers().forEach(player -> player.sendMessage(finalSummonMessage));

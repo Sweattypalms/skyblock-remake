@@ -1,5 +1,6 @@
 package com.sweattypalms.skyblock.core.player.sub.stats;
 
+import com.google.common.util.concurrent.AtomicDouble;
 import com.sweattypalms.skyblock.core.helpers.PDCHelper;
 import com.sweattypalms.skyblock.core.items.builder.Rarity;
 import com.sweattypalms.skyblock.core.items.builder.SkyblockItem;
@@ -83,18 +84,30 @@ public class StatsManager {
 
 
         this.baseStats.forEach((stat, baseValue) -> {
-            final double[] value = {baseValue};
+            AtomicDouble value = new AtomicDouble(baseValue);
             /* -------- ARMOR & ITEMS -------- */
-            player.getInventoryManager().getInventoryItems().forEach((skyblockItemType, itemStack) -> value[0] += getStat(stat, itemStack));
-            stats.put(stat, value[0]);
+            player.getInventoryManager().getInventoryItems().forEach((skyblockItemType, itemStack) -> value.addAndGet(getStat(stat, itemStack)));
+            stats.put(stat, value.get());
             /* -------- ARMOR & ITEMS -------- */
 
         });
 
         double oldMaxHealth = this.maxStats.get(Stats.HEALTH);
         double oldCurrentHealth = this.liveStats.get(Stats.HEALTH);
-        this.maxStats.putAll(stats);
 
+
+        // Apply the bonuses
+        for (List<Bonus> bonuses : this.player.getBonusManager().getBonuses().values()) {
+            for (Bonus bonus : bonuses) {
+                if (bonus.isExpired()) continue;
+
+                double value = stats.get(bonus.getStat());
+                value += bonus.getValue();
+                stats.put(bonus.getStat(), value);
+            }
+        }
+
+        this.maxStats.putAll(stats);
 
         List<PassiveAbility> passiveAbilities = new ArrayList<>();
 
@@ -125,18 +138,7 @@ public class StatsManager {
             }
         }
 
-        // Apply the bonuses
-        for (List<Bonus> bonuses : this.player.getBonusManager().getBonuses().values()) {
-            for (Bonus bonus : bonuses) {
-                if (bonus.isExpired()) {
-                    continue;
-                }
 
-                double value = stats.get(bonus.getStat());
-                value += bonus.getValue();
-                stats.put(bonus.getStat(), value);
-            }
-        }
 
         healthCorrection(oldMaxHealth, oldCurrentHealth);
         double max = 500;

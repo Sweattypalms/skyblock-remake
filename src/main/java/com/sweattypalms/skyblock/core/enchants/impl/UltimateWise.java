@@ -44,7 +44,10 @@ public class UltimateWise extends Enchantment implements UltimateEnchantment, IT
         if (!(event instanceof SkyblockAbilityUseEvent abilityUseEvent)) {
             return;
         }
-        double shouldPercentage = level * (1 - (level * 0.1));
+
+        // For example: if level is 1, then shouldPercentage is 0.9 (90%)
+        // level 10: 0%
+        double shouldPercentage = level * ((1 - level * 0.1));
 
         abilityUseEvent.setCostMultiplier(shouldPercentage);
     }
