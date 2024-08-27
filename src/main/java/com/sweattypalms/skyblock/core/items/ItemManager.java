@@ -87,11 +87,5 @@ public class ItemManager {
         }
 
         return null;
-//
-//        SkyblockItem skyblockItem = SimpleSkyblockItem
-//                .builder()
-//                .material(material)
-//                .itemType(itemType)
-//                .
     }
 }

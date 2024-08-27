@@ -47,6 +47,19 @@ public class AdminCommands {
 
         player.sendMessage(ChatColor.RED + "Successfully spawned: " + skyblockMob.getNameAttribute(NameAttributes.CUSTOM_NAME));
     }
+    @TabCompleter(command = "mob")
+    public List<String> mobTabCompleter(Player player, String[] args) {
+        if (args.length > 1) {
+            return List.of();
+        }
+
+        if (args.length == 0) {
+            return MobManager.MOBS_LIST.keySet().stream().toList();
+        }
+
+        String id = args[0].toLowerCase();
+        return MobManager.MOBS_LIST.keySet().stream().filter(s -> s.startsWith(id)).toList();
+    }
 
     @Command(name = "sitem", description = "Item command", op = true)
     public void itemCommand(Player player, String[] args) {

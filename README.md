@@ -46,8 +46,8 @@ public List<String> exampleTabCompleter(Player player, String[] args) {
 ```java
 Hologram hologram = new Hologram(  
 		"Example Text",  
-		new Location(Bukkit.getWorld("world"), 0, 100,0),  
-)				
+		new Location(Bukkit.getWorld("world"), 0, 100,0)  
+);	
 ```
 -   **Event-Based System:** Harness the power of events for versatile gameplay elements.
 ```java
@@ -100,7 +100,7 @@ public class LightningChestplate extends SkyblockItem implements IHasAbility, ID
 -   **UI System:** Robust UI system with callback features for clickable items and static GUIs.
 ```java
 public class TestGUI extends BaseGUI {
-	private static final int SIZE = 6 * 9 // 6 rows of 9 slots
+	private static final int SIZE = 6 * 9; // 6 rows of 9 slots
 
 	public TestGUI() {
 		super(SIZE, "Test GUI");
