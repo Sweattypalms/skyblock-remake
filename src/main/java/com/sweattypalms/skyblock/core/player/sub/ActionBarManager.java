@@ -3,6 +3,7 @@ package com.sweattypalms.skyblock.core.player.sub;
 import com.sweattypalms.skyblock.core.player.PlayerManager;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
 import com.sweattypalms.skyblock.core.player.sub.stats.Stats;
+import com.sweattypalms.skyblock.core.player.sub.stats.StatsManager;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
@@ -30,12 +31,16 @@ public class ActionBarManager extends PlayerManager {
     }
 
     private String getHealthComponent() {
-        double maxHealth = this.skyblockPlayer.getStatsManager().getMaxStats().get(Stats.HEALTH);
+        StatsManager statsManager = this.skyblockPlayer.getStatsManager();
+        double absorption = statsManager.getMaxStat(Stats.ABSORPTION);
+        double maxHealth = statsManager.getMaxStat(Stats.HEALTH);
         String healthString = formatDouble(maxHealth);
         double currentHealth = this.skyblockPlayer.getPlayer().getHealth();
         if (currentHealth > maxHealth) currentHealth = maxHealth;
-        String currentHealthString = formatDouble(currentHealth);
-        return ChatColor.RED + Stats.HEALTH.getSymbol() + " " + currentHealthString + " / " + healthString;
+        String currentHealthString = formatDouble(currentHealth + absorption);
+
+        ChatColor color = absorption > 0 ? ChatColor.GOLD : ChatColor.RED;
+        return color + Stats.HEALTH.getSymbol() + " " + currentHealthString + " / " + healthString;
     }
 
     private String getDefenceComponent() {

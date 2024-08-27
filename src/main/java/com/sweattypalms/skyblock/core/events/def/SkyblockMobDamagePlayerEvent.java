@@ -1,6 +1,7 @@
 package com.sweattypalms.skyblock.core.events.def;
 
 import com.sweattypalms.skyblock.core.items.builder.abilities.Ability;
+import com.sweattypalms.skyblock.core.mobs.builder.MobAttributes;
 import com.sweattypalms.skyblock.core.mobs.builder.SkyblockMob;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
 import lombok.Getter;
@@ -14,33 +15,36 @@ import org.bukkit.inventory.ItemStack;
 public class SkyblockMobDamagePlayerEvent extends SkyblockPlayerEvent implements Cancellable {
     public static final HandlerList HANDLERS = new HandlerList();
 
-    @Getter private final SkyblockPlayer skyblockPlayer;
-    @Getter private final SkyblockMob skyblockMob;
+    @Getter
+    private final SkyblockPlayer skyblockPlayer;
+    @Getter
+    private final SkyblockMob skyblockMob;
 
-    @Getter @Setter private double damage;
-    @Getter private double additiveMultiplier = 0;
-    @Getter private double multiplicativeMultiplier = 1;
+    @Getter
+    @Setter
+    private double damage;
+    @Getter
+    private double additiveMultiplier = 0;
+    @Getter
+    private double multiplicativeMultiplier = 1;
 
-    @Getter @Setter private boolean preCalc = true;
+    @Getter
+    @Setter
+    private boolean preCalc = true;
 
-    @Getter @Setter private ItemStack defenseItem;
-    @Getter @Setter private Ability ability;
+    @Getter
+    @Setter
+    private ItemStack defenseItem;
+    @Getter
+    @Setter
+    private Ability ability;
 
     private boolean cancelled = false;
-
-    public SkyblockMobDamagePlayerEvent(SkyblockPlayer skyblockPlayer, SkyblockMob skyblockMob) {
-        this.skyblockPlayer = skyblockPlayer;
-        this.skyblockMob = skyblockMob;
-    }
-
-    public SkyblockMobDamagePlayerEvent(SkyblockPlayer skyblockPlayer, LivingEntity livingEntity) {
-        this.skyblockPlayer = skyblockPlayer;
-        this.skyblockMob = SkyblockMob.getSkyblockMob(livingEntity);
-    }
 
     public SkyblockMobDamagePlayerEvent(Player player, LivingEntity livingEntity) {
         this.skyblockPlayer = SkyblockPlayer.getSkyblockPlayer(player);
         this.skyblockMob = SkyblockMob.getSkyblockMob(livingEntity);
+        this.damage = skyblockMob.getAttribute(MobAttributes.DAMAGE);
     }
 
     /**

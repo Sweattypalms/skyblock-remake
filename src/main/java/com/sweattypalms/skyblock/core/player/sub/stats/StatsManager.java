@@ -141,6 +141,7 @@ public class StatsManager {
 
 
         healthCorrection(oldMaxHealth, oldCurrentHealth);
+        displayAbsorption();
         double max = 500;
         double speed = Math.min(stats.get(Stats.SPEED), max);
         this.player.getPlayer().setWalkSpeed((float) (speed / max));
@@ -164,6 +165,33 @@ public class StatsManager {
         if (oldCurrentHealth >= oldMaxHealth - correction1Percent) {
             player.setHealth(maxHealth);
         }
+    }
+    /**
+     * Display absorption to the player
+     * e.g. 300 absorption would result in 4 hearts of absorption (golden hearts)
+     */
+    private void displayAbsorption() {
+        double absorption = this.maxStats.get(Stats.ABSORPTION);
+        Player player = this.player.getPlayer();
+
+        int absorptionAmount;
+        if (absorption <= 0) {
+            absorptionAmount = 0;
+        } else if (absorption >= 1250) {
+            absorptionAmount = 20;
+        } else {
+            int[] thresholds = {165, 230, 300, 400, 500, 650, 800, 1000, 1250};
+            absorptionAmount = 2;
+            for (int threshold : thresholds) {
+                if (absorption >= threshold) {
+                    absorptionAmount += 2;
+                } else {
+                    break;
+                }
+            }
+        }
+
+        player.setAbsorptionAmount(absorptionAmount);
     }
 
     public void regenerate() {
@@ -250,6 +278,8 @@ public class StatsManager {
         this.baseStats.put(stat, value);
     }
 
+
+
     /**
      * Get the effective health of the player
      * @return double Effective health
@@ -259,6 +289,16 @@ public class StatsManager {
         double defense = this.liveStats.get(Stats.DEFENSE);
 
         return health * (1 + (defense / 100));
+    }
+
+    public void addMaxStat(Stats stat, double value) {
+        this.maxStats.put(stat, this.getMaxStat(stat) + value);
+    }
+    public void addLiveStat(Stats stat, double value) {
+        this.liveStats.put(stat, this.getLiveStat(stat) + value);
+    }
+    public void addBaseStat(Stats stat, double value) {
+        this.baseStats.put(stat, this.getBaseStat(stat) + value);
     }
 
     public double getMaxStat(Stats stat) {

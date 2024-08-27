@@ -121,6 +121,14 @@ public class SkyblockPlayer {
     public void damage(double damage) {
         if (this.player.getGameMode() != GameMode.SURVIVAL)
             return;
+
+        StatsManager statsManager = this.getStatsManager();
+
+        double absorption = statsManager.getMaxStat(Stats.ABSORPTION);
+        statsManager.setMaxStat(Stats.ABSORPTION, Math.max(absorption - damage, 0));
+
+        damage = Math.max(damage - absorption, 0);
+
         this.player.setHealth(
                 Math.max(
                         this.player.getHealth() - damage,

@@ -17,6 +17,7 @@ public enum Stats {
 
     /* ---------------------------- */
 
+    ABSORPTION("", "Absorption", 0, false, ChatColor.GOLD),
     HEALTH(ChatColor.RED + "❤", "Health", 100, false, ChatColor.GREEN),
     DEFENSE(ChatColor.GREEN + "❈", "Defence", 0, false, ChatColor.GREEN),
     INTELLIGENCE(ChatColor.AQUA + "✎", "Intelligence", 100, false, ChatColor.GREEN),
