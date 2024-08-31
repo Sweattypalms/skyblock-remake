@@ -35,8 +35,8 @@ This is my way of paying it back, y'know. Enjoy!
 -   **Fan favourite items:** Most loved items from Hypixel Skyblock (e.g. Hyperion, Terminator, etc.)
 ![Hyperion & Terminator melting mobs](/README/assets/gameplay/items/items_showcase.gif)
 -   **Regions:** Explore different areas and regions.
-![Regions](/README/assets/gameplay/misc/scoreboard.png)
 -   **Scoreboard:** See objectives, your balance and quests.
+![Scoreboard](/README/assets/gameplay/misc/scoreboard.png)
 -   **Mobs System:** Engage with various in-game creatures.
 ![Mobs System](/README/assets/gameplay/mobs/mobs_showcase.png)
 -   **Customize Items:** Customize your items by applying enchants, reforges, and much more!
