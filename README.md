@@ -1,6 +1,6 @@
 # Skyblock Remake
 
-![Skyblock Remake Banner](README/assets/banner.png)
+![Skyblock Remake Banner](https://github.com/Sweattypalms/skyblock-remake/blob/master/README/assets/banner.png?raw=true)
 
 <b>Skyblock Remake </b> is an open-source fan project inspired by Hypixel's Skyblock. It aims not only to recreate the familiar experience but also to offer a platform for fellow developers to learn and grow.
 
