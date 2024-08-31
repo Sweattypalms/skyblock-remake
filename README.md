@@ -50,7 +50,7 @@ This is my way of paying it back, y'know. Enjoy!
 ![Fight Dragon)](https://github.com/Sweattypalms/skyblock-remake/blob/master/README/assets/gameplay/end/fight_dragon.gif?raw=true)
 ![Dragon Death](https://github.com/Sweattypalms/skyblock-remake/blob/master/README/assets/gameplay/end/dragon_death_message.png?raw=true)
 - **Dungeons (W.I.P):** Procedurally generated dungeons with bosses and loot. (Extremely W.I.P)
-![Dungeons Generate Map](https://github.com/Sweattypalms/skyblock-remake/blob/master/README/assets/gameplay/dungeons/dungeon_generate_map.gif)
+![Dungeons Generate Map](https://github.com/Sweattypalms/skyblock-remake/blob/master/README/assets/gameplay/dungeons/dungeon_generate_map.gif?raw=true)
 
 ### Developer Features
 <details>
