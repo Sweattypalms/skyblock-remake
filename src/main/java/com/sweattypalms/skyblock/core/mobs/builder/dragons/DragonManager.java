@@ -1,8 +1,10 @@
 package com.sweattypalms.skyblock.core.mobs.builder.dragons;
 
+import com.sweattypalms.skyblock.SkyBlock;
 import com.sweattypalms.skyblock.api.Point;
 import com.sweattypalms.skyblock.api.sequence.Sequence;
 import com.sweattypalms.skyblock.api.sequence.SequenceAction;
+import com.sweattypalms.skyblock.core.helpers.MozangStuff;
 import com.sweattypalms.skyblock.core.helpers.PDCHelper;
 import com.sweattypalms.skyblock.core.helpers.PlaceholderFormatter;
 import com.sweattypalms.skyblock.core.items.ItemManager;
@@ -10,6 +12,7 @@ import com.sweattypalms.skyblock.core.items.types.end.items.RemnantOfTheEye;
 import com.sweattypalms.skyblock.core.items.types.end.items.SummoningEye;
 import com.sweattypalms.skyblock.core.items.types.end.items.UsedSummoningEye;
 import com.sweattypalms.skyblock.core.mobs.builder.MobManager;
+import com.sweattypalms.skyblock.core.mobs.builder.NameAttributes;
 import com.sweattypalms.skyblock.core.mobs.builder.SkyblockMob;
 import com.sweattypalms.skyblock.core.mobs.regions.end.dragons.StrongDragon;
 import com.sweattypalms.skyblock.core.player.SkyblockPlayer;
@@ -17,10 +20,12 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.type.EndPortalFrame;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.*;
@@ -51,10 +56,12 @@ public class DragonManager {
     private int summoningEyes = 0;
     private SkyblockMob dragon;
     private final Map<UUID, Double> playerDamage = new HashMap<>();
-    public double getPlayerDamage(UUID playerUUID){
+
+    public double getPlayerDamage(UUID playerUUID) {
         return this.playerDamage.getOrDefault(playerUUID, 0d);
     }
-    public void  addPlayerDamage(UUID playerUUID, double damage){
+
+    public void addPlayerDamage(UUID playerUUID, double damage) {
         double before = this.playerDamage.getOrDefault(playerUUID, 0.0);
         this.playerDamage.put(playerUUID, before + damage);
     }
@@ -128,9 +135,52 @@ public class DragonManager {
                 }
             });
 
-            summonDragon();
+            this.startEyeAnimation();
         }
     }
+
+    public void startEyeAnimation() { // Shows the eye animation that goes upwards
+        List<ArmorStand> eyes = new ArrayList<>();
+        if (this.altarBlocks.size() == 8) {
+            for (Block block : this.altarBlocks.keySet()) {
+                Location loc = block.getLocation();
+                loc = loc.clone();
+                if (loc.getWorld() == null) continue;
+                ArmorStand as = loc.getWorld().spawn(loc.clone().add(0.5, -1, 0.5), ArmorStand.class);
+                as.setVisible(false);
+                as.setMarker(true);
+                as.getEyeLocation().setYaw(as.getEyeLocation().getYaw() - 90);
+                as.setGravity(false);
+                as.getEquipment().setHelmet(ItemManager.getItemStack(SummoningEye.ID));
+                eyes.add(as);
+                EndPortalFrame endPortalFrame = (EndPortalFrame) loc.getBlock().getBlockData();
+                endPortalFrame.setEye(false);
+            }
+            new BukkitRunnable() {
+
+                double y = 0;
+
+                @Override
+                public void run() {
+                    for (ArmorStand as : eyes) {
+                        as.teleport(as.getLocation().add(0, 0.05, 0));
+                    }
+
+                    if (y >= 4) {
+                        for (ArmorStand as : eyes) {
+                            as.remove();
+                        }
+                        this.cancel();
+                        // Now running the block animation and cancelling this task!
+                        DragonManager.this.summonDragon();
+                        return;
+                    }
+                    y += 0.05;
+                }
+            }.runTaskTimer(SkyBlock.getInstance(), 0L, 1L);
+        }
+    }
+
 
     public void removeSummoningEye(SkyblockPlayer player, Location location) {
         if (!altarBlocks.containsKey(location.getBlock())) return;
@@ -261,7 +311,7 @@ public class DragonManager {
     }
 
     private boolean checkSolidBlock(Block block) {
-        BlockFace[] faces = { BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST, BlockFace.UP, BlockFace.DOWN };
+        BlockFace[] faces = {BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST, BlockFace.UP, BlockFace.DOWN};
 
         for (BlockFace face : faces) {
             if (block.getRelative(face).getType() == Material.AIR) {
@@ -273,6 +323,7 @@ public class DragonManager {
 
     public void onEnderDragonDeath() {
         this.summoningEyes = 0;
+        this.dragonDownMessage(this.dragon.getEntityInstance().getKiller());
         this.dragon.despawn();
         this.dragon = null;
         this.altarBlocks.keySet().forEach(block -> {
@@ -284,6 +335,52 @@ public class DragonManager {
         this.playerDamage.clear();
 
         temp_save_backup.forEach((loc, type) -> loc.getBlock().setType(type));
+    }
+
+    public void dragonDownMessage(Player killer) {
+        Map<UUID, Double> damage = MozangStuff.sortByValue(this.playerDamage);
+        List<UUID> damagers = new ArrayList<>(damage.keySet());
+        String green = PlaceholderFormatter.format("$a");
+        String yellow = PlaceholderFormatter.format("$e");
+        String gold = PlaceholderFormatter.format("$6");
+        String bold = PlaceholderFormatter.format("$l");
+        String gray = PlaceholderFormatter.format("$7");
+        String red = PlaceholderFormatter.format("$c");
+        String light_purple = PlaceholderFormatter.format("$d");
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            String damage1 = (PlaceholderFormatter.formatDecimalCSV(damage.get(damagers.get(0))));
+            String yourDamage;
+            try {
+                yourDamage = (PlaceholderFormatter.formatDecimalCSV(damage.get(p.getUniqueId())));
+            } catch (IllegalArgumentException ignored) {
+                yourDamage = "0";
+            }
+            p.sendMessage(green + "----------------------------------------------------");
+            p.sendMessage(gold + "                   " + bold + (dragon.getNameAttribute(NameAttributes.CUSTOM_NAME).toString().toUpperCase()) + " DOWN!");
+            p.sendMessage("");
+            p.sendMessage(green + "                " + killer.getName() + gray + " dealt the final blow.");
+            p.sendMessage("");
+            p.sendMessage(yellow + "          " + bold + "1st Damager" + gray + " - " + Bukkit.getOfflinePlayer(damagers.get(0)).getName() + gray + " - " + yellow + damage1);
+            if (damagers.size() < 3) {
+                if (damagers.size() == 2) {
+                    String damage2 = (PlaceholderFormatter.formatDecimalCSV(damage.get(damagers.get(1))));
+                    p.sendMessage(gold + "          " + bold + "2nd Damager" + gray + " - " + Bukkit.getOfflinePlayer(damagers.get(1)).getName() + gray + " - " + yellow + damage2);
+                } else {
+                    p.sendMessage(gold + "          " + bold + "2nd Damager" + gray + " - N/A" + gray);
+                }
+                p.sendMessage(red + "          " + bold + "3rd Damager" + gray + " - N/A");
+            } else {
+                String damage2 = (PlaceholderFormatter.formatDecimalCSV(damage.get(damagers.get(1))));
+                String damage3 = (PlaceholderFormatter.formatDecimalCSV(damage.get(damagers.get(2))));
+                p.sendMessage(gold + "          " + bold + "2nd Damager" + gray + " - " + Bukkit.getOfflinePlayer(damagers.get(1)).getName() + gray + " - " + yellow+ damage2);
+                p.sendMessage(red + "          " + bold + "3rd Damager" + gray + " - " + Bukkit.getOfflinePlayer(damagers.get(2)).getName() + gray + " - " + yellow + damage3);
+            }
+            p.sendMessage("");
+            p.sendMessage(yellow + "          Your Damage: " + gray + yourDamage + gray + " (Position #" + (damagers.indexOf(p.getUniqueId()) + 1) + ")");
+            p.sendMessage(yellow + "             Runecrafting Experience: " + light_purple + "0" + red + " (Not Yet Coded)");
+            p.sendMessage("");
+            p.sendMessage(green + "----------------------------------------------------");
+        }
     }
 
     private Location pointToLocation(Point point) {

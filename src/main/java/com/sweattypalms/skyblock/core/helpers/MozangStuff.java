@@ -8,8 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.UUID;
+import java.util.*;
 
 public class MozangStuff {
     public static ItemStack getHeadItemStack(String texture) {
@@ -30,5 +29,15 @@ public class MozangStuff {
         Arrays.stream(ItemFlag.values()).toList().forEach(skullMeta::addItemFlags);
         item.setItemMeta(skullMeta);
         return item;
+    }
+
+    public static <K, V extends Comparable<? super V>> Map<K, V> sortByValue(Map<K, V> map) {
+        List<Map.Entry<K, V>> list = new LinkedList<>(map.entrySet());
+        list.sort((o1, o2) -> (o2.getValue()).compareTo(o1.getValue()));
+        Map<K, V> result = new LinkedHashMap<>();
+        for (Map.Entry<K, V> entry : list) {
+            result.put(entry.getKey(), entry.getValue());
+        }
+        return result;
     }
 }
