@@ -24,6 +24,7 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
+import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
@@ -149,9 +150,12 @@ public class DragonManager {
                 ArmorStand as = loc.getWorld().spawn(loc.clone().add(0.5, -1, 0.5), ArmorStand.class);
                 as.setVisible(false);
                 as.setMarker(true);
-                as.getEyeLocation().setYaw(as.getEyeLocation().getYaw() - 90);
+                as.getEyeLocation().setPitch(90); // Looking up
                 as.setGravity(false);
-                as.getEquipment().setHelmet(ItemManager.getItemStack(SummoningEye.ID));
+
+                EntityEquipment equipment = as.getEquipment();
+                assert equipment != null;
+                equipment.setHelmet(ItemManager.getItemStack(SummoningEye.ID));
                 eyes.add(as);
                 EndPortalFrame endPortalFrame = (EndPortalFrame) loc.getBlock().getBlockData();
                 endPortalFrame.setEye(false);
@@ -278,7 +282,7 @@ public class DragonManager {
                 () -> {
                     String summonMessage = String.format("$5⇒ $5c$l%s $5Dragon Spawned!", "Strong");
                     summonMessage = PlaceholderFormatter.format(summonMessage);
-                    String finalSummonMessage = summonMessage;
+                    String finalSummonMessage = PlaceholderFormatter.format(summonMessage);
                     endWorld.getPlayers().forEach(player -> player.sendMessage(finalSummonMessage));
                     SkyblockMob dragon = MobManager.getInstance(StrongDragon.ID);
                     dragon.spawn(new Location(endWorld, 0, 85, 0));
@@ -340,6 +344,7 @@ public class DragonManager {
     public void dragonDownMessage(Player killer) {
         Map<UUID, Double> damage = MozangStuff.sortByValue(this.playerDamage);
         List<UUID> damagers = new ArrayList<>(damage.keySet());
+
         String green = PlaceholderFormatter.format("$a");
         String yellow = PlaceholderFormatter.format("$e");
         String gold = PlaceholderFormatter.format("$6");
@@ -347,39 +352,56 @@ public class DragonManager {
         String gray = PlaceholderFormatter.format("$7");
         String red = PlaceholderFormatter.format("$c");
         String light_purple = PlaceholderFormatter.format("$d");
+
         for (Player p : Bukkit.getOnlinePlayers()) {
-            String damage1 = (PlaceholderFormatter.formatDecimalCSV(damage.get(damagers.get(0))));
-            String yourDamage;
-            try {
-                yourDamage = (PlaceholderFormatter.formatDecimalCSV(damage.get(p.getUniqueId())));
-            } catch (IllegalArgumentException ignored) {
-                yourDamage = "0";
-            }
+            int playerRank = damagers.indexOf(p.getUniqueId()) + 1;
+            String yourDamage = getDamageString(damage, p.getUniqueId());
+            String rankColor = getRankColor(playerRank).toString();
+
             p.sendMessage(green + "----------------------------------------------------");
-            p.sendMessage(gold + "                   " + bold + (dragon.getNameAttribute(NameAttributes.CUSTOM_NAME).toString().toUpperCase()) + " DOWN!");
+            p.sendMessage(gold + "                   " + bold + dragon.getNameAttribute(NameAttributes.CUSTOM_NAME).toString().toUpperCase() + " DOWN!");
             p.sendMessage("");
             p.sendMessage(green + "                " + killer.getName() + gray + " dealt the final blow.");
             p.sendMessage("");
-            p.sendMessage(yellow + "          " + bold + "1st Damager" + gray + " - " + Bukkit.getOfflinePlayer(damagers.get(0)).getName() + gray + " - " + yellow + damage1);
-            if (damagers.size() < 3) {
-                if (damagers.size() == 2) {
-                    String damage2 = (PlaceholderFormatter.formatDecimalCSV(damage.get(damagers.get(1))));
-                    p.sendMessage(gold + "          " + bold + "2nd Damager" + gray + " - " + Bukkit.getOfflinePlayer(damagers.get(1)).getName() + gray + " - " + yellow + damage2);
-                } else {
-                    p.sendMessage(gold + "          " + bold + "2nd Damager" + gray + " - N/A" + gray);
-                }
-                p.sendMessage(red + "          " + bold + "3rd Damager" + gray + " - N/A");
-            } else {
-                String damage2 = (PlaceholderFormatter.formatDecimalCSV(damage.get(damagers.get(1))));
-                String damage3 = (PlaceholderFormatter.formatDecimalCSV(damage.get(damagers.get(2))));
-                p.sendMessage(gold + "          " + bold + "2nd Damager" + gray + " - " + Bukkit.getOfflinePlayer(damagers.get(1)).getName() + gray + " - " + yellow+ damage2);
-                p.sendMessage(red + "          " + bold + "3rd Damager" + gray + " - " + Bukkit.getOfflinePlayer(damagers.get(2)).getName() + gray + " - " + yellow + damage3);
-            }
+
+            sendDamagerInfo(p, damagers, damage, 1, yellow);
+            sendDamagerInfo(p, damagers, damage, 2, gold);
+            sendDamagerInfo(p, damagers, damage, 3, red);
+
             p.sendMessage("");
-            p.sendMessage(yellow + "          Your Damage: " + gray + yourDamage + gray + " (Position #" + (damagers.indexOf(p.getUniqueId()) + 1) + ")");
-            p.sendMessage(yellow + "             Runecrafting Experience: " + light_purple + "0" + red + " (Not Yet Coded)");
+            p.sendMessage(yellow + "          Your Damage: " + rankColor + yourDamage + rankColor + " (Position #" + playerRank + ")");
+            p.sendMessage(yellow + "               Runecrafting Experience: " + light_purple + "0" + red + " (WIP)");
             p.sendMessage("");
             p.sendMessage(green + "----------------------------------------------------");
+        }
+    }
+
+    private String getDamageString(Map<UUID, Double> damage, UUID playerId) {
+        try {
+            return PlaceholderFormatter.formatDecimalCSV(damage.get(playerId));
+        } catch (IllegalArgumentException ignored) {
+            return "0";
+        }
+    }
+
+    private ChatColor getRankColor(int rank) {
+        return switch (rank) {
+            case 1 -> ChatColor.GOLD;
+            case 2 -> ChatColor.YELLOW;
+            case 3 -> ChatColor.RED;
+            default -> ChatColor.GRAY;
+        };
+    }
+
+    private void sendDamagerInfo(Player p, List<UUID> damagers, Map<UUID, Double> damage, int rank, String color) {
+        String rankName = rank == 1 ? "1st" : (rank == 2 ? "2nd" : "3rd");
+        if (damagers.size() >= rank) {
+            UUID damagerId = damagers.get(rank - 1);
+            String damagerName = Bukkit.getOfflinePlayer(damagerId).getName();
+            String damageAmount = PlaceholderFormatter.formatDecimalCSV(damage.get(damagerId));
+            p.sendMessage(color + "          " + PlaceholderFormatter.format("$l") + rankName + " Damager" + PlaceholderFormatter.format("$7") + " - " + damagerName + PlaceholderFormatter.format("$7") + " - " + PlaceholderFormatter.format("$e") + damageAmount);
+        } else {
+            p.sendMessage(color + "          " + PlaceholderFormatter.format("$l") + rankName + " Damager" + PlaceholderFormatter.format("$7") + " - N/A");
         }
     }
 

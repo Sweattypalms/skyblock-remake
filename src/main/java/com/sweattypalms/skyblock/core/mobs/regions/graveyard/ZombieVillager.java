@@ -3,6 +3,7 @@ package com.sweattypalms.skyblock.core.mobs.regions.graveyard;
 import com.sweattypalms.skyblock.core.helpers.EntityHelper;
 import com.sweattypalms.skyblock.core.mobs.builder.IRegionEntity;
 import com.sweattypalms.skyblock.core.mobs.builder.ISkyblockMob;
+import com.sweattypalms.skyblock.core.mobs.builder.MobAttributes;
 import com.sweattypalms.skyblock.core.regions.Regions;
 import com.sweattypalms.skyblock.core.mobs.builder.SkyblockMob;
 import net.minecraft.world.entity.EntityLiving;
@@ -26,6 +27,7 @@ public class ZombieVillager extends EntityZombieVillager implements ISkyblockMob
                 .setDamage(24)
                 .setCustomName("$cZombie Villager")
                 .setLevel(1)
+                .setAttribute(MobAttributes.COMBAT_XP, 20d)
         ;
 
         EntityHelper.equipAllArmor(this, Material.LEATHER);

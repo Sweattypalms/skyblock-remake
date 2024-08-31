@@ -25,6 +25,7 @@ import java.util.Random;
 public abstract class EnderDragon extends EntityEnderDragon implements ISkyblockMob, IRegionEntity, IEndDragon {
     private final SkyblockMob skyblockMob;
     private final List<DragonStage> stages;
+    private final boolean pathVisualized = false;
 
 
     @Getter @Setter
@@ -99,7 +100,10 @@ public abstract class EnderDragon extends EntityEnderDragon implements ISkyblock
             }
         }
         moveAlongPath();
-//        visualizePath(); (Will show path for the dragon with Fire particles until the dragon is dead)
+//        (Will show path for the dragon with Fire particles until the dragon is dead)
+        if (pathVisualized) {
+            visualizePath();
+        }
     }
 
     public void moveAlongPath() {
