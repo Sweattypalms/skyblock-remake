@@ -2,6 +2,18 @@
 
 ![Skyblock Remake Banner](https://github.com/Sweattypalms/skyblock-remake/blob/master/README/assets/banner.png?raw=true)
 
+<p align="center">
+  <img src="https://img.shields.io/github/license/Sweattypalms/skyblock-remake" alt="License">
+  <img src="https://img.shields.io/github/languages/code-size/Sweattypalms/skyblock-remake" alt="Code Size">
+  <img src="https://img.shields.io/badge/language-Java-green" alt="Language">
+</p>
+<p align="center">
+  <a href="https://discord.gg/Ew4u4TRbQ6">
+    <img src="https://img.shields.io/discord/962270718568046592?color=7289DA&label=Join%20our%20Discord&logo=discord&logoColor=white" alt="Join our Discord&style=for-the-badge">
+  </a>
+</p>
+
+
 <b>Skyblock Remake </b> is an open-source fan project inspired by Hypixel's Skyblock. It aims not only to recreate the familiar experience but also to offer a platform for fellow developers to learn and grow.
 
 🚨 **Disclaimer:** This project is a fan-made recreation of "Hypixel" Skyblock. It is not affiliated with or endorsed by Hypixel or its associated products. All rights and content belong to their respective owners.
