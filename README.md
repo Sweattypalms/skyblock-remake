@@ -8,21 +8,27 @@
 
 ## Why This Project Exists
 
-I am a high school student deeply passionate about programming. Two years ago, I embarked on the journey of developing an early version of this plugin, which became instrumental in sharpening my programming skills. By open-sourcing this project, I aim to give back to the community. I believe that aspiring developers, just like I once was, can utilize this material as a valuable resource for learning and experimentation.
+I'm a high school kid, and I really enjoy programming, like you can make anything you want.
+I got a taste of that when I started developing this plugin two years ago. It was pretty basic back then, 
+but man, did it help me get good at programming, design patterns, efficient code, maths, everything. 
+I feel like it would've helped me a lot if there were projects that I could've taken inspiration from, 
+so I'm putting this out there so someone on the same path can benefit a lot from this. 
+This is my way of paying it back, y'know. Enjoy! 
 
 ## Features
 
-<details>
+<details open>
 <summary>Click to expand</summary>
 
 ### Player Features
 
 -   **Stats System:** Complete stat system.
+![Stats System](/README/assets/gameplay/stats_system.gif)
 -   **Slayers (W.I.P):** Start quests and defeat bosses.
 -   **Skills (W.I.P):** Progress and develop your player skills.
 -   **Items System:** Dynamic system for in-game items.
 -   **Regions:** Explore different areas and regions.
--   **Scoreboard (W.I.P):** See objectives, your balance and quests.
+-   **Scoreboard:** See objectives, your balance and quests.
 -   **Mobs System:** Engage with various in-game creatures.
 -   **Ender Dragon Fight:** Battle the mighty Ender Dragon! Altar system with Custom Dragon Pathfinding + Dragon egg animation.
 

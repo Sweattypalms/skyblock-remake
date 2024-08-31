@@ -8,6 +8,7 @@ import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
 
+import static com.sweattypalms.skyblock.core.helpers.PlaceholderFormatter.formatDecimalCSV;
 import static com.sweattypalms.skyblock.core.helpers.PlaceholderFormatter.formatDouble;
 
 public class ActionBarManager extends PlayerManager {
@@ -34,10 +35,10 @@ public class ActionBarManager extends PlayerManager {
         StatsManager statsManager = this.skyblockPlayer.getStatsManager();
         double absorption = statsManager.getMaxStat(Stats.ABSORPTION);
         double maxHealth = statsManager.getMaxStat(Stats.HEALTH);
-        String healthString = formatDouble(maxHealth);
+        String healthString = formatDecimalCSV(maxHealth);
         double currentHealth = this.skyblockPlayer.getPlayer().getHealth();
         if (currentHealth > maxHealth) currentHealth = maxHealth;
-        String currentHealthString = formatDouble(currentHealth + absorption);
+        String currentHealthString = formatDecimalCSV(currentHealth + absorption);
 
         ChatColor color = absorption > 0 ? ChatColor.GOLD : ChatColor.RED;
         return color + Stats.HEALTH.getSymbol() + " " + currentHealthString + " / " + healthString;
@@ -46,16 +47,16 @@ public class ActionBarManager extends PlayerManager {
     private String getDefenceComponent() {
         double maxDefence = this.skyblockPlayer.getStatsManager().getMaxStats().get(Stats.DEFENSE);
         if (maxDefence == 0) return "";
-        String defenceString = formatDouble(maxDefence);
+        String defenceString = formatDecimalCSV(maxDefence);
         return ChatColor.GREEN + Stats.DEFENSE.getSymbol() + " " + defenceString;
     }
 
     private String getIntelligenceComponent() {
         double maxIntelligence = this.skyblockPlayer.getStatsManager().getMaxStats().get(Stats.INTELLIGENCE);
-        String intelligenceString = formatDouble(maxIntelligence);
+        String intelligenceString = formatDecimalCSV(maxIntelligence);
         double currentIntelligence = this.skyblockPlayer.getStatsManager().getLiveStats().get(Stats.INTELLIGENCE);
         if (currentIntelligence > maxIntelligence) currentIntelligence = maxIntelligence;
-        String currentIntelligenceString = formatDouble(currentIntelligence);
+        String currentIntelligenceString = formatDecimalCSV(currentIntelligence);
 
         return ChatColor.AQUA + Stats.INTELLIGENCE.getSymbol() + " " + currentIntelligenceString + " / " + intelligenceString;
     }
