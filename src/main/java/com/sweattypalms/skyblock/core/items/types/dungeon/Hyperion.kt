@@ -37,6 +37,8 @@ val STATS = mapOf(
     Stats.FEROCITY to 30.0,
 )
 
+
+@Suppress("unused")
 class Hyperion : SkyblockItem(
     ID,
     "Hyperion",

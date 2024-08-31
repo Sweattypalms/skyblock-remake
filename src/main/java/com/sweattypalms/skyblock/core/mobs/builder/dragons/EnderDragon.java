@@ -26,6 +26,7 @@ public abstract class EnderDragon extends EntityEnderDragon implements ISkyblock
     private final SkyblockMob skyblockMob;
     private final List<DragonStage> stages;
 
+
     @Getter @Setter
     private boolean moving = true;
     private double visualizePathTick = 0;
