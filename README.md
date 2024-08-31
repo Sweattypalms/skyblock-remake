@@ -23,32 +23,32 @@ This is my way of paying it back, y'know. Enjoy!
 ### Player Features
 
 -   **Stats System:** Complete stat system.
-![Stats System](/README/assets/gameplay/stats/stats_system.gif)
+![Stats System](https://github.com/Sweattypalms/skyblock-remake/blob/master/README/assets/gameplay/stats/stats_system.gif?raw=true)
 -   **Slayers (W.I.P):** Start quests and defeat bosses.
 *Start a Slayer Quest*
-![Slayer Quest](/README/assets/gameplay/slayer/slayer_start.gif)
+![Slayer Quest](https://github.com/Sweattypalms/skyblock-remake/blob/master/README/assets/gameplay/slayer/slayer_start.gif?raw=true)
 *Get the necessary xp to spawn the boss*
-![Slayer Quest](/README/assets/gameplay/slayer/slayer_xp.gif)
+![Slayer Quest](https://github.com/Sweattypalms/skyblock-remake/blob/master/README/assets/gameplay/slayer/slayer_xp.gif?raw=true)
 *Defeat the boss*
-![Slayer Boss](/README/assets/gameplay/slayer/slayer_kill.gif)
+![Slayer Boss](https://github.com/Sweattypalms/skyblock-remake/blob/master/README/assets/gameplay/slayer/slayer_kill.gif?raw=true)
 -   **Skills (W.I.P):** Progress and develop your player skills.
 -   **Fan favourite items:** Most loved items from Hypixel Skyblock (e.g. Hyperion, Terminator, etc.)
-![Hyperion & Terminator melting mobs](/README/assets/gameplay/items/items_showcase.gif)
+![Hyperion & Terminator melting mobs](https://github.com/Sweattypalms/skyblock-remake/blob/master/README/assets/gameplay/items/items_showcase.gif?raw=true)
 -   **Regions:** Explore different areas and regions.
 -   **Scoreboard:** See objectives, your balance and quests.
-![Scoreboard](/README/assets/gameplay/misc/scoreboard.png)
+![Scoreboard](https://github.com/Sweattypalms/skyblock-remake/blob/master/README/assets/gameplay/misc/scoreboard.png?raw=true)
 -   **Mobs System:** Engage with various in-game creatures.
-![Mobs System](/README/assets/gameplay/mobs/mobs_showcase.png)
+![Mobs System](https://github.com/Sweattypalms/skyblock-remake/blob/master/README/assets/gameplay/mobs/mobs_showcase.png?raw=true)
 -   **Customize Items:** Customize your items by applying enchants, reforges, and much more!
-![Customize Items](/README/assets/gameplay/items/customize_item_showcase.png)
+![Customize Items](https://github.com/Sweattypalms/skyblock-remake/blob/master/README/assets/gameplay/items/customize_item_showcase.png?raw=true)
 -   **Ender Dragon Fight:** Battle the mighty Ender Dragon! Altar system with Custom Dragon Pathfinding + Dragon egg animation.
-![End World](/README/assets/gameplay/end/end_world.png)
-![Altar System](/README/assets/gameplay/end/altar.gif)
-![Spawn Animation](/README/assets/gameplay/end/spawn_animation.gif)
-![Dragon Pathfinding](/README/assets/gameplay/end/dragon_pathfinding.gif)
-![Dragon Ability](/README/assets/gameplay/end/dragon_ability.gif)
-![Fight Dragon)](/README/assets/gameplay/end/fight_dragon.gif)
-![Dragon Death](/README/assets/gameplay/end/dragon_death_message.png)
+![End World](https://github.com/Sweattypalms/skyblock-remake/blob/master/README/assets/gameplay/end/end_world.png?raw=true)
+![Altar System](https://github.com/Sweattypalms/skyblock-remake/blob/master/README/assets/gameplay/end/altar.gif?raw=true)
+![Spawn Animation](https://github.com/Sweattypalms/skyblock-remake/blob/master/README/assets/gameplay/end/spawn_animation.gif?raw=true)
+![Dragon Pathfinding](https://github.com/Sweattypalms/skyblock-remake/blob/master/README/assets/gameplay/end/dragon_pathfinding.gif?raw=true)
+![Dragon Ability](https://github.com/Sweattypalms/skyblock-remake/blob/master/README/assets/gameplay/end/dragon_ability.gif?raw=true)
+![Fight Dragon)](https://github.com/Sweattypalms/skyblock-remake/blob/master/README/assets/gameplay/end/fight_dragon.gif?raw=true)
+![Dragon Death](https://github.com/Sweattypalms/skyblock-remake/blob/master/README/assets/gameplay/end/dragon_death_message.png?raw=true)
 
 ### Developer Features
 <details>
